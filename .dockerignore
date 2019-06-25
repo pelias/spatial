@@ -1,0 +1,10 @@
+.git
+.gitignore
+Dockerfile
+.dockerignore
+node_modules
+package-lock.json
+*.md
+*.db
+*.db-journal
+*.geojson

@@ -1,0 +1,44 @@
+class Module {
+  constructor (db) {
+    this.db = db
+    this.init = {}
+    this.table = {}
+    this.index = {}
+    this.statement = {}
+  }
+  setup (config) {
+    // perform init operations
+    for (let name in this.init) {
+      this.init[name].create(this.db, config)
+    }
+
+    if (!config || config.readonly !== true) {
+      // create tables
+      for (let name in this.table) {
+        this.table[name].create(this.db, config)
+      }
+
+      // create indices
+      for (let name in this.index) {
+        this.index[name].create(this.db, config)
+      }
+
+      // create triggers
+      for (let name in this.trigger) {
+        this.trigger[name].create(this.db, config)
+      }
+
+      // create views
+      for (let name in this.view) {
+        this.view[name].create(this.db, config)
+      }
+    }
+
+    // prepare statements
+    for (let name in this.statement) {
+      this.statement[name].create(this.db, config)
+    }
+  }
+}
+
+module.exports = Module

@@ -1,0 +1,61 @@
+{
+  "name": "pelias-spatial",
+  "version": "0.0.0-development",
+  "author": "pelias",
+  "description": "Pelias Geometry Service",
+  "homepage": "https://github.com/pelias/spatial",
+  "license": "MIT",
+  "main": "index.js",
+  "bin": "./bin/start",
+  "scripts": {
+    "postinstall": "npm i better-sqlite3@latest --sqlite3=$PWD/amalgamation/sqlite-amalgamation-3280000",
+    "validate": "npm ls",
+    "prune": "npm prune",
+    "build": "docker build -t 'pelias/spatial' .",
+    "test": "./bin/test",
+    "start": "node example.js",
+    "server": "node server/http.js",
+    "format_check": "./node_modules/standard/bin/cmd.js",
+    "format_fix": "./node_modules/standard/bin/cmd.js --fix",
+    "lint": "jshint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pelias/spatial.git"
+  },
+  "bugs": {
+    "url": "https://github.com/pelias/spatial/issues"
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "dependencies": {
+    "better-sqlite3": "^5.4.0",
+    "express": "^4.17.1",
+    "lodash": "^4.17.11",
+    "morgan": "^1.9.1",
+    "pelias-logger": "^1.4.1",
+    "split2": "^3.1.1",
+    "through2": "^3.0.1",
+    "wkx": "^0.4.7"
+  },
+  "devDependencies": {
+    "difflet": "^1.0.1",
+    "glob": "^7.1.4",
+    "precommit-hook": "^3.0.0",
+    "semver": "^6.1.2",
+    "standard": "^12.0.1",
+    "tap-spec": "^5.0.0",
+    "tape": "^4.10.2"
+  },
+  "pre-commit": [
+    "format_check",
+    "lint",
+    "validate",
+    "test"
+  ],
+  "release": {
+    "branch": "master",
+    "success": []
+  }
+}
