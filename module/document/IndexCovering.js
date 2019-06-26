@@ -1,10 +1,12 @@
+const _ = require('lodash')
 const SqliteIndex = require('../../sqlite/SqliteIndex')
 
 class IndexCovering extends SqliteIndex {
   create (db, config) {
     try {
+      let dbname = _.get(config, 'database', 'main')
       db.prepare(`
-        CREATE INDEX IF NOT EXISTS ${config.database}.document_idx_covering 
+        CREATE INDEX IF NOT EXISTS ${dbname}.document_idx_covering 
         ON document(source, id, class, type)
       `).run()
     } catch (e) {
@@ -13,8 +15,9 @@ class IndexCovering extends SqliteIndex {
   }
   drop (db, config) {
     try {
+      let dbname = _.get(config, 'database', 'main')
       db.prepare(`
-        DROP INDEX IF EXISTS ${config.database}.document_idx_covering
+        DROP INDEX IF EXISTS ${dbname}.document_idx_covering
       `).run()
     } catch (e) {
       this.error('DROP INDEX', e)

@@ -1,10 +1,12 @@
+const _ = require('lodash')
 const SqliteIndex = require('../../sqlite/SqliteIndex')
 
-class IndexUnique extends SqliteIndex {
+class IndexIdentityUnique extends SqliteIndex {
   create (db, config) {
     try {
+      let dbname = _.get(config, 'database', 'main')
       db.prepare(`
-        CREATE UNIQUE INDEX IF NOT EXISTS ${config.database}.document_idx_unique
+        CREATE UNIQUE INDEX IF NOT EXISTS ${dbname}.document_idx_unique
         ON document(source, id)
       `).run()
     } catch (e) {
@@ -13,8 +15,9 @@ class IndexUnique extends SqliteIndex {
   }
   drop (db, config) {
     try {
+      let dbname = _.get(config, 'database', 'main')
       db.prepare(`
-        DROP INDEX IF EXISTS ${config.database}.document_idx_unique
+        DROP INDEX IF EXISTS ${dbname}.document_idx_unique
       `).run()
     } catch (e) {
       this.error('DROP INDEX', e)
@@ -22,4 +25,4 @@ class IndexUnique extends SqliteIndex {
   }
 }
 
-module.exports = IndexUnique
+module.exports = IndexIdentityUnique

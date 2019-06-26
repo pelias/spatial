@@ -73,6 +73,7 @@ app.use((req, res, next) => {
 })
 
 // routes
+app.get('/document/:source/:id', require('./routes/document'))
 app.get('/document/:source/:id/property', require('./routes/property'))
 app.get('/query/pip', require('./routes/pip'))
 
