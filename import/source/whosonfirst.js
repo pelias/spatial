@@ -5,9 +5,15 @@ const mapping = {
   'source_id': 'id',
   'class': () => 'admin',
   'type': (record) => _.get(record, 'properties.wof:placetype'),
-  // 'bbox': 'bbox',
-  // 'bbox_format': () => 'WSEN',
-  'geometry': (record) => format.from('geometry', 'geojson', record.geometry)
+  'geometry': (record) => format.from('geometry', 'geojson', record.geometry),
+  'property': (record) => {
+    return {
+      'alpha2': _.get(record, 'properties.wof:country', 'XX').toUpperCase(),
+      'name': _.get(record, 'properties.wof:name')
+      // 'wof:repo': _.get(record, 'properties.wof:repo')
+      // 'wof:lastmodified': _.get(record, 'properties.wof:lastmodified')
+    }
+  }
 }
 
 module.exports = {

@@ -3,6 +3,7 @@ const Database = require('better-sqlite3')
 const ServiceConfiguration = require('../config/ServiceConfiguration')
 const Spatialite = require('../module/spatialite/Spatialite')
 const Document = require('../module/document/Document')
+const Property = require('../module/property/Property')
 const Geometry = require('../module/geometry/Geometry')
 const Shard = require('../module/shard/Shard')
 const PointInPolygon = require('../module/pip/PointInPolygon')
@@ -23,6 +24,7 @@ class ImportService {
     this.module = {
       spatialite: new Spatialite(this.db),
       document: new Document(this.db),
+      property: new Property(this.db),
       geometry: new Geometry(this.db),
       shard: new Shard(this.db),
       pip: new PointInPolygon(this.db)
@@ -45,11 +47,12 @@ class ImportService {
     }
   }
   createImportStream () {
-    let stats = { error: 0, imports: 0, document: 0, geometry: 0, shard: 0 }
+    let stats = { error: 0, imports: 0, document: 0, property: 0, geometry: 0, shard: 0 }
 
     ticker.addIncrementOperation('error', () => stats.error)
     ticker.addIncrementOperation('imports', () => stats.document, true, true)
     // ticker.addIncrementOperation('document', () => stats.document)
+    ticker.addIncrementOperation('property', () => stats.property)
     // ticker.addIncrementOperation('geometry', () => stats.document)
     // ticker.addIncrementOperation('shard', () => stats.document)
 
@@ -60,6 +63,9 @@ class ImportService {
 
           info = this.module.document.insert(doc, this.config)
           if (info && info.changes) { stats.document += info.changes }
+
+          info = this.module.property.insert(doc, this.config)
+          if (info && info.changes) { stats.property += info.changes }
 
           info = this.module.geometry.insert(doc, this.config)
           if (info && info.changes) { stats.geometry += info.changes }
