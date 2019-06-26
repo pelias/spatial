@@ -8,6 +8,14 @@ const formats = {
   TWKB: 'Twkb',
   GEOJSON: 'GeoJSON'
 }
+const parsers = {
+  WKT: '_parseWkt',
+  WKB: '_parseWkb',
+  EWKT: '_parseWkt',
+  EWKB: 'parse',
+  TWKB: 'parseTwkb',
+  GEOJSON: '_parseGeoJSON'
+}
 const types = {
   GEOMETRY: 'Geometry',
   POINT: 'Point',
@@ -25,15 +33,15 @@ const types = {
 function from (type, format, geom) {
   // normalize inputs
   type = types[type.trim().toUpperCase()]
-  format = formats[format.trim().toUpperCase()]
+  format = format.trim().toUpperCase()
 
   // ensure wkx supports this type
   if (!wkx.hasOwnProperty(type)) {
     throw new Error(`invalid type: ${type}`)
   }
 
-  // wkx function to use
-  let func = _.get(wkx, `${type}.parse${format}`)
+  // wkx parser to use
+  let func = _.get(wkx, `${type}.${parsers[format]}`)
 
   // ensure wkx supports this format
   if (!_.isFunction(func)) {

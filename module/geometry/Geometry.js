@@ -4,6 +4,7 @@ const IndexCovering = require('./IndexCovering')
 const GeoColumnGeom = require('./GeoColumnGeom')
 const GeoIndexGeom = require('./GeoIndexGeom')
 const StatementInsert = require('./StatementInsert')
+const StatementFetch = require('./StatementFetch')
 
 class Geometry extends Module {
   constructor (db) {
@@ -17,7 +18,8 @@ class Geometry extends Module {
       geometry: new GeoIndexGeom()
     }
     this.statement = {
-      insert: new StatementInsert()
+      insert: new StatementInsert(),
+      fetch: new StatementFetch()
     }
   }
   insert (doc) {
