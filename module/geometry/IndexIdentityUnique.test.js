@@ -1,6 +1,6 @@
 const SqliteIntrospect = require('../../sqlite/SqliteIntrospect')
 const TableGeometry = require('./TableGeometry')
-const IndexCovering = require('./IndexCovering')
+const IndexIdentityUnique = require('./IndexIdentityUnique')
 
 module.exports.tests = {}
 
@@ -17,7 +17,7 @@ module.exports.tests.create_drop = (test, common) => {
     t.false(introspect.indices('geometry').length, 'prior state')
 
     // create index
-    let index = new IndexCovering()
+    let index = new IndexIdentityUnique()
     index.create(db)
 
     // index exists
@@ -43,20 +43,20 @@ module.exports.tests.definition = (test, common) => {
     table.create(db)
 
     // create index
-    let index = new IndexCovering()
+    let index = new IndexIdentityUnique()
     index.create(db)
 
     // test indices
     let indices = introspect.indices('geometry')
 
-    // geometry_idx_covering
+    // geometry_idx_unique
     t.deepEqual(indices[0], {
       seq: 0,
-      name: 'geometry_idx_covering',
-      unique: 0,
+      name: 'geometry_idx_unique',
+      unique: 1,
       origin: 'c',
       partial: 0
-    }, 'geometry_idx_covering')
+    }, 'geometry_idx_unique')
 
     t.end()
   })
@@ -64,7 +64,7 @@ module.exports.tests.definition = (test, common) => {
 
 module.exports.all = (tape, common) => {
   function test (name, testFunction) {
-    return tape(`IndexCovering: ${name}`, testFunction)
+    return tape(`IndexIdentityUnique: ${name}`, testFunction)
   }
 
   for (var testCase in module.exports.tests) {

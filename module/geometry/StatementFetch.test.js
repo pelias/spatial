@@ -37,6 +37,7 @@ module.exports.tests.function = (test, common) => {
     insert.run({
       source: 'example_source',
       id: 'example_id',
+      role: 'example',
       geom: TRIANGLE.toWkb()
     })
 
@@ -54,6 +55,7 @@ module.exports.tests.function = (test, common) => {
     t.deepEqual(rows, [{
       source: 'example_source',
       id: 'example_id',
+      role: 'example',
       geom: TRIANGLE.toWkb()
     }], 'read')
 

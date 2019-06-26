@@ -1,6 +1,6 @@
 const Module = require('../Module')
 const TableGeometry = require('./TableGeometry')
-const IndexCovering = require('./IndexCovering')
+const IndexIdentityUnique = require('./IndexIdentityUnique')
 const GeoColumnGeom = require('./GeoColumnGeom')
 const GeoIndexGeom = require('./GeoIndexGeom')
 const StatementInsert = require('./StatementInsert')
@@ -14,7 +14,7 @@ class Geometry extends Module {
       geom: new GeoColumnGeom()
     }
     this.index = {
-      covering: new IndexCovering(),
+      identity: new IndexIdentityUnique(),
       geometry: new GeoIndexGeom()
     }
     this.statement = {

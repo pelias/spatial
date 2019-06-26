@@ -53,7 +53,7 @@ module.exports.tests.definition = (test, common) => {
 
     // geometry_idx_complexity
     t.deepEqual(geom[0], {
-      cid: 2,
+      cid: 3,
       name: 'geom',
       type: 'GEOMETRY',
       notnull: 1,

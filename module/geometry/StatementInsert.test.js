@@ -33,6 +33,7 @@ module.exports.tests.create_drop = (test, common) => {
     let info = stmt.run({
       source: 'example_source',
       id: 'example_id',
+      role: 'example',
       geom: TRIANGLE.toWkb()
     })
 
@@ -43,6 +44,7 @@ module.exports.tests.create_drop = (test, common) => {
     t.deepEqual(db.prepare(`SELECT *, AsBinary(geom) AS geom FROM geometry`).all(), [{
       source: 'example_source',
       id: 'example_id',
+      role: 'example',
       geom: TRIANGLE.toWkb()
     }], 'read')
 

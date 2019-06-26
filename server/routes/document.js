@@ -1,11 +1,12 @@
+const util = require('./util')
+
 module.exports = function (req, res) {
-  // service
   var service = req.app.locals.service
 
   // inputs
   let query = {
-    source: req.params.source,
-    id: req.params.id
+    source: util.flatten(req.params.source),
+    id: util.flatten(req.params.id)
   }
 
   // perform query

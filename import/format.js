@@ -73,5 +73,7 @@ function type (geom) {
 module.exports = {
   from: from,
   to: to,
-  type: type
+  type: type,
+  formats: formats,
+  types: types
 }

@@ -8,7 +8,8 @@ class TableGeometry extends SqliteTable {
       db.prepare(`
         CREATE TABLE IF NOT EXISTS ${dbname}.geometry (
           source TEXT NOT NULL,
-          id TEXT NOT NULL
+          id TEXT NOT NULL,
+          role TEXT NOT NULL DEFAULT 'default'
         )
       `).run()
     } catch (e) {

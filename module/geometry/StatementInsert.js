@@ -11,10 +11,12 @@ class StatementInsert extends SqliteStatement {
           INSERT OR REPLACE INTO ${dbname}.geometry (
             source,
             id,
-            geom
+            geom,
+            role,
           ) VALUES (
             @source,
             @id,
+            @role,
             SimplifyPreserveTopology( GeomFromWKB( @geom, 4326 ), ${simplify} )
           )
         `)
@@ -23,10 +25,12 @@ class StatementInsert extends SqliteStatement {
           INSERT OR REPLACE INTO ${dbname}.geometry (
             source,
             id,
+            role,
             geom
           ) VALUES (
             @source,
             @id,
+            @role,
             GeomFromWKB( @geom, 4326 )
           )
         `)

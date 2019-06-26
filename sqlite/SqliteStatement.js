@@ -1,13 +1,17 @@
 const Sqlite = require('./Sqlite')
 class SqliteStatement extends Sqlite {
+  _selectStatement () { return this.statement }
   run () {
-    return this.statement.run.apply(this.statement, arguments)
+    let stmt = this._selectStatement.apply(this, arguments)
+    return stmt.run.apply(stmt, arguments)
   }
   get () {
-    return this.statement.get.apply(this.statement, arguments)
+    let stmt = this._selectStatement.apply(this, arguments)
+    return stmt.get.apply(stmt, arguments)
   }
   all () {
-    return this.statement.all.apply(this.statement, arguments)
+    let stmt = this._selectStatement.apply(this, arguments)
+    return stmt.all.apply(stmt, arguments)
   }
 }
 
