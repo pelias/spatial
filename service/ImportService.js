@@ -54,7 +54,7 @@ class ImportService {
     ticker.addIncrementOperation('error', () => stats.error)
     ticker.addIncrementOperation('imports', () => stats.document, true, true)
     // ticker.addIncrementOperation('document', () => stats.document)
-    ticker.addIncrementOperation('property', () => stats.property)
+    // ticker.addIncrementOperation('property', () => stats.property)
     // ticker.addIncrementOperation('geometry', () => stats.document)
     // ticker.addIncrementOperation('shard', () => stats.document)
 
@@ -74,6 +74,9 @@ class ImportService {
 
           info = this.module.shard.insert(doc, this.config)
           if (info && info.changes) { stats.shard += info.changes }
+
+          info = this.module.hierarchy.insert(doc, this.config)
+          if (info && info.changes) { stats.hierarchy += info.changes }
         })
         transaction(doc)
 

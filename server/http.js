@@ -77,6 +77,7 @@ app.get('/document/:source/:id', require('./routes/document'))
 app.get('/document/:source/:id/geometry', require('./routes/geometry').all)
 app.get('/document/:source/:id/geometry/:role', require('./routes/geometry').one)
 app.get('/document/:source/:id/property', require('./routes/property'))
+app.get('/document/:source/:id/hierarchy', require('./routes/hierarchy'))
 app.get('/query/pip', require('./routes/pip'))
 
 // demo page

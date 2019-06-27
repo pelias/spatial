@@ -4,6 +4,7 @@ const IndexUnique = require('./IndexUnique')
 const IndexChildIdentity = require('./IndexChildIdentity')
 const IndexParentIdentity = require('./IndexParentIdentity')
 const StatementInsert = require('./StatementInsert')
+const StatementFetch = require('./StatementFetch')
 const ViewInsertProxy = require('./ViewInsertProxy')
 const TriggerOnInsert = require('./TriggerOnInsert')
 
@@ -19,7 +20,8 @@ class Hierarchy extends Module {
       identityParent: new IndexParentIdentity()
     }
     this.statement = {
-      insert: new StatementInsert()
+      insert: new StatementInsert(),
+      fetch: new StatementFetch()
     }
     this.trigger = {
       onInsert: new TriggerOnInsert()
@@ -28,8 +30,19 @@ class Hierarchy extends Module {
       insertProxy: new ViewInsertProxy()
     }
   }
-  insert () {
-    // @todo
+  insert (doc) {
+    let info = { changes: 0, lastInsertRowid: 0 }
+    if (doc.hierarchy) {
+      doc.hierarchy.forEach(relation => {
+        // insert property
+        let _info = this.statement.insert.run(relation)
+
+        // update aggregate info
+        info.changes += _info.changes
+        info.lastInsertRowid = _info.lastInsertRowid
+      })
+    }
+    return info
   }
 }
 
