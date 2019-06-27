@@ -23,14 +23,14 @@ class Module {
         this.index[name].create(this.db, config)
       }
 
-      // create triggers
-      for (let name in this.trigger) {
-        this.trigger[name].create(this.db, config)
-      }
-
       // create views
       for (let name in this.view) {
         this.view[name].create(this.db, config)
+      }
+
+      // create triggers
+      for (let name in this.trigger) {
+        this.trigger[name].create(this.db, config)
       }
     }
 

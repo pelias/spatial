@@ -6,6 +6,7 @@ const Document = require('../module/document/Document')
 const Property = require('../module/property/Property')
 const Geometry = require('../module/geometry/Geometry')
 const Shard = require('../module/shard/Shard')
+const Hierarchy = require('../module/hierarchy/Hierarchy')
 const PointInPolygon = require('../module/pip/PointInPolygon')
 const ticker = require('../import/ticker')
 
@@ -27,6 +28,7 @@ class ImportService {
       property: new Property(this.db),
       geometry: new Geometry(this.db),
       shard: new Shard(this.db),
+      hierarchy: new Hierarchy(this.db),
       pip: new PointInPolygon(this.db)
     }
 
