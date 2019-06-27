@@ -1,6 +1,7 @@
 const Module = require('../Module')
 const TableGeometry = require('./TableGeometry')
 const IndexIdentityUnique = require('./IndexIdentityUnique')
+const IndexGeometryType = require('./IndexGeometryType')
 const GeoColumnGeom = require('./GeoColumnGeom')
 const GeoIndexGeom = require('./GeoIndexGeom')
 const StatementInsert = require('./StatementInsert')
@@ -15,6 +16,7 @@ class Geometry extends Module {
     }
     this.index = {
       identity: new IndexIdentityUnique(),
+      geometryType: new IndexGeometryType(),
       geometry: new GeoIndexGeom()
     }
     this.statement = {
@@ -26,6 +28,7 @@ class Geometry extends Module {
     return this.statement.insert.run({
       source: doc.source.toString(),
       id: doc.source_id.toString(),
+      role: 'default',
       geom: doc.geometry.toWkb()
     })
   }
