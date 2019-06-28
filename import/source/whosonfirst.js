@@ -1,8 +1,6 @@
 const _ = require('lodash')
 const format = require('../format')
-
-const WhosOnFirstSpec = require('./WhosOnFirstSpec')
-const spec = new WhosOnFirstSpec()
+const spec = require('./whosonfirst-spec')
 
 const mapping = {
   'source': () => 'wof',
@@ -13,14 +11,15 @@ const mapping = {
   'property': (record) => {
     return {
       'alpha2': _.get(record, 'properties.wof:country', 'XX').toUpperCase(),
-      'name': _.get(record, 'properties.wof:name')
-      // 'wof:repo': _.get(record, 'properties.wof:repo')
-      // 'wof:lastmodified': _.get(record, 'properties.wof:lastmodified')
+      'name': _.get(record, 'properties.wof:name'),
+      'wof:repo': _.get(record, 'properties.wof:repo'),
+      'wof:lastmodified': _.get(record, 'properties.wof:lastmodified')
     }
   },
   'hierarchy': (record, mapped) => {
     let hierarchy = []
     let wofHierarchies = _.get(record, 'properties.wof:hierarchy', [])
+    let pt = spec.names.get(mapped.type)
     let validParentPlaceTypes = spec.parents(mapped.type).reduce((memo, item) => {
       memo[item.name] = item
       return memo
@@ -28,8 +27,10 @@ const mapping = {
     wofHierarchies.forEach((wofHierarchy, o) => {
       let branch = `wof:${o}`
       for (let key in wofHierarchy) {
-        let pt = key.replace('_id', '')
-        if (!validParentPlaceTypes.hasOwnProperty(pt)) { continue }
+        let _placetype = key.replace('_id', '')
+        if (!validParentPlaceTypes.hasOwnProperty(_placetype)) { continue } // not a valid parent type
+        if (validParentPlaceTypes[_placetype].name === pt.name) { continue } // same placetype
+        if (validParentPlaceTypes[_placetype].rank >= pt.rank) { continue } // same or less granular
         hierarchy.push({
           child_source: mapped.source.toString(),
           child_id: mapped.source_id.toString(),
@@ -37,7 +38,7 @@ const mapping = {
           parent_id: wofHierarchy[key].toString(),
           branch: branch
         })
-        // only take the first (should be the lowest leevel?) parent
+        // only take the first (should be the lowest level?) parent
         // ensures we only get a max of one parent per hierarchy
         break
       }
