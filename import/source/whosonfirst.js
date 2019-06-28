@@ -11,9 +11,11 @@ const mapping = {
   'property': (record) => {
     return {
       'alpha2': _.get(record, 'properties.wof:country', 'XX').toUpperCase(),
+      'alpha3': _.get(record, 'properties.wof:country_alpha3', '').toUpperCase(),
+      'shortcode': _.get(record, 'properties.wof:shortcode', '').toUpperCase(),
       'name': _.get(record, 'properties.wof:name'),
-      'wof:repo': _.get(record, 'properties.wof:repo'),
-      'wof:lastmodified': _.get(record, 'properties.wof:lastmodified')
+      'abbr': _.get(record, 'properties.wof:abbreviation'),
+      'repo': _.get(record, 'properties.wof:repo')
     }
   },
   'hierarchy': (record, mapped) => {
