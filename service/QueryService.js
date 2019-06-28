@@ -1,7 +1,7 @@
 const Database = require('better-sqlite3')
 const ServiceConfiguration = require('../config/ServiceConfiguration')
 const Spatialite = require('../module/spatialite/Spatialite')
-const Document = require('../module/document/Document')
+const Place = require('../module/place/Place')
 const Property = require('../module/property/Property')
 const Geometry = require('../module/geometry/Geometry')
 const PointInPolygon = require('../module/pip/PointInPolygon')
@@ -21,7 +21,7 @@ class QueryService {
     // set up modules
     this.module = {
       spatialite: new Spatialite(this.db),
-      document: new Document(this.db),
+      place: new Place(this.db),
       property: new Property(this.db),
       geometry: new Geometry(this.db),
       pip: new PointInPolygon(this.db),

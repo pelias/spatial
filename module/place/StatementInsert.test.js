@@ -1,4 +1,4 @@
-const TableDocument = require('./TableDocument')
+const TablePlace = require('./TablePlace')
 const StatementInsert = require('./StatementInsert')
 
 module.exports.tests = {}
@@ -8,7 +8,7 @@ module.exports.tests.create_drop = (test, common) => {
     let db = common.tempDatabase()
 
     // create table
-    let table = new TableDocument()
+    let table = new TablePlace()
     table.create(db)
 
     // prepare statement
@@ -16,7 +16,7 @@ module.exports.tests.create_drop = (test, common) => {
     stmt.create(db)
 
     // table empty
-    t.false(db.prepare(`SELECT * FROM document`).all().length, 'prior state')
+    t.false(db.prepare(`SELECT * FROM place`).all().length, 'prior state')
 
     // insert data
     let info = stmt.run({
@@ -30,7 +30,7 @@ module.exports.tests.create_drop = (test, common) => {
     t.deepEqual(info, { changes: 1, lastInsertRowid: 1 }, 'write')
 
     // read data
-    t.deepEqual(db.prepare(`SELECT * FROM document`).all(), [{
+    t.deepEqual(db.prepare(`SELECT * FROM place`).all(), [{
       source: 'example_source',
       id: 'example_id',
       class: 'example_class',

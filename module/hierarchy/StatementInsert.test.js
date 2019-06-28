@@ -22,7 +22,7 @@ module.exports.tests.functional = (test, common) => {
     let view = new ViewInsertProxy()
     view.create(db)
 
-    // create view
+    // create trigger
     let trigger = new TriggerOnInsert()
     trigger.create(db)
 
@@ -88,7 +88,7 @@ module.exports.tests.functional = (test, common) => {
     let view = new ViewInsertProxy()
     view.create(db)
 
-    // create view
+    // create trigger
     let trigger = new TriggerOnInsert()
     trigger.create(db)
 

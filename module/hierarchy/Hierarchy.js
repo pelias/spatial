@@ -12,7 +12,7 @@ class Hierarchy extends Module {
   constructor (db) {
     super(db)
     this.table = {
-      document: new TableHierarchy()
+      hierarchy: new TableHierarchy()
     }
     this.index = {
       unique: new IndexUnique(),

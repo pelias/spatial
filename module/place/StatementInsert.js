@@ -1,15 +1,22 @@
 const _ = require('lodash')
 const SqliteStatement = require('../../sqlite/SqliteStatement')
 
-class StatementFetch extends SqliteStatement {
+class StatementInsert extends SqliteStatement {
   create (db, config) {
     try {
       let dbname = _.get(config, 'database', 'main')
       this.statement = db.prepare(`
-        SELECT *
-        FROM ${dbname}.document
-        WHERE source = @source
-        AND id = @id
+        INSERT OR REPLACE INTO ${dbname}.place (
+          source,
+          id,
+          class,
+          type
+        ) VALUES (
+          @source,
+          @id,
+          @class,
+          @type
+        )
       `)
     } catch (e) {
       this.error('PREPARE STATEMENT', e)
@@ -17,4 +24,4 @@ class StatementFetch extends SqliteStatement {
   }
 }
 
-module.exports = StatementFetch
+module.exports = StatementInsert

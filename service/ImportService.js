@@ -2,7 +2,7 @@ const through = require('through2')
 const Database = require('better-sqlite3')
 const ServiceConfiguration = require('../config/ServiceConfiguration')
 const Spatialite = require('../module/spatialite/Spatialite')
-const Document = require('../module/document/Document')
+const Place = require('../module/place/Place')
 const Property = require('../module/property/Property')
 const Geometry = require('../module/geometry/Geometry')
 const Shard = require('../module/shard/Shard')
@@ -24,7 +24,7 @@ class ImportService {
     // set up modules
     this.module = {
       spatialite: new Spatialite(this.db),
-      document: new Document(this.db),
+      place: new Place(this.db),
       property: new Property(this.db),
       geometry: new Geometry(this.db),
       shard: new Shard(this.db),
@@ -49,22 +49,22 @@ class ImportService {
     }
   }
   createImportStream () {
-    let stats = { error: 0, imports: 0, document: 0, property: 0, geometry: 0, shard: 0 }
+    let stats = { error: 0, imports: 0, place: 0, property: 0, geometry: 0, shard: 0 }
 
     ticker.addIncrementOperation('error', () => stats.error)
-    ticker.addIncrementOperation('imports', () => stats.document, true, true)
-    // ticker.addIncrementOperation('document', () => stats.document)
+    ticker.addIncrementOperation('imports', () => stats.place, true, true)
+    // ticker.addIncrementOperation('place', () => stats.place)
     // ticker.addIncrementOperation('property', () => stats.property)
-    // ticker.addIncrementOperation('geometry', () => stats.document)
-    // ticker.addIncrementOperation('shard', () => stats.document)
+    // ticker.addIncrementOperation('geometry', () => stats.place)
+    // ticker.addIncrementOperation('shard', () => stats.place)
 
     return through.obj((doc, _, next) => {
       try {
         const transaction = this.db.transaction(doc => {
           let info
 
-          info = this.module.document.insert(doc, this.config)
-          if (info && info.changes) { stats.document += info.changes }
+          info = this.module.place.insert(doc, this.config)
+          if (info && info.changes) { stats.place += info.changes }
 
           info = this.module.property.insert(doc, this.config)
           if (info && info.changes) { stats.property += info.changes }

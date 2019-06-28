@@ -6,8 +6,8 @@ class IndexCovering extends SqliteIndex {
     try {
       let dbname = _.get(config, 'database', 'main')
       db.prepare(`
-        CREATE INDEX IF NOT EXISTS ${dbname}.document_idx_covering 
-        ON document(source, id, class, type)
+        CREATE INDEX IF NOT EXISTS ${dbname}.place_idx_covering 
+        ON place(source, id, class, type)
       `).run()
     } catch (e) {
       this.error('CREATE INDEX', e)
@@ -17,7 +17,7 @@ class IndexCovering extends SqliteIndex {
     try {
       let dbname = _.get(config, 'database', 'main')
       db.prepare(`
-        DROP INDEX IF EXISTS ${dbname}.document_idx_covering
+        DROP INDEX IF EXISTS ${dbname}.place_idx_covering
       `).run()
     } catch (e) {
       this.error('DROP INDEX', e)

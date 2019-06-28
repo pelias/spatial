@@ -6,7 +6,7 @@ class TableDocument extends SqliteTable {
     try {
       let dbname = _.get(config, 'database', 'main')
       db.prepare(`
-        CREATE TABLE IF NOT EXISTS ${dbname}.document (
+        CREATE TABLE IF NOT EXISTS ${dbname}.place (
           source TEXT NOT NULL,
           id TEXT NOT NULL,
           class TEXT NOT NULL,
@@ -21,7 +21,7 @@ class TableDocument extends SqliteTable {
     try {
       let dbname = _.get(config, 'database', 'main')
       db.prepare(`
-        DROP TABLE IF EXISTS ${dbname}.document
+        DROP TABLE IF EXISTS ${dbname}.place
       `).run()
     } catch (e) {
       this.error('DROP TABLE', e)

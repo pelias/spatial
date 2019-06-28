@@ -1,4 +1,4 @@
-const TableDocument = require('./TableDocument')
+const TablePlace = require('./TablePlace')
 const StatementInsert = require('./StatementInsert')
 const StatementFetch = require('./StatementFetch')
 
@@ -9,7 +9,7 @@ module.exports.tests.function = (test, common) => {
     let db = common.tempDatabase()
 
     // create table
-    let table = new TableDocument()
+    let table = new TablePlace()
     table.create(db)
 
     // prepare statements
@@ -20,7 +20,7 @@ module.exports.tests.function = (test, common) => {
     fetch.create(db)
 
     // table empty
-    t.false(db.prepare(`SELECT * FROM document`).all().length, 'prior state')
+    t.false(db.prepare(`SELECT * FROM place`).all().length, 'prior state')
 
     // insert data
     insert.run({
@@ -31,7 +31,7 @@ module.exports.tests.function = (test, common) => {
     })
 
     // ensure data written
-    t.equal(db.prepare(`SELECT * FROM document`).all().length, 1, 'write')
+    t.equal(db.prepare(`SELECT * FROM place`).all().length, 1, 'write')
 
     // read data
     let row = fetch.get({

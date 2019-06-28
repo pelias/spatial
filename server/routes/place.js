@@ -11,7 +11,7 @@ module.exports = function (req, res) {
 
   // perform query
   console.time('took')
-  let rows = service.module.document.statement.fetch.get(query)
+  let rows = service.module.place.statement.fetch.get(query)
   console.timeEnd('took')
 
   // send json

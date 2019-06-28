@@ -1,15 +1,15 @@
 const Module = require('../Module')
-const TableDocument = require('./TableDocument')
+const TablePlace = require('./TablePlace')
 const IndexCovering = require('./IndexCovering')
 const IndexIdentityUnique = require('./IndexIdentityUnique')
 const StatementInsert = require('./StatementInsert')
 const StatementFetch = require('./StatementFetch')
 
-class Document extends Module {
+class Place extends Module {
   constructor (db) {
     super(db)
     this.table = {
-      document: new TableDocument()
+      place: new TablePlace()
     }
     this.index = {
       covering: new IndexCovering(),
@@ -30,4 +30,4 @@ class Document extends Module {
   }
 }
 
-module.exports = Document
+module.exports = Place

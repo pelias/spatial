@@ -6,8 +6,8 @@ class IndexIdentityUnique extends SqliteIndex {
     try {
       let dbname = _.get(config, 'database', 'main')
       db.prepare(`
-        CREATE UNIQUE INDEX IF NOT EXISTS ${dbname}.document_idx_unique
-        ON document(source, id)
+        CREATE UNIQUE INDEX IF NOT EXISTS ${dbname}.place_idx_unique
+        ON place(source, id)
       `).run()
     } catch (e) {
       this.error('CREATE INDEX', e)
@@ -17,7 +17,7 @@ class IndexIdentityUnique extends SqliteIndex {
     try {
       let dbname = _.get(config, 'database', 'main')
       db.prepare(`
-        DROP INDEX IF EXISTS ${dbname}.document_idx_unique
+        DROP INDEX IF EXISTS ${dbname}.place_idx_unique
       `).run()
     } catch (e) {
       this.error('DROP INDEX', e)

@@ -73,11 +73,11 @@ app.use((req, res, next) => {
 })
 
 // routes
-app.get('/document/:source/:id', require('./routes/document'))
-app.get('/document/:source/:id/geometry', require('./routes/geometry').all)
-app.get('/document/:source/:id/geometry/:role', require('./routes/geometry').one)
-app.get('/document/:source/:id/property', require('./routes/property'))
-app.get('/document/:source/:id/hierarchy', require('./routes/hierarchy'))
+app.get('/place/:source/:id', require('./routes/place'))
+app.get('/place/:source/:id/geometry', require('./routes/geometry').all)
+app.get('/place/:source/:id/geometry/:role', require('./routes/geometry').one)
+app.get('/place/:source/:id/property', require('./routes/property'))
+app.get('/place/:source/:id/hierarchy', require('./routes/hierarchy'))
 app.get('/query/pip', require('./routes/pip'))
 
 // demo page

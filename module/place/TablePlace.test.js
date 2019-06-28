@@ -1,5 +1,5 @@
 const SqliteIntrospect = require('../../sqlite/SqliteIntrospect')
-const TableDocument = require('./TableDocument')
+const TablePlace = require('./TablePlace')
 
 module.exports.tests = {}
 
@@ -9,20 +9,20 @@ module.exports.tests.create_drop = (test, common) => {
     let introspect = new SqliteIntrospect(db)
 
     // table does not exist
-    t.false(introspect.tables().includes('document'), 'prior state')
+    t.false(introspect.tables().includes('place'), 'prior state')
 
     // create table
-    let table = new TableDocument()
+    let table = new TablePlace()
     table.create(db)
 
     // table exists
-    t.true(introspect.tables().includes('document'), 'create')
+    t.true(introspect.tables().includes('place'), 'create')
 
     // drop table
     table.drop(db)
 
     // table does not exist
-    t.false(introspect.tables().includes('document'), 'drop')
+    t.false(introspect.tables().includes('place'), 'drop')
 
     t.end()
   })
@@ -34,11 +34,11 @@ module.exports.tests.definition = (test, common) => {
     let introspect = new SqliteIntrospect(db)
 
     // create table
-    let table = new TableDocument()
+    let table = new TablePlace()
     table.create(db)
 
     // test columns
-    let columns = introspect.columns('document')
+    let columns = introspect.columns('place')
 
     // source
     t.deepEqual(columns[0], {
@@ -86,7 +86,7 @@ module.exports.tests.definition = (test, common) => {
 
 module.exports.all = (tape, common) => {
   function test (name, testFunction) {
-    return tape(`TableDocument: ${name}`, testFunction)
+    return tape(`TablePlace: ${name}`, testFunction)
   }
 
   for (var testCase in module.exports.tests) {
