@@ -8,6 +8,13 @@ const mapping = {
   'class': () => 'admin',
   'type': (record) => _.get(record, 'properties.wof:placetype'),
   'geometry': (record) => format.from('geometry', 'geojson', record.geometry),
+  'valid': (record) => {
+    let isCurrent = _.get(record, 'properties.mz:is_current') !== 0
+    let isDeprecated = !_.isEmpty(_.trim(record.properties['edtf:deprecated']))
+    let isSuperseded = _.isArray(_.get(record, 'properties.wof:superseded_by')) &&
+        record.properties['wof:superseded_by'].length > 0
+    return isCurrent && !isDeprecated && !isSuperseded
+  },
   'property': (record) => {
     return {
       'alpha2': _.get(record, 'properties.wof:country', 'XX').toUpperCase(),

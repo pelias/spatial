@@ -14,6 +14,11 @@ function streamFactory (mapping) {
             _.set(mapped, attr, _.get(record, val, undefined))
           }
         }
+        // skip invalid records
+        // ie. expired, deprecated etc.
+        if (mapped.valid === false) { return next() }
+
+        // push record downstream
         next(null, mapped)
       } catch (e) {
         console.error('mapping error', e)
