@@ -20,7 +20,7 @@ docker run --rm -it pelias/spatial npm test
 INGRESS='/data/wof/sqlite/whosonfirst-data-admin-nz-latest.db'
 EXTRACT_QUERY='SELECT json_extract(body, "$") FROM geojson'
 
-sqlite3 "${INGRESS}" "${EXTRACT_QUERY}" | docker run --rm -i -v "${PWD}:/data" pelias/spatial node bin/import.js /data/geo.docker.db
+sqlite3 "${INGRESS}" "${EXTRACT_QUERY}" | docker run --rm -i -v "${PWD}:/data" pelias/spatial node bin/import.js 'whosonfirst' /data/geo.docker.db
 ```
 
 ```
@@ -56,7 +56,7 @@ npm test
 INGRESS='/data/wof/sqlite/whosonfirst-data-admin-nz-latest.db'
 EXTRACT_QUERY='SELECT json_extract(body, "$") FROM geojson'
 
-sqlite3 "${INGRESS}" "${EXTRACT_QUERY}" | node bin/import.js geo.local.db
+sqlite3 "${INGRESS}" "${EXTRACT_QUERY}" | node bin/import.js 'whosonfirst' geo.local.db
 ```
 
 ```

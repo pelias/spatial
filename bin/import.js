@@ -1,9 +1,17 @@
 const ImportService = require('../service/ImportService')
 const importStream = require('../import/stream')
+const SOURCES = ['whosonfirst']
 
+// configure source
+const _source = process.argv[2]
+if (!SOURCES.includes(_source)) { throw new Error(`invalid source: ${_source}`) }
+const source = require(`../import/source/${_source}`)
+const stream = importStream(source)
+
+// configure service
 const service = new ImportService({
   readonly: false,
-  filename: process.argv[2] || 'geo.db',
+  filename: process.argv[3] || 'geo.db',
   database: 'main',
   module: {
     geometry: {
@@ -17,9 +25,7 @@ const service = new ImportService({
   }
 })
 
-const source = require('../import/source/whosonfirst')
-const stream = importStream(source)
-
+// start ticker
 const ticker = require('../import/ticker')
 ticker.start(1000)
 
