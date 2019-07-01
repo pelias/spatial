@@ -1,4 +1,3 @@
-
 /**
   The http server improves performance on multicore machines by using the
   node core 'cluster' module to fork worker processes.
@@ -22,6 +21,7 @@ const morgan = require('morgan')
 const express = require('express')
 const cluster = require('cluster')
 const through = require('through2')
+const handlebars = require('express-handlebars')
 const QueryService = require('../service/QueryService')
 const logger = require('pelias-logger').get('geometry')
 
@@ -56,6 +56,18 @@ function log () {
 // make sure that logging is the first thing that happens for all endpoints
 app.use(log())
 
+// view engine setup
+app.set('views', `${__dirname}/demo/views/`)
+app.engine('.hbs', handlebars({
+  extname: '.hbs',
+  defaultView: 'default',
+  helpers: {
+    uriEncode: encodeURIComponent,
+    uriDecode: decodeURIComponent
+  }
+}))
+app.set('view engine', '.hbs')
+
 // init service
 const service = new QueryService({
   readonly: true,
@@ -68,7 +80,9 @@ app.locals.service = service
 // generic http headers
 app.use((req, res, next) => {
   res.header('Charset', 'utf8')
-  res.header('Cache-Control', 'public, max-age=120')
+  if (!req.url.startsWith('/demo')) {
+    res.header('Cache-Control', 'public, max-age=120')
+  }
   next()
 })
 
@@ -80,9 +94,10 @@ app.get('/place/:source/:id/property', require('./routes/property'))
 app.get('/place/:source/:id/hierarchy', require('./routes/hierarchy'))
 app.get('/query/pip', require('./routes/pip'))
 
-// demo page
-// app.use('/demo', express.static(__dirname + '/demo'))
-// app.use('/', (req, res) => { res.redirect('/demo#eng') })
+// demo pages
+app.use('/demo', express.static(`${__dirname}/demo`))
+app.get('/demo/place/:source/:id', require('./routes/demo').place)
+app.use('/', (req, res) => { res.redirect('/demo/place') })
 
 // handle SIGTERM (required for fast docker restarts)
 process.on('SIGTERM', () => { app.close() })
@@ -112,7 +127,7 @@ if (cpus > 1) {
     })
   }
 
-// start single-threaded server
+  // start single-threaded server
 } else {
   console.error('[master] using %d cpus', cpus)
 

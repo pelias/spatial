@@ -1,0 +1,44 @@
+<div id="place-header" class="columns is-marginless">
+
+  <!-- breadcrumbs -->
+  <nav class="column is-6 breadcrumb" aria-label="breadcrumbs">
+    <ul>
+      <li><a href="/demo/place">place</a></li>
+      <li><a href="/demo/place/{{params.source}}">{{params.source}}</a></li>
+      <li class="is-active">
+        <a href="/demo/place/{{params.source}}/{{params.id}}" aria-current="page">{{params.id}}</a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- page title -->
+  <div class="column is-6">
+    <h1 id="title"></h1>
+  </div>
+</div>
+
+<div class="columns is-gapless">
+  <div id="place-content" class="column is-9">
+
+    <section class="map-hero">
+      <div id="map" class="map"></div>
+    </section>
+
+  </div>
+
+  <div id="place-sidebar" class="column is-3">
+    <nav id="sidebar-geometry" class="panel"></nav>
+    <nav id="sidebar-property" class="panel"></nav>
+    <nav id="sidebar-hierarchy" class="panel"></nav>
+  </div>
+
+</div>
+
+<script>
+  var events = $({});
+  var place = {
+    source: "{{{ params.source }}}",
+    id: "{{{ params.id }}}"
+  }
+</script>
+<script src="/demo/assets/page.js"></script>
