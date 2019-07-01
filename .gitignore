@@ -3,3 +3,4 @@ package-lock.json
 *.db
 *.db-journal
 *.geojson
+*.gz

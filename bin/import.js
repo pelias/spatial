@@ -1,6 +1,6 @@
 const ImportService = require('../service/ImportService')
 const importStream = require('../import/stream')
-const SOURCES = ['whosonfirst']
+const SOURCES = ['whosonfirst', 'osmium']
 
 // configure source
 const _source = process.argv[2]
