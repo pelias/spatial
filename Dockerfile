@@ -41,4 +41,4 @@ COPY . /code
 RUN npm i --link
 
 # run tests
-RUN bin/test
+ENTRYPOINT ["node", "bin/spatial.js"]

@@ -11,7 +11,7 @@ function streamFactory (source) {
     .pipe(parser(source.format))
     .pipe(mapper(source.mapping))
 
-  // pause stream until a sink is atatched
+  // pause stream until a sink is attached
   stream.pause()
 
   return stream

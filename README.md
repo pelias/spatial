@@ -20,12 +20,12 @@ docker run --rm -it pelias/spatial npm test
 INGRESS='/data/wof/sqlite/whosonfirst-data-admin-nz-latest.db'
 EXTRACT_QUERY='SELECT json_extract(body, "$") FROM geojson'
 
-sqlite3 "${INGRESS}" "${EXTRACT_QUERY}" | docker run --rm -i -v "${PWD}:/data" pelias/spatial node bin/import.js 'whosonfirst' /data/geo.docker.db
+sqlite3 "${INGRESS}" "${EXTRACT_QUERY}" | docker run --rm -i -v "${PWD}:/data" pelias/spatial --db='/data/geo.docker.db' 'import' 'whosonfirst'
 ```
 
 ```
 # run point-in-polygon query
-docker run --rm -i -v "${PWD}:/data" pelias/spatial node bin/pip.js /data/geo.docker.db 174.766843 -41.288788
+docker run --rm -i -v "${PWD}:/data" pelias/spatial --db='/data/geo.docker.db' 'pip' 174.766843 -41.288788
 ```
 
 # Local Development
@@ -56,10 +56,10 @@ npm test
 INGRESS='/data/wof/sqlite/whosonfirst-data-admin-nz-latest.db'
 EXTRACT_QUERY='SELECT json_extract(body, "$") FROM geojson'
 
-sqlite3 "${INGRESS}" "${EXTRACT_QUERY}" | node bin/import.js 'whosonfirst' geo.local.db
+sqlite3 "${INGRESS}" "${EXTRACT_QUERY}" | node bin/spatial.js --db='geo.local.db' 'import' 'whosonfirst'
 ```
 
 ```
 # run point-in-polygon query
-node bin/pip.js geo.local.db 174.766843 -41.288788
+node bin/spatial.js --db='geo.local.db' 'pip' 174.766843 -41.288788
 ```

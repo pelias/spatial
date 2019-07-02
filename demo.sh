@@ -6,4 +6,4 @@ QUERY='SELECT json_extract(body, "$") FROM geojson'
 rm -f geo.db
 
 # run import
-sqlite3 "${DATABASE}" "${QUERY}" | node bin/import.js 'whosonfirst'
+sqlite3 "${DATABASE}" "${QUERY}" | node bin/spatial.js --db='geo.db' 'import' 'whosonfirst'

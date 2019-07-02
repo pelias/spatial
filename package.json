@@ -38,7 +38,8 @@
     "pelias-logger": "^1.4.1",
     "split2": "^3.1.1",
     "through2": "^3.0.1",
-    "wkx": "^0.4.7"
+    "wkx": "^0.4.7",
+    "yargs": "^13.2.4"
   },
   "devDependencies": {
     "difflet": "^1.0.1",
