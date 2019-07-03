@@ -24,11 +24,17 @@ module.exports = {
       default: 'geo.db',
       describe: 'location of spatial database file'
     })
+    yargs.option('verbose', {
+      type: 'boolean',
+      default: false,
+      describe: 'enable verbose logging'
+    })
   },
   handler: (argv) => {
     const service = new QueryService({
       readonly: true,
-      filename: argv.db
+      filename: argv.db,
+      verbose: argv.verbose
     })
 
     let query = {

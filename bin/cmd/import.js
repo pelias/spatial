@@ -31,6 +31,11 @@ module.exports = {
       default: 1000,
       describe: 'ticker interval (set 0 to disable)'
     })
+    yargs.option('verbose', {
+      type: 'boolean',
+      default: false,
+      describe: 'enable verbose logging'
+    })
 
     // tweaks
     yargs.option('tweak_module_geometry_simplify', {
@@ -68,6 +73,7 @@ module.exports = {
       readonly: false,
       filename: argv.db,
       database: 'main',
+      verbose: argv.verbose,
       module: {
         geometry: {
           simplify: argv.tweak_module_geometry_simplify || undefined

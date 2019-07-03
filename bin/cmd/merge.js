@@ -18,13 +18,19 @@ module.exports = {
       default: 'geo.db',
       describe: 'location of spatial database file'
     })
+    yargs.option('verbose', {
+      type: 'boolean',
+      default: false,
+      describe: 'enable verbose logging'
+    })
   },
   handler: (argv) => {
     // configure service
     const service = new ImportService({
       readonly: false,
       filename: argv.db,
-      database: 'main'
+      database: 'main',
+      verbose: argv.verbose
     })
 
     if (!fs.existsSync(argv.external)) {
