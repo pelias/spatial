@@ -16,7 +16,7 @@ class Shard extends Module {
   constructor (db) {
     super(db)
     this.table = {
-      area: new TableShard(),
+      shard: new TableShard(),
       geom: new GeoColumnGeom()
     }
     this.index = {

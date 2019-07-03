@@ -27,6 +27,16 @@ class TableDocument extends SqliteTable {
       this.error('DROP TABLE', e)
     }
   }
+  merge (db, fromDbName, toDbName) {
+    try {
+      db.prepare(`
+        INSERT INTO ${toDbName}.place
+        SELECT * FROM ${fromDbName}.place
+      `).run()
+    } catch (e) {
+      this.error('MERGE TABLE', e)
+    }
+  }
 }
 
 module.exports = TableDocument

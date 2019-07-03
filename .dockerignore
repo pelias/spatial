@@ -3,6 +3,7 @@
 Dockerfile
 .dockerignore
 node_modules
+tmp
 package-lock.json
 *.md
 *.db

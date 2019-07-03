@@ -39,6 +39,13 @@ class Module {
       this.statement[name].create(this.db, config)
     }
   }
+  merge (fromDbName, toDbName) {
+    for (let name in this.table) {
+      if (typeof this.table[name].merge === 'function') {
+        this.table[name].merge(this.db, fromDbName, toDbName || 'main')
+      }
+    }
+  }
 }
 
 module.exports = Module

@@ -11,7 +11,7 @@ class Geometry extends Module {
   constructor (db) {
     super(db)
     this.table = {
-      area: new TableGeometry(),
+      geometry: new TableGeometry(),
       geom: new GeoColumnGeom()
     }
     this.index = {

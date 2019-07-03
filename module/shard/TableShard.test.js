@@ -1,25 +1,25 @@
 const SqliteIntrospect = require('../../sqlite/SqliteIntrospect')
-const TableShard = require('./TableShard')
+const Shard = require('./Shard')
 
 module.exports.tests = {}
 
 module.exports.tests.create_drop = (test, common) => {
   test('create & drop', (t) => {
-    let db = common.tempDatabase()
+    let db = common.tempSpatialDatabase()
     let introspect = new SqliteIntrospect(db)
 
     // table does not exist
     t.false(introspect.tables().includes('shard'), 'prior state')
 
-    // create table
-    let table = new TableShard()
-    table.create(db)
+    // setup module
+    let mod = new Shard(db)
+    mod.setup()
 
     // table exists
     t.true(introspect.tables().includes('shard'), 'create')
 
     // drop table
-    table.drop(db)
+    mod.table.shard.drop(db)
 
     // table does not exist
     t.false(introspect.tables().includes('shard'), 'drop')
@@ -28,14 +28,66 @@ module.exports.tests.create_drop = (test, common) => {
   })
 }
 
+module.exports.tests.merge = (test, common) => {
+  test('merge', (t) => {
+    let external = common.tempSpatialDatabase({ memory: false })
+
+    // setup module
+    let mod = new Shard(external)
+    mod.setup()
+
+    // ensure table is empty
+    t.equal(external.prepare(`SELECT * FROM shard`).all().length, 0, 'prior state')
+
+    // insert some data
+    let stmt = external.prepare(`
+      INSERT INTO shard (source, id, parity, depth, geom)
+      VALUES (@source, @id, @parity, @depth, CastToMultiPolygon( Buffer( MakePoint( @lon, @lat, 4326 ), 1 ) ) )
+    `)
+
+    stmt.run({ source: 'example', id: 'id1', parity: 1, depth: 1, lat: 1, lon: 1 })
+    stmt.run({ source: 'example', id: 'id2', parity: 2, depth: 1, lat: 2, lon: 2 })
+    stmt.run({ source: 'example', id: 'id3', parity: 3, depth: 1, lat: 3, lon: 3 })
+
+    // ensure table is populated
+    t.equal(external.prepare(`SELECT * FROM shard`).all().length, 3, 'write')
+
+    // close external database
+    external.close()
+
+    // ---
+
+    // generate second database
+    let db = common.tempSpatialDatabase()
+
+    // setup module on second db
+    mod = new Shard(db)
+    mod.setup()
+
+    // attach external database
+    db.prepare(`ATTACH DATABASE '${external.name}' as 'external'`).run()
+
+    // ensure external table is populated
+    t.equal(db.prepare(`SELECT * FROM external.shard`).all().length, 3, 'external state')
+
+    // table does not exist
+    mod.table.shard.merge(db, 'external', 'main')
+
+    // ensure table is merged to main db
+    t.equal(db.prepare(`SELECT * FROM shard`).all().length, 3, 'merged')
+
+    t.end()
+  })
+}
+
 module.exports.tests.definition = (test, common) => {
   test('definition', (t) => {
-    let db = common.tempDatabase()
+    let db = common.tempSpatialDatabase()
     let introspect = new SqliteIntrospect(db)
 
-    // create table
-    let table = new TableShard()
-    table.create(db)
+    // setup module
+    let mod = new Shard(db)
+    mod.setup()
 
     // test columns
     let columns = introspect.columns('shard')

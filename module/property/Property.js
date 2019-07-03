@@ -9,7 +9,7 @@ class Property extends Module {
   constructor (db) {
     super(db)
     this.table = {
-      area: new TableProperty()
+      property: new TableProperty()
     }
     this.index = {
       identity: new IndexIdentity()

@@ -1,5 +1,5 @@
 const SqliteIntrospect = require('../../sqlite/SqliteIntrospect')
-const TableProperty = require('./TableProperty')
+const Property = require('./Property')
 
 module.exports.tests = {}
 
@@ -11,18 +11,85 @@ module.exports.tests.create_drop = (test, common) => {
     // table does not exist
     t.false(introspect.tables().includes('property'), 'prior state')
 
-    // create table
-    let table = new TableProperty()
-    table.create(db)
+    // setup module
+    let mod = new Property(db)
+    mod.setup()
 
     // table exists
     t.true(introspect.tables().includes('property'), 'create')
 
     // drop table
-    table.drop(db)
+    mod.table.property.drop(db)
 
     // table does not exist
     t.false(introspect.tables().includes('property'), 'drop')
+
+    t.end()
+  })
+}
+
+module.exports.tests.merge = (test, common) => {
+  test('merge', (t) => {
+    let external = common.tempDatabase({ memory: false })
+
+    // setup module
+    let mod = new Property(external)
+    mod.setup()
+
+    // ensure table is empty
+    t.equal(external.prepare(`SELECT * FROM property`).all().length, 0, 'prior state')
+
+    // insert some data
+    let stmt = external.prepare(`
+      INSERT INTO property (source, id, key, value)
+      VALUES (@source, @id, @key, @value)
+    `)
+
+    stmt.run({
+      source: 'example',
+      id: 'id1',
+      key: 'foo',
+      value: 'bar'
+    })
+    stmt.run({
+      source: 'example',
+      id: 'id2',
+      key: 'foo',
+      value: 'bar'
+    })
+    stmt.run({
+      source: 'example',
+      id: 'id3',
+      key: 'foo',
+      value: 'bar'
+    })
+
+    // ensure table is populated
+    t.equal(external.prepare(`SELECT * FROM property`).all().length, 3, 'write')
+
+    // close external database
+    external.close()
+
+    // ---
+
+    // generate second database
+    let db = common.tempDatabase()
+
+    // setup module on second db
+    mod = new Property(db)
+    mod.setup()
+
+    // attach external database
+    db.prepare(`ATTACH DATABASE '${external.name}' as 'external'`).run()
+
+    // ensure external table is populated
+    t.equal(db.prepare(`SELECT * FROM external.property`).all().length, 3, 'external state')
+
+    // table does not exist
+    mod.table.property.merge(db, 'external', 'main')
+
+    // ensure table is merged to main db
+    t.equal(db.prepare(`SELECT * FROM property`).all().length, 3, 'merged')
 
     t.end()
   })
@@ -33,9 +100,9 @@ module.exports.tests.definition = (test, common) => {
     let db = common.tempDatabase()
     let introspect = new SqliteIntrospect(db)
 
-    // create table
-    let table = new TableProperty()
-    table.create(db)
+    // setup module
+    let mod = new Property(db)
+    mod.setup()
 
     // test columns
     let columns = introspect.columns('property')

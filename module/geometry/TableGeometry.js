@@ -26,6 +26,16 @@ class TableGeometry extends SqliteTable {
       this.error('DROP TABLE', e)
     }
   }
+  merge (db, fromDbName, toDbName) {
+    try {
+      db.prepare(`
+        INSERT INTO ${toDbName}.geometry
+        SELECT * FROM ${fromDbName}.geometry
+      `).run()
+    } catch (e) {
+      this.error('MERGE TABLE', e)
+    }
+  }
 }
 
 module.exports = TableGeometry
