@@ -30,7 +30,7 @@ class TableGeometry extends SqliteTable {
   merge (db, fromDbName, toDbName) {
     try {
       db.prepare(`
-        INSERT INTO ${toDbName}.property
+        INSERT OR REPLACE INTO ${toDbName}.property
         SELECT * FROM ${fromDbName}.property
       `).run()
     } catch (e) {

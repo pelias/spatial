@@ -2,7 +2,7 @@ const format = require('../../import/format')
 const Module = require('../Module')
 const TableShard = require('./TableShard')
 const IndexCovering = require('./IndexCovering')
-const IndexDepth = require('./IndexDepth')
+const IndexPath = require('./IndexPath')
 const IndexComplexity = require('./IndexComplexity')
 const GeoColumnGeom = require('./GeoColumnGeom')
 const GeoIndexGeom = require('./GeoIndexGeom')
@@ -21,7 +21,7 @@ class Shard extends Module {
     }
     this.index = {
       covering: new IndexCovering(),
-      depth: new IndexDepth(),
+      path: new IndexPath(),
       complexity: new IndexComplexity(),
       geom: new GeoIndexGeom()
     }

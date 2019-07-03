@@ -10,47 +10,45 @@ class TriggerSplitHorizontal extends SqliteStatement {
       db.prepare(`
         CREATE TRIGGER IF NOT EXISTS shard_split_horizontal_trigger
         AFTER UPDATE OF complexity ON ${dbname}.shard
-        WHEN (NEW.depth % 2) = 0
-        AND NEW.depth < ${depth}
+        WHEN ( LENGTH( NEW.path ) % 2 ) = 1
+        AND LENGTH( NEW.path ) <= ${depth}
         AND IFNULL( NEW.complexity, 0 ) > ${complexity}
-        AND IsValid( NEW.geom )
+        AND IsValid( NEW.geom ) = 1
         BEGIN
-          INSERT OR REPLACE INTO shard( source, id, parity, depth, geom )
+          INSERT OR REPLACE INTO shard( source, id, path, geom )
 
           /* left half */
           SELECT
-            NEW.source, NEW.id, 1, NEW.depth + 1,
+            NEW.source, NEW.id, NEW.path || '1',
             CastToMultiPolygon(Intersection(NEW.geom, BuildMbr(
               MbrMinX(NEW.geom),
               MbrMinY(NEW.geom),
               MbrMinX(NEW.geom) + ((MbrMaxX(NEW.geom) - MbrMinX(NEW.geom)) / 2),
               MbrMaxY(NEW.geom)
-            ))) AS quad
+            ))) AS geom
           FROM shard
           WHERE shard.rowid = NEW.rowid
-          AND quad IS NOT NULL
+          AND IsValid( geom ) = 1
 
-          UNION
+          UNION ALL
 
           /* right half */
           SELECT
-            NEW.source, NEW.id, 2, NEW.depth + 1,
+            NEW.source, NEW.id, NEW.path || '2',
             CastToMultiPolygon(Intersection(NEW.geom, BuildMbr(
               MbrMinX( geom ) + (( MbrMaxX( geom ) - MbrMinX( geom )) / 2),
               MbrMinY( geom ),
               MbrMaxX( geom ),
               MbrMaxY( geom )
-            ))) AS quad
+            ))) AS geom
           FROM shard
           WHERE shard.rowid = NEW.rowid
-          AND quad IS NOT NULL;
+          AND IsValid( geom ) = 1;
 
           /* clean up */
           DELETE FROM shard
           WHERE rowid = NEW.rowid
-          AND depth = NEW.depth
-          AND IFNULL( NEW.complexity, 0 ) > ${complexity}
-          AND IsValid( NEW.geom );
+          AND CHANGES() == 2;
         END
       `).run()
     } catch (e) {

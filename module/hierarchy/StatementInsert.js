@@ -6,7 +6,7 @@ class StatementInsert extends SqliteStatement {
     try {
       let dbname = _.get(config, 'database', 'main')
       this.statement = db.prepare(`
-        INSERT INTO ${dbname}.hierarchy_insert_proxy (
+        INSERT OR IGNORE INTO ${dbname}.hierarchy_insert_proxy (
           parent_source,
           parent_id,
           child_source,

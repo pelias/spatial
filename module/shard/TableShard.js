@@ -9,8 +9,7 @@ class TableShard extends SqliteTable {
         CREATE TABLE IF NOT EXISTS ${dbname}.shard (
           source TEXT NOT NULL,
           id TEXT NOT NULL,
-          parity INTEGER NOT NULL DEFAULT 0,
-          depth INTEGER NOT NULL DEFAULT 0,
+          path TEXT NOT NULL DEFAULT '0',
           complexity INTEGER DEFAULT NULL
         )
       `).run()
@@ -31,7 +30,7 @@ class TableShard extends SqliteTable {
   merge (db, fromDbName, toDbName) {
     try {
       db.prepare(`
-        INSERT INTO ${toDbName}.shard
+        INSERT OR REPLACE INTO ${toDbName}.shard
         SELECT * FROM ${fromDbName}.shard
       `).run()
     } catch (e) {

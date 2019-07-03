@@ -30,7 +30,7 @@ class TableDocument extends SqliteTable {
   merge (db, fromDbName, toDbName) {
     try {
       db.prepare(`
-        INSERT INTO ${toDbName}.place
+        INSERT OR REPLACE INTO ${toDbName}.place
         SELECT * FROM ${fromDbName}.place
       `).run()
     } catch (e) {

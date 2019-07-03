@@ -10,47 +10,45 @@ class TriggerSplitVertical extends SqliteStatement {
       db.prepare(`
         CREATE TRIGGER IF NOT EXISTS shard_split_vertical_trigger
         AFTER UPDATE OF complexity ON ${dbname}.shard
-        WHEN (NEW.depth % 2) = 1
-        AND NEW.depth < ${depth}
+        WHEN ( LENGTH( NEW.path ) % 2 ) = 0
+        AND LENGTH( NEW.path ) <= ${depth}
         AND IFNULL( NEW.complexity, 0 ) > ${complexity}
-        AND IsValid( NEW.geom )
+        AND IsValid( NEW.geom ) = 1
         BEGIN
-          INSERT OR REPLACE INTO shard( source, id, parity, depth, geom )
+          INSERT OR REPLACE INTO shard( source, id, path, geom )
 
           /* top half */
           SELECT
-            NEW.source, NEW.id, 3, NEW.depth + 1,
+            NEW.source, NEW.id, NEW.path || '3',
             CastToMultiPolygon(Intersection(NEW.geom, BuildMbr(
               MbrMinX( geom ),
               MbrMinY( geom ),
               MbrMaxX( geom ),
               MbrMinY( geom ) + (( MbrMaxY( geom ) - MbrMinY( geom )) / 2)
-            ))) AS quad
+            ))) AS geom
           FROM shard
           WHERE shard.rowid = NEW.rowid
-          AND quad IS NOT NULL
+          AND IsValid( geom ) = 1
 
-          UNION
+          UNION ALL
 
           /* bottom half */
           SELECT
-            NEW.source, NEW.id, 4, NEW.depth + 1,
+            NEW.source, NEW.id, NEW.path || '4',
             CastToMultiPolygon(Intersection(NEW.geom, BuildMbr(
               MbrMinX( geom ),
               MbrMinY( geom ) + (( MbrMaxY( geom ) - MbrMinY( geom )) / 2),
               MbrMaxX( geom ),
               MbrMaxY( geom )
-            ))) AS quad
+            ))) AS geom
           FROM shard
           WHERE shard.rowid = NEW.rowid
-          AND quad IS NOT NULL;
+          AND IsValid( geom ) = 1;
 
           /* clean up */
           DELETE FROM shard
           WHERE rowid = NEW.rowid
-          AND depth = NEW.depth
-          AND IFNULL( NEW.complexity, 0 ) > ${complexity}
-          AND IsValid( NEW.geom );
+          AND CHANGES() == 2;
         END
       `).run()
     } catch (e) {

@@ -32,7 +32,7 @@ class TableHierarchy extends SqliteTable {
   merge (db, fromDbName, toDbName) {
     try {
       db.prepare(`
-        INSERT INTO ${toDbName}.hierarchy
+        INSERT OR IGNORE INTO ${toDbName}.hierarchy
         SELECT * FROM ${fromDbName}.hierarchy
       `).run()
     } catch (e) {

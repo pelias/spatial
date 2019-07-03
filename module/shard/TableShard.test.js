@@ -41,13 +41,13 @@ module.exports.tests.merge = (test, common) => {
 
     // insert some data
     let stmt = external.prepare(`
-      INSERT INTO shard (source, id, parity, depth, geom)
-      VALUES (@source, @id, @parity, @depth, CastToMultiPolygon( Buffer( MakePoint( @lon, @lat, 4326 ), 1 ) ) )
+      INSERT INTO shard (source, id, path, geom)
+      VALUES (@source, @id, @path, CastToMultiPolygon( Buffer( MakePoint( @lon, @lat, 4326 ), 1 ) ) )
     `)
 
-    stmt.run({ source: 'example', id: 'id1', parity: 1, depth: 1, lat: 1, lon: 1 })
-    stmt.run({ source: 'example', id: 'id2', parity: 2, depth: 1, lat: 2, lon: 2 })
-    stmt.run({ source: 'example', id: 'id3', parity: 3, depth: 1, lat: 3, lon: 3 })
+    stmt.run({ source: 'example', id: 'id1', path: '01', lat: 1, lon: 1 })
+    stmt.run({ source: 'example', id: 'id2', path: '02', lat: 2, lon: 2 })
+    stmt.run({ source: 'example', id: 'id3', path: '03', lat: 3, lon: 3 })
 
     // ensure table is populated
     t.equal(external.prepare(`SELECT * FROM shard`).all().length, 3, 'write')
@@ -112,29 +112,19 @@ module.exports.tests.definition = (test, common) => {
       pk: 0
     }, 'id')
 
-    // parity
+    // path
     t.deepEqual(columns[2], {
       cid: 2,
-      name: 'parity',
-      type: 'INTEGER',
+      name: 'path',
+      type: 'TEXT',
       notnull: 1,
-      dflt_value: '0',
+      dflt_value: `'0'`,
       pk: 0
-    }, 'parity')
-
-    // depth
-    t.deepEqual(columns[3], {
-      cid: 3,
-      name: 'depth',
-      type: 'INTEGER',
-      notnull: 1,
-      dflt_value: '0',
-      pk: 0
-    }, 'depth')
+    }, 'path')
 
     // complexity
-    t.deepEqual(columns[4], {
-      cid: 4,
+    t.deepEqual(columns[3], {
+      cid: 3,
       name: 'complexity',
       type: 'INTEGER',
       notnull: 0,

@@ -2,6 +2,7 @@ const _ = require('lodash')
 const Module = require('../Module')
 const TableProperty = require('./TableProperty')
 const IndexIdentity = require('./IndexIdentity')
+const IndexUnique = require('./IndexUnique')
 const StatementInsert = require('./StatementInsert')
 const StatementFetch = require('./StatementFetch')
 
@@ -12,7 +13,8 @@ class Property extends Module {
       property: new TableProperty()
     }
     this.index = {
-      identity: new IndexIdentity()
+      identity: new IndexIdentity(),
+      unique: new IndexUnique()
     }
     this.statement = {
       insert: new StatementInsert(),

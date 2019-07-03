@@ -53,7 +53,7 @@ module.exports.tests.definition = (test, common) => {
 
     // shard_idx_complexity
     t.deepEqual(geom[0], {
-      cid: 5,
+      cid: 4,
       name: 'geom',
       type: 'MULTIPOLYGON',
       notnull: 1,

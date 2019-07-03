@@ -62,47 +62,45 @@ module.exports.tests.definition = (test, common) => {
       sql: `
         CREATE TRIGGER IF NOT EXISTS shard_split_horizontal_trigger
         AFTER UPDATE OF complexity ON main.shard
-        WHEN (NEW.depth % 2) = 0
-        AND NEW.depth < 50
+        WHEN ( LENGTH( NEW.path ) % 2 ) = 1
+        AND LENGTH( NEW.path ) <= 50
         AND IFNULL( NEW.complexity, 0 ) > 200
-        AND IsValid( NEW.geom )
+        AND IsValid( NEW.geom ) = 1
         BEGIN
-          INSERT OR REPLACE INTO shard( source, id, parity, depth, geom )
+          INSERT OR REPLACE INTO shard( source, id, path, geom )
 
           /* left half */
           SELECT
-            NEW.source, NEW.id, 1, NEW.depth + 1,
+            NEW.source, NEW.id, NEW.path || '1',
             CastToMultiPolygon(Intersection(NEW.geom, BuildMbr(
               MbrMinX(NEW.geom),
               MbrMinY(NEW.geom),
               MbrMinX(NEW.geom) + ((MbrMaxX(NEW.geom) - MbrMinX(NEW.geom)) / 2),
               MbrMaxY(NEW.geom)
-            ))) AS quad
+            ))) AS geom
           FROM shard
           WHERE shard.rowid = NEW.rowid
-          AND quad IS NOT NULL
+          AND IsValid( geom ) = 1
 
-          UNION
+          UNION ALL
 
           /* right half */
           SELECT
-            NEW.source, NEW.id, 2, NEW.depth + 1,
+            NEW.source, NEW.id, NEW.path || '2',
             CastToMultiPolygon(Intersection(NEW.geom, BuildMbr(
               MbrMinX( geom ) + (( MbrMaxX( geom ) - MbrMinX( geom )) / 2),
               MbrMinY( geom ),
               MbrMaxX( geom ),
               MbrMaxY( geom )
-            ))) AS quad
+            ))) AS geom
           FROM shard
           WHERE shard.rowid = NEW.rowid
-          AND quad IS NOT NULL;
+          AND IsValid( geom ) = 1;
 
           /* clean up */
           DELETE FROM shard
           WHERE rowid = NEW.rowid
-          AND depth = NEW.depth
-          AND IFNULL( NEW.complexity, 0 ) > 200
-          AND IsValid( NEW.geom );
+          AND CHANGES() == 2;
         END
       `.trim().replace(' IF NOT EXISTS', '')
     }, 'shard_split_horizontal_trigger')
@@ -130,7 +128,7 @@ module.exports.tests.function = (test, common) => {
     let trigger = new TriggerSplitHorizontal({
       shard: {
         complexity: 100,
-        depth: 1
+        path: '01'
       }
     })
     trigger.create(db)
@@ -150,11 +148,14 @@ module.exports.tests.function = (test, common) => {
     })
 
     // fire the trigger
-    db.prepare(`UPDATE shard SET depth = 0`).run()
+    db.prepare(`UPDATE shard SET path = '0'`).run()
     db.prepare(`UPDATE shard SET complexity = 338`).run()
 
     // trigger has split the geometry in half horizontally
-    t.equal(db.prepare(`SELECT COUNT(*) AS cnt FROM shard`).get().cnt, 2, 'prior state')
+    t.deepEqual(db.prepare(`SELECT path FROM shard`).all(), [
+      { path: '01' },
+      { path: '02' }
+    ], 'split')
 
     t.end()
   })

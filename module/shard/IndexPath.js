@@ -1,13 +1,13 @@
 const _ = require('lodash')
 const SqliteIndex = require('../../sqlite/SqliteIndex')
 
-class IndexDepth extends SqliteIndex {
+class IndexPath extends SqliteIndex {
   create (db, config) {
     try {
       let dbname = _.get(config, 'database', 'main')
       db.prepare(`
-        CREATE INDEX IF NOT EXISTS ${dbname}.shard_idx_depth 
-        ON shard(depth)
+        CREATE INDEX IF NOT EXISTS ${dbname}.shard_idx_path 
+        ON shard( LENGTH( path ) )
       `).run()
     } catch (e) {
       this.error('CREATE INDEX', e)
@@ -17,7 +17,7 @@ class IndexDepth extends SqliteIndex {
     try {
       let dbname = _.get(config, 'database', 'main')
       db.prepare(`
-        DROP INDEX IF EXISTS ${dbname}.shard_idx_depth
+        DROP INDEX IF EXISTS ${dbname}.shard_idx_path
       `).run()
     } catch (e) {
       this.error('DROP INDEX', e)
@@ -25,4 +25,4 @@ class IndexDepth extends SqliteIndex {
   }
 }
 
-module.exports = IndexDepth
+module.exports = IndexPath

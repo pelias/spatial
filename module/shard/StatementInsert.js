@@ -11,14 +11,12 @@ class StatementInsert extends SqliteStatement {
           INSERT OR REPLACE INTO ${dbname}.shard (
             source,
             id,
-            parity,
-            depth,
+            path,
             geom
           ) VALUES (
             @source,
             @id,
-            0,
-            0,
+            '0',
             CastToMultiPolygon( SimplifyPreserveTopology( GeomFromWKB( @geom, 4326 ), ${simplify} ) )
           )
         `)
@@ -27,14 +25,12 @@ class StatementInsert extends SqliteStatement {
           INSERT OR REPLACE INTO ${dbname}.shard (
             source,
             id,
-            parity,
-            depth,
+            path,
             geom
           ) VALUES (
             @source,
             @id,
-            0,
-            0,
+            '0',
             CastToMultiPolygon( GeomFromWKB( @geom, 4326 ) )
           )
         `)

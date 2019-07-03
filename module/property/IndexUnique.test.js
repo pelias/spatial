@@ -1,6 +1,6 @@
 const SqliteIntrospect = require('../../sqlite/SqliteIntrospect')
-const TableShard = require('./TableShard')
-const IndexCovering = require('./IndexCovering')
+const TableProperty = require('./TableProperty')
+const IndexUnique = require('./IndexUnique')
 
 module.exports.tests = {}
 
@@ -10,24 +10,24 @@ module.exports.tests.create_drop = (test, common) => {
     let introspect = new SqliteIntrospect(db)
 
     // create table
-    let table = new TableShard()
+    let table = new TableProperty()
     table.create(db)
 
     // index does not exist
-    t.false(introspect.indices('shard').length, 'prior state')
+    t.false(introspect.indices('property').length, 'prior state')
 
     // create index
-    let index = new IndexCovering()
+    let index = new IndexUnique()
     index.create(db)
 
     // index exists
-    t.true(introspect.indices('shard').length, 'create')
+    t.true(introspect.indices('property').length, 'create')
 
     // drop index
     index.drop(db)
 
     // index does not exist
-    t.false(introspect.indices('shard').length, 'drop')
+    t.false(introspect.indices('property').length, 'drop')
 
     t.end()
   })
@@ -39,24 +39,24 @@ module.exports.tests.definition = (test, common) => {
     let introspect = new SqliteIntrospect(db)
 
     // create table
-    let table = new TableShard()
+    let table = new TableProperty()
     table.create(db)
 
     // create index
-    let index = new IndexCovering()
+    let index = new IndexUnique()
     index.create(db)
 
     // test indices
-    let indices = introspect.indices('shard')
+    let indices = introspect.indices('property')
 
-    // shard_idx_covering
+    // property_idx_unique
     t.deepEqual(indices[0], {
       seq: 0,
-      name: 'shard_idx_covering',
+      name: 'property_idx_unique',
       unique: 1,
       origin: 'c',
       partial: 0
-    }, 'shard_idx_covering')
+    }, 'property_idx_unique')
 
     t.end()
   })
@@ -64,7 +64,7 @@ module.exports.tests.definition = (test, common) => {
 
 module.exports.all = (tape, common) => {
   function test (name, testFunction) {
-    return tape(`IndexCovering: ${name}`, testFunction)
+    return tape(`IndexUnique: ${name}`, testFunction)
   }
 
   for (var testCase in module.exports.tests) {

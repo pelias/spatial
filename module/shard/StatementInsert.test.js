@@ -39,8 +39,7 @@ module.exports.tests.function = (test, common) => {
     t.deepEqual(db.prepare(`SELECT *, AsBinary(geom) AS geom FROM shard`).all(), [{
       source: 'example_source',
       id: 'example_id',
-      parity: 0,
-      depth: 0,
+      path: '0',
       complexity: null,
       geom: TRIANGLE.toWkb()
     }], 'read')
