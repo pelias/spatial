@@ -1,29 +1,4 @@
-<div id="place-header" class="columns is-marginless">
-
-  <!-- breadcrumbs -->
-  <nav class="column is-6 breadcrumb" aria-label="breadcrumbs">
-    <ul>
-      <li><a href="/demo/place">place</a></li>
-      <li><a href="/demo/place/{{encodeURI params.identity.source}}">{{params.identity.source}}</a></li>
-      <li class="is-active">
-        <a href="/demo/place/{{encodeURI params.identity.source}}/{{encodeURI params.identity.id}}">{{params.identity.id}}</a>
-      </li>
-    </ul>
-  </nav>
-
-  <!-- page title -->
-  <div class="column is-6">
-    <h1 id="title">
-      {{#each params.place.property}}
-        {{#if (is this.key 'name')}}
-          {{this.value}}
-        {{/if}}
-      {{/each}}
-    </h1>
-  </div>
-</div>
-
-<div class="columns is-gapless">
+<div class="columns is-gapless" style="height: 100%;">
   <div id="place-content" class="column is-9">
 
     <section class="map-hero">
@@ -34,9 +9,34 @@
 
   <div id="place-sidebar" class="column is-3">
 
+    <!-- identity sidebar -->
+    <nav id="sidebar-identity" class="panel">
+      <p class="panel-heading">Identity</p>
+      <table class="table is-fullwidth">
+        <tbody>
+          <tr>
+            <th>source</th>
+            <td>{{params.place.source}}</td>
+          </tr>
+          <tr>
+            <th>id</th>
+            <td>{{params.place.id}}</td>
+          </tr>
+          <tr>
+            <th>class</th>
+            <td>{{params.place.class}}</td>
+          </tr>
+          <tr>
+            <th>type</th>
+            <td>{{params.place.type}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </nav>
+
     <!-- geometry sidebar -->
     <nav id="sidebar-geometry" class="panel">
-      <p class="panel-heading">Geometries:</p>
+      <p class="panel-heading">Geometries</p>
       {{#each params.place.geometry}}
         <a class="sidebar-element panel-block is-active">
           <span class="panel-icon">
@@ -50,14 +50,11 @@
 
     <!-- property sidebar -->
     <nav id="sidebar-property" class="panel">
-      <p class="panel-heading">Properties:</p>
+      <p class="panel-heading">Properties</p>
       <table class="table is-fullwidth">
-        <thead>
-          <tr><th>key</th><th>value</th></tr>
-        </thead>
         <tbody>
           {{#each params.place.property}}
-            <tr><td>{{this.key}}</td><td>{{this.value}}</td></tr>
+            <tr><th>{{this.key}}</th><td>{{this.value}}</td></tr>
           {{/each}}
         </tbody>
       </table>
@@ -65,7 +62,7 @@
 
     <!-- hierarchy sidebar -->
     <nav id="sidebar-hierarchy" class="panel">
-      <p class="panel-heading">Hierarchies:</p>
+      <p class="panel-heading">Hierarchies</p>
       <table class="table is-fullwidth">
         <thead>
           <tr>

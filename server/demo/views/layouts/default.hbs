@@ -8,15 +8,14 @@
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.js"></script>
   <script src="https://code.jquery.com/jquery-3.0.0.js"></script>
+  <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>-->
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css" />
   <link rel="stylesheet"
     href="https://cdn.jsdelivr.net/npm/bulma-extensions@4.0.1/dist/css/bulma-extensions.min.css">
   
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
-  <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>-->
-  <!--<link href="/demo/assets/admin.css" rel="stylesheet">-->
+  <script src="https://kit.fontawesome.com/9d98297a6e.js"></script>
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.css" />
@@ -32,7 +31,29 @@
 </head>
 
 <body>
-  {{{body}}}
+
+  <div id="outer" class="columns is-marginless">
+    <div id="menu">
+      <aside class="menu">
+        <ul class="menu-list">
+          <li><a>
+            <i class="fas fa-database"></i>
+            <em>Browse</em>
+          </a></li>
+          <li><a>
+            <i class="fas fa-draw-polygon"></i>
+            <em>PIP</em>
+          </a></li>
+          <li class="bottom"><a id="menu-toggle" class="inverse">
+            <i class="fas fa-plus"></i>
+          </a></li>
+        </ul>
+      </aside>
+    </div>
+    <div class="column is-paddingless" style="height: 100%;">
+      {{{body}}}
+    </div>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bulma-extensions@4.0.1/dist/js/bulma-extensions.min.js"></script>
   <script async type="text/javascript" src="/demo/assets/bulma.js"></script>

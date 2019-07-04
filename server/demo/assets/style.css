@@ -1,17 +1,61 @@
-html, body {
+html, body, #outer {
   width: 100%;
   height: 100%;
   margin: 0;
   padding: 0;
   border: 0;
+  font-family: 'Open Sans', sans-serif;
 }
 
 html {
-  background: #ECF0F3;
+  /* background: #ECF0F3; */
+  background: #ECF0F1;
 }
 
-.columns {
-  margin-top: 0px;
+#menu {
+  width: 50px;
+  background-color: #071E22;
+  padding-top: 4px;
+}
+
+#menu.expanded {
+  width: 150px;
+}
+
+#menu ul.menu-list li {
+  padding: 5px;
+}
+
+#menu ul.menu-list li.bottom {
+  position: absolute;
+  bottom: 0px;
+}
+
+#menu ul.menu-list li a {
+  padding: 5px 10px;
+  font-size: 1.3em;
+  color: #071E22;
+  background-color: #FFF;
+  border: solid 2px #FFF;
+  border-radius: 4px;
+}
+
+#menu ul.menu-list li a.inverse {
+  background-color: #071E22;
+  border-color: #071E22;
+  color: #FFF;
+}
+
+#menu ul.menu-list li a em {
+  display: none;
+  font-style: normal;
+  font-size: 0.7em;
+  padding-left: 5px;
+  /* text-transform: uppercase; */
+}
+
+#menu.expanded ul.menu-list li a em {
+  display: initial;
 }
 
 h1#title {
@@ -57,11 +101,21 @@ nav.breadcrumb {
 
 #place-sidebar .panel {
   margin: 10px;
+  background-color: #FFF;
+  border: none;
+  font-size: 0.85em;
+}
+
+#place-sidebar .panel-heading {
+  background-color: #DDD;
+  border: none;
+  font-size: 1.4em;
 }
 
 .sidebar-element em {
   font-style: normal;
   font-size: 12px;
+  text-transform: uppercase;
 }
 
 .sidebar-element strong {
@@ -70,6 +124,7 @@ nav.breadcrumb {
 
 #place-content {
   margin: 0;
+  height: 100%;
   /* padding: 0; */
 }
 
@@ -80,5 +135,10 @@ nav.breadcrumb {
 
 .map-hero,
 .map-hero div.map {
-  height: 500px;
+  height: 100%;
+}
+
+.map-hero {
+  /* padding: 10px; */
+  /* padding-right: 0px; */
 }
