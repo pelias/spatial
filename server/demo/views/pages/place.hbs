@@ -4,16 +4,22 @@
   <nav class="column is-6 breadcrumb" aria-label="breadcrumbs">
     <ul>
       <li><a href="/demo/place">place</a></li>
-      <li><a href="/demo/place/{{params.source}}">{{params.source}}</a></li>
+      <li><a href="/demo/place/{{encodeURI params.identity.source}}">{{params.identity.source}}</a></li>
       <li class="is-active">
-        <a href="/demo/place/{{params.source}}/{{params.id}}" aria-current="page">{{params.id}}</a>
+        <a href="/demo/place/{{encodeURI params.identity.source}}/{{encodeURI params.identity.id}}">{{params.identity.id}}</a>
       </li>
     </ul>
   </nav>
 
   <!-- page title -->
   <div class="column is-6">
-    <h1 id="title"></h1>
+    <h1 id="title">
+      {{#each params.place.property}}
+        {{#if (is this.key 'name')}}
+          {{this.value}}
+        {{/if}}
+      {{/each}}
+    </h1>
   </div>
 </div>
 
@@ -27,18 +33,68 @@
   </div>
 
   <div id="place-sidebar" class="column is-3">
-    <nav id="sidebar-geometry" class="panel"></nav>
-    <nav id="sidebar-property" class="panel"></nav>
-    <nav id="sidebar-hierarchy" class="panel"></nav>
+
+    <!-- geometry sidebar -->
+    <nav id="sidebar-geometry" class="panel">
+      <p class="panel-heading">Geometries:</p>
+      {{#each params.place.geometry}}
+        <a class="sidebar-element panel-block is-active">
+          <span class="panel-icon">
+            <input type="checkbox" checked="checked" />
+          </span>
+          <em>[{{this.geom.type}}]</em>
+          <strong>{{this.role}}</strong>
+        </a>
+      {{/each}}
+    </nav>
+
+    <!-- property sidebar -->
+    <nav id="sidebar-property" class="panel">
+      <p class="panel-heading">Properties:</p>
+      <table class="table is-fullwidth">
+        <thead>
+          <tr><th>key</th><th>value</th></tr>
+        </thead>
+        <tbody>
+          {{#each params.place.property}}
+            <tr><td>{{this.key}}</td><td>{{this.value}}</td></tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </nav>
+
+    <!-- hierarchy sidebar -->
+    <nav id="sidebar-hierarchy" class="panel">
+      <p class="panel-heading">Hierarchies:</p>
+      <table class="table is-fullwidth">
+        <thead>
+          <tr>
+            <th>parent</th>
+            <th>branch</th>
+            <th>depth</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each params.place.hierarchy}}
+          <tr>
+            <td>
+              <a href="/demo/place/{{encodeURI this.parent_source}}/{{encodeURI this.parent_id}}">
+                {{this.parent_source}}/{{this.parent_id}}
+              </a>
+            </td>
+            <td>{{this.branch}}</td>
+            <td>{{this.depth}}</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </nav>
   </div>
 
 </div>
 
 <script>
   var events = $({});
-  var place = {
-    source: "{{{ params.source }}}",
-    id: "{{{ params.id }}}"
-  }
+  var params = JSON.parse(decodeURIComponent("{{{json}}}"));
 </script>
 <script src="/demo/assets/page.js"></script>

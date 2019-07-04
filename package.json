@@ -33,6 +33,7 @@
     "better-sqlite3": "^5.4.0",
     "express": "^4.17.1",
     "express-handlebars": "^3.1.0",
+    "handlebars-helpers": "^0.10.0",
     "lodash": "^4.17.11",
     "morgan": "^1.9.1",
     "pelias-logger": "^1.4.1",

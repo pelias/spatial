@@ -22,6 +22,7 @@ const express = require('express')
 const cluster = require('cluster')
 const through = require('through2')
 const handlebars = require('express-handlebars')
+const helpers = require('handlebars-helpers')()
 const QueryService = require('../service/QueryService')
 const logger = require('pelias-logger').get('geometry')
 
@@ -61,10 +62,7 @@ app.set('views', `${__dirname}/demo/views/`)
 app.engine('.hbs', handlebars({
   extname: '.hbs',
   defaultView: 'default',
-  helpers: {
-    uriEncode: encodeURIComponent,
-    uriDecode: decodeURIComponent
-  }
+  helpers: helpers
 }))
 app.set('view engine', '.hbs')
 
