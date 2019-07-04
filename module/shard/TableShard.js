@@ -32,6 +32,7 @@ class TableShard extends SqliteTable {
       db.prepare(`
         INSERT OR REPLACE INTO ${toDbName}.shard
         SELECT * FROM ${fromDbName}.shard
+        WHERE IsValid(geom) = 1
       `).run()
     } catch (e) {
       this.error('MERGE TABLE', e)
