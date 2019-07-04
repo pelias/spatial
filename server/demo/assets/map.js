@@ -42,6 +42,14 @@ function setupMap (elementId, settings) {
   L.control.layers(tiles).addTo(map)
 
   map.setView({ lng: -73.9805, lat: 40.7259 }, 12)
+
+  map.addControl(new L.Control.Fullscreen({
+    title: {
+      'false': 'View Fullscreen',
+      'true': 'Exit Fullscreen'
+    }
+  }))
+
   return map
 }
 
