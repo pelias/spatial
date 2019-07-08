@@ -42,7 +42,7 @@ $('document').ready(function () {
     }
 
     let display = simplify.toFixed(12).replace(/0+$/, '')
-    if (display === '0.') { display = '0.0' }
+    if (display.endsWith('.')) { display += '0' }
     $('#simplification-info').val(display)
 
     res.forEach(function (place) {
