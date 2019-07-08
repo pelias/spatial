@@ -3,11 +3,15 @@ $('document').ready(function () {
     // use map center
     var latlng = map.getCenter()
 
+    // handle weird leflet behaviour
+    if (latlng.lng_neg && latlng.lng > 0) { latlng.lng = -latlng.lng }
+    if (latlng.lat_neg && latlng.lat > 0) { latlng.lat = -latlng.lat }
+
     // unwrap longitude
     while (latlng.lng > +180) { latlng.lng -= 360 }
     while (latlng.lng < -180) { latlng.lng += 360 }
 
-    return latlng
+    return _.pick(latlng, ['lat', 'lng'])
   }
 
   function getMapLayer (map, name) {
