@@ -22,6 +22,25 @@ $('document').ready(function () {
     let geojson = getMapLayer(map, 'geojson')
     geojson.clearLayers()
 
+    let simplify = 0
+    let simplification = parseFloat($('#simplification').val())
+
+    var minp = 0
+    var maxp = 100
+    var minv = Math.log(0.000001)
+    var maxv = Math.log(1)
+
+    if (!isNaN(simplification) && simplification > 0) {
+      // calculate logarithmic scale
+      var scale = (maxv - minv) / (maxp - minp)
+      var log = Math.exp(minv + scale * (simplification - minp))
+      simplify = log
+    }
+
+    let display = simplify.toFixed(12).replace(/0+$/, '')
+    if (display === '0.') { display = '0.0' }
+    $('#simplification-info').val(display)
+
     res.forEach(function (place) {
       api.property(place, {}, function (err2, res2) {
         if (err2) { console.error(err2) } else {
@@ -29,7 +48,7 @@ $('document').ready(function () {
             memo[row.key] = row.value
             return memo
           }, {})
-          api.geometry(place, {}, function (err3, res3) {
+          api.geometry(place, { simplify: simplify }, function (err3, res3) {
             if (err3) { console.error(err3) } else {
               geojson.addData({
                 type: 'Feature',
@@ -74,6 +93,7 @@ $('document').ready(function () {
   var map = document.querySelector('#map')._leaflet_map
   map.on('moveend', function (e) { pointInPolygon(map) })
   map.on('resize', function (e) { pointInPolygon(map) })
+  $('#simplification').change(function () { pointInPolygon(map) })
 
   // create a layer to store geojson geometries
   var geojson = new L.geoJson([], { style: featureStyle, onEachFeature: onEachFeature })
