@@ -90,8 +90,27 @@
 
 </div>
 
+<!-- relationships sidebar -->
+<nav id="sidebar-relationships" class="panel">
+  <p class="panel-heading">Spatial Relationships</p>
+  <div class="control has-icons-left">
+    <div class="select">
+      <select id="select-relationships">
+        <option value="within" selected="selected">within</option>
+        <option value="contains">contains</option>
+        <option value="intersects">intersects</option>
+      </select>
+    </div>
+    <span class="icon is-left">
+      <i class="fas fa-vector-square"></i>
+    </span>
+  </div>
+  <ul class="spatial-relationships"></ul>
+</nav>
+
 <script>
   var events = $({});
   var params = JSON.parse(decodeURIComponent("{{{json}}}"));
 </script>
 <script src="/demo/assets/map.load.js"></script>
+<script src="/demo/assets/relationships.js"></script>

@@ -12,22 +12,37 @@ function request (url, method, params, cb) {
 };
 
 function place (place, params, cb) {
-  let url = '/place/' + place.source + '/' + place.id + '/'
+  let url = '/place/' + place.source + '/' + place.id
   api.request(url, 'GET', params, cb)
 }
 
 function property (place, params, cb) {
-  let url = '/place/' + place.source + '/' + place.id + '/property/'
+  let url = '/place/' + place.source + '/' + place.id + '/property'
   api.request(url, 'GET', params, cb)
 }
 
 function geometry (place, params, cb) {
-  let url = '/place/' + place.source + '/' + place.id + '/geometry/'
+  let url = '/place/' + place.source + '/' + place.id + '/geometry'
+  api.request(url, 'GET', params, cb)
+}
+
+function within (query, params, cb) {
+  let url = '/place/' + query.source + '/' + query.id + '/relationship/within'
+  api.request(url, 'GET', params, cb)
+}
+
+function contains (query, params, cb) {
+  let url = '/place/' + query.source + '/' + query.id + '/relationship/contains'
+  api.request(url, 'GET', params, cb)
+}
+
+function intersects (query, params, cb) {
+  let url = '/place/' + query.source + '/' + query.id + '/relationship/intersects'
   api.request(url, 'GET', params, cb)
 }
 
 function hierarchy (place, params, cb) {
-  let url = '/place/' + place.source + '/' + place.id + '/hierarchy/'
+  let url = '/place/' + place.source + '/' + place.id + '/hierarchy'
   api.request(url, 'GET', params, cb)
 }
 
@@ -42,5 +57,10 @@ var api = {
   property: property,
   geometry: geometry,
   hierarchy: hierarchy,
-  pip: pip
+  pip: pip,
+  relationship: {
+    within: within,
+    contains: contains,
+    intersects: intersects
+  }
 }

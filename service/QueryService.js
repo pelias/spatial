@@ -6,6 +6,7 @@ const Property = require('../module/property/Property')
 const Geometry = require('../module/geometry/Geometry')
 const PointInPolygon = require('../module/pip/PointInPolygon')
 const Hierarchy = require('../module/hierarchy/Hierarchy')
+const Relationship = require('../module/relationship/Relationship')
 
 class QueryService {
   constructor (config) {
@@ -25,7 +26,8 @@ class QueryService {
       property: new Property(this.db),
       geometry: new Geometry(this.db),
       pip: new PointInPolygon(this.db),
-      hierarchy: new Hierarchy(this.db)
+      hierarchy: new Hierarchy(this.db),
+      relationship: new Relationship(this.db)
     }
 
     // attach external databases

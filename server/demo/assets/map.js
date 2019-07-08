@@ -53,17 +53,22 @@ function setupMap (elementId, settings) {
   })
 
   var map = L.map(elementId, settings)
-  L.control.layers(tiles).addTo(map)
+
+  if (settings.layerControl !== false) {
+    L.control.layers(tiles).addTo(map)
+  }
 
   map.setView({ lng: -73.9805, lat: 40.7259 }, 12)
   // map.setView({ lng: 174.7786, lat: -41.29 }, 12)
 
-  map.addControl(new L.Control.Fullscreen({
-    title: {
-      'false': 'View Fullscreen',
-      'true': 'Exit Fullscreen'
-    }
-  }))
+  if (settings.fullscreenControl !== false) {
+    map.addControl(new L.Control.Fullscreen({
+      title: {
+        'false': 'View Fullscreen',
+        'true': 'Exit Fullscreen'
+      }
+    }))
+  }
 
   return map
 }

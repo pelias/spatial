@@ -89,7 +89,7 @@ nav.breadcrumb {
   font-size: 0.85em;
 }
 
-#map-sidebar .panel-heading {
+.panel-heading {
   background-color: #0074D9;
   color: #FFF;
   border: none;
@@ -146,4 +146,41 @@ nav.breadcrumb {
   text-align: right;
   font-size: 0.8em;
   color: #AAA;
+}
+
+ul.spatial-relationships {
+  padding: 10px 0;
+}
+
+ul.spatial-relationships li {
+  display: inline-block;
+  width: 230px;
+  height: 230px;
+  margin: 0 5px 10px 0;
+  background-color:  #FFF;
+}
+
+ul.spatial-relationships li em {
+  width: 100%;
+  display: block;
+  font-style: normal;
+  text-align: center;
+}
+
+ul.spatial-relationships div.minimap {
+  width: 230px;
+  height: 230px;
+}
+
+#sidebar-relationships {
+  position: relative;
+  margin-right: 10px;
+  margin-left: -40px;
+  margin-top: -10px;
+}
+
+#sidebar-relationships .control {
+  position: absolute;
+  right: 7px;
+  top: 7px;
 }
