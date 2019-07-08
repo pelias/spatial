@@ -31,10 +31,16 @@ function hierarchy (place, params, cb) {
   api.request(url, 'GET', params, cb)
 }
 
+function pip (params, cb) {
+  let url = '/query/pip'
+  api.request(url, 'GET', params, cb)
+}
+
 var api = {
   request: request,
   place: place,
   property: property,
   geometry: geometry,
-  hierarchy: hierarchy
+  hierarchy: hierarchy,
+  pip: pip
 }

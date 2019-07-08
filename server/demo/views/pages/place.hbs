@@ -1,5 +1,5 @@
 <div class="columns is-gapless" style="height: 100%;">
-  <div id="place-content" class="column is-9">
+  <div id="map-pane" class="column is-9">
 
     <section class="map-hero">
       <div id="map" class="map"></div>
@@ -7,7 +7,7 @@
 
   </div>
 
-  <div id="place-sidebar" class="column is-3">
+  <div id="map-sidebar" class="column is-3">
 
     <!-- identity sidebar -->
     <nav id="sidebar-identity" class="panel">
@@ -75,7 +75,7 @@
           {{#each params.place.hierarchy}}
           <tr>
             <td>
-              <a href="/demo/place/{{encodeURI this.parent_source}}/{{encodeURI this.parent_id}}">
+              <a data-source="{{this.parent_source}}" data-id="{{this.parent_id}}">
                 {{this.parent_source}}/{{this.parent_id}}
               </a>
             </td>
@@ -94,4 +94,4 @@
   var events = $({});
   var params = JSON.parse(decodeURIComponent("{{{json}}}"));
 </script>
-<script src="/demo/assets/page.js"></script>
+<script src="/demo/assets/map.load.js"></script>

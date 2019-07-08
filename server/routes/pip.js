@@ -5,8 +5,8 @@ module.exports = function (req, res) {
 
   // inputs
   let query = {
-    lon: parseFloat(util.flattten(req.query.lon)),
-    lat: parseFloat(util.flattten(req.query.lat)),
+    lon: parseFloat(util.flatten(req.query.lon)),
+    lat: parseFloat(util.flatten(req.query.lat)),
     limit: 1000
   }
 

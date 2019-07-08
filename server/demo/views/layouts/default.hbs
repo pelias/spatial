@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -8,7 +8,7 @@
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.js"></script>
   <script src="https://code.jquery.com/jquery-3.0.0.js"></script>
-  <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.11/lodash.min.js"></script>
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css" />
   <link rel="stylesheet"
@@ -25,13 +25,18 @@
   <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css'
     rel='stylesheet' />
 
+  <script src="https://cdn.jsdelivr.net/npm/bulma-extensions@4.0.1/dist/js/bulma-extensions.min.js"></script>
+
+  <link rel="stylesheet" href="/demo/assets/vendor/L.Control.MapCenterCoord.min.css" />
+  <script src="/demo/assets/vendor/L.Control.MapCenterCoord.min.js"></script>
+
   <link href="/demo/assets/tree.css" rel="stylesheet" />
   <link href="/demo/assets/style.css" rel="stylesheet" />
-  <script src="/demo/assets/bulma.js"></script>
+  <script src="/demo/assets/links.js"></script>
+  <script src="/demo/assets/api.js"></script>
+  <script src="/demo/assets/menu.js"></script>
   <script src="/demo/assets/map.style.js"></script>
   <script src="/demo/assets/map.js"></script>
-  <script src="/demo/assets/main.js"></script>
-  <script src="/demo/assets/api.js"></script>
 </head>
 
 <body>
@@ -40,11 +45,11 @@
     <div id="menu">
       <aside class="menu">
         <ul class="menu-list">
-          <li><a>
+          <li><a href="/demo/place">
             <i class="fas fa-database"></i>
             <em>Browse</em>
           </a></li>
-          <li><a>
+          <li><a href="/demo/pip">
             <i class="fas fa-draw-polygon"></i>
             <em>PIP</em>
           </a></li>
@@ -59,7 +64,5 @@
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bulma-extensions@4.0.1/dist/js/bulma-extensions.min.js"></script>
-  <script async type="text/javascript" src="/demo/assets/bulma.js"></script>
 </body>
 </html>

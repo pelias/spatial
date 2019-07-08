@@ -45,3 +45,13 @@ module.exports.place = function (req, res) {
     json: encodeURIComponent(JSON.stringify(params))
   })
 }
+
+module.exports.pip = function (req, res) {
+  let params = {}
+
+  res.render('pages/pip', {
+    layout: 'default',
+    params: params,
+    json: encodeURIComponent(JSON.stringify(params))
+  })
+}

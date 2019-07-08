@@ -1,0 +1,38 @@
+<div class="columns is-gapless" style="height: 100%;">
+  <div id="map-pane" class="column is-9">
+
+    <section class="map-hero">
+      <div id="map" class="map crosshairs"></div>
+    </section>
+
+  </div>
+
+  <div id="map-sidebar" class="column is-3">
+  
+    <!-- results sidebar -->
+    <nav id="sidebar-results" class="panel">
+      <p class="panel-heading">Hits</p>
+      <table class="table is-fullwidth">
+        <thead>
+          <tr>
+            <th>place</th>
+            <th>class</th>
+            <th>type</th>
+          </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+      </table>
+    </nav>
+  
+  </div>
+
+</div>
+
+<script>
+  var events = $({});
+  var params = JSON.parse(decodeURIComponent("{{{json}}}"));
+</script>
+<script src="/demo/assets/map.load.js"></script>
+<script src="/demo/assets/pip.js"></script>

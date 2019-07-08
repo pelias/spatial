@@ -20,7 +20,13 @@ function setupMap (elementId, settings) {
     attribution: 'Tiles courtesy of <a href="http://openstreetmap.se/" target="_blank">OpenStreetMap Sweden</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
   }
 
+  provider.wikimedia = {
+    maxZoom: 18,
+    attribution: '<a href="https://wikimediafoundation.org/wiki/Maps_Terms_of_Use">Wikimedia maps</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }
+
   let tiles = {
+    'wikimedia': L.tileLayer('https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png', provider.wikimedia),
     'toner': L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}{r}.{ext}', provider.stamen),
     'toner_nolabels': L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner-background/{z}/{x}/{y}{r}.{ext}', provider.stamen),
     'toner_lite': L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}{r}.{ext}', provider.stamen),
@@ -36,12 +42,21 @@ function setupMap (elementId, settings) {
   if (!settings) { settings = {} }
   settings.zoomControl = !!settings.zoomControl
   settings.attributionControl = !!settings.attributionControl
-  settings.layers = [tiles['toner_nolabels']]
+  settings.layers = [tiles['wikimedia']]
+
+  // https://github.com/Leaflet/Leaflet/issues/6298
+  L.Map.addInitHook(function () {
+    // Store a reference of the Leaflet map object on the map container,
+    // so that it could be retrieved from DOM selection.
+    // https://leafletjs.com/reference-1.3.4.html#map-getcontainer
+    this.getContainer()._leaflet_map = this
+  })
 
   var map = L.map(elementId, settings)
   L.control.layers(tiles).addTo(map)
 
-  map.setView({ lng: -73.9805, lat: 40.7259 }, 12)
+  // map.setView({ lng: -73.9805, lat: 40.7259 }, 12)
+  map.setView({ lng: 174.7786, lat: -41.29 }, 12)
 
   map.addControl(new L.Control.Fullscreen({
     title: {
