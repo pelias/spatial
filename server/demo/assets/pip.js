@@ -1,7 +1,7 @@
 $('document').ready(function () {
   function getCenter (map) {
     // use map center
-    var latlng = map.getCenter()
+    var latlng = _.extend({}, map.getCenter())
 
     // handle weird leflet behaviour
     if (latlng.lng_neg && latlng.lng > 0) { latlng.lng = -latlng.lng }
@@ -99,16 +99,6 @@ $('document').ready(function () {
   map.on('resize', function (e) { pointInPolygon(map) })
   $('#simplification').change(function () { pointInPolygon(map) })
 
-  // create a layer to store geojson geometries
-  var geojson = new L.geoJson([], { style: featureStyle, onEachFeature: onEachFeature })
-  geojson.addTo(map)
-  geojson.name = 'geojson'
-
-  // create a layer for labels
-  var labels = new L.geoJson([], { style: featureStyle, onEachFeature: onEachFeature })
-  labels.addTo(map)
-  labels.name = 'labels'
-
   function onEachFeature (feature, layer) {
     if (feature.geometry.type.indexOf('Polygon') !== -1) {
       var tmpLayer = new L.geoJson()
@@ -124,8 +114,15 @@ $('document').ready(function () {
     }
   }
 
-  // add crosshairs controller
-  L.control.mapCenterCoord().addTo(map)
+  // create a layer to store geojson geometries
+  var geojson = new L.geoJson([], { style: featureStyle, onEachFeature: onEachFeature })
+  geojson.addTo(map)
+  geojson.name = 'geojson'
+
+  // create a layer for labels
+  var labels = new L.geoJson([], { style: featureStyle, onEachFeature: onEachFeature })
+  labels.addTo(map)
+  labels.name = 'labels'
 
   pointInPolygon(map)
 })

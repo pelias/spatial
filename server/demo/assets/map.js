@@ -43,6 +43,7 @@ function setupMap (elementId, settings) {
   settings.zoomControl = !!settings.zoomControl
   settings.attributionControl = !!settings.attributionControl
   settings.layers = [tiles['wikimedia']]
+  settings.scrollWheelZoom = 'center'
 
   // https://github.com/Leaflet/Leaflet/issues/6298
   L.Map.addInitHook(function () {
@@ -58,7 +59,7 @@ function setupMap (elementId, settings) {
     L.control.layers(tiles).addTo(map)
   }
 
-  map.setView({ lng: -73.9805, lat: 40.7259 }, 12)
+  // map.setView({ lng: -73.9805, lat: 40.7259 }, 12)
   // map.setView({ lng: 174.7786, lat: -41.29 }, 12)
 
   if (settings.fullscreenControl !== false) {
@@ -68,6 +69,34 @@ function setupMap (elementId, settings) {
         'true': 'Exit Fullscreen'
       }
     }))
+  }
+
+  if (settings.hashControl === true) {
+    var hash = new L.Hash(map)
+    if (!location.hash) {
+      map.setView({ lng: -73.9805, lat: 40.7259 }, 12)
+    }
+  } else {
+    map.setView({ lng: -73.9805, lat: 40.7259 }, 12)
+  }
+
+  if (settings.crosshairControl === true) {
+    // Add in a crosshair for the map
+    var crosshairIcon = L.icon({
+      iconUrl: '/demo/assets/vendor/icons/MapCenterCoordIcon1.svg',
+      iconSize: [40, 40], // size of the icon
+      iconAnchor: [10, 10] // point of the icon which will correspond to marker's location
+    })
+    var crosshair = new L.marker({
+      center: new L.LatLng(40.7259, -73.9805),
+      zoom: 12
+    }, { icon: crosshairIcon, interactive: false })
+    crosshair.addTo(map)
+
+    // Move the crosshair to the center of the map when the user pans
+    map.on('move', function (e) {
+      crosshair.setLatLng(map.getCenter())
+    })
   }
 
   return map
