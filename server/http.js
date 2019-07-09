@@ -76,13 +76,19 @@ const service = new QueryService({
 app.locals.service = service
 
 // generic http headers
-app.use((req, res, next) => {
-  res.header('Charset', 'utf8')
-  if (!req.url.startsWith('/demo')) {
-    res.header('Cache-Control', 'public, max-age=120')
-  }
-  next()
-})
+if (process.env.NODE_ENV === 'production') {
+  app.use((req, res, next) => {
+    res.header('Charset', 'utf8')
+    if (req.url.startsWith('/demo')) {
+      // demo pages
+      res.header('Cache-Control', 'public, max-age=3600') // 1 hour
+    } else {
+      // api endpoints
+      res.header('Cache-Control', 'public, max-age=604800') // 7 days
+    }
+    next()
+  })
+}
 
 // routes
 app.get('/place/:source/:id', require('./routes/place'))
