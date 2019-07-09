@@ -1,7 +1,7 @@
 $('document').ready(function () {
   var el = $('div.spatial-relationships')
   var query = _.extend({}, params.place, { role: 'default' })
-  var options = { limit: 10000 }
+  var options = { limit: 100 }
   var select = $('#select-relationships')
 
   function refresh () {

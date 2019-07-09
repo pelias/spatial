@@ -3,11 +3,15 @@ const util = require('./util')
 module.exports.intersects = function (req, res) {
   var service = req.app.locals.service
 
+  let limit = parseInt(req.query.limit, 10)
+  if (!limit) { limit = 100 }
+  if (limit > 500) { limit = 500 }
+
   // inputs
   let query = {
     source: util.flatten(req.params.source),
     id: util.flatten(req.params.id),
-    limit: 100
+    limit: limit
   }
 
   // perform query
@@ -22,11 +26,15 @@ module.exports.intersects = function (req, res) {
 module.exports.contains = function (req, res) {
   var service = req.app.locals.service
 
+  let limit = parseInt(req.query.limit, 10)
+  if (!limit) { limit = 100 }
+  if (limit > 500) { limit = 500 }
+
   // inputs
   let query = {
     source: util.flatten(req.params.source),
     id: util.flatten(req.params.id),
-    limit: 100
+    limit: limit
   }
 
   // perform query
@@ -41,11 +49,15 @@ module.exports.contains = function (req, res) {
 module.exports.within = function (req, res) {
   var service = req.app.locals.service
 
+  let limit = parseInt(req.query.limit, 10)
+  if (!limit) { limit = 100 }
+  if (limit > 500) { limit = 500 }
+
   // inputs
   let query = {
     source: util.flatten(req.params.source),
     id: util.flatten(req.params.id),
-    limit: 100
+    limit: limit
   }
 
   // perform query
