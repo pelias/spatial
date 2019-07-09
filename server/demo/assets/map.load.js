@@ -1,7 +1,7 @@
 $('document').ready(function () {
   var map = setupMap('map', { zoomControl: true, attributionControl: true })
 
-  var geojson = L.geoJSON(null, mapStyle.place)
+  var geojson = L.geoJSON(null, { style: mapStyle.place, interactive: false })
   geojson.addTo(map)
 
   // render geometries on map

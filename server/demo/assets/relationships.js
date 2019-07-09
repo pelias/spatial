@@ -1,26 +1,28 @@
 $('document').ready(function () {
-  var ul = $('ul.spatial-relationships')
+  var el = $('div.spatial-relationships')
   var query = _.extend({}, params.place, { role: 'default' })
   var options = { limit: 10000 }
   var select = $('#select-relationships')
 
   function refresh () {
     // clear contents
-    ul.empty()
+    el.empty()
+    $('#sidebar-relationships .select').addClass('is-loading')
 
     api.relationship[select.val()](query, options, function (err, res) {
       if (err) { console.error(err) } else {
         (res || []).forEach(function (rel) {
-          ul.append(
-            '<li>' +
-              '<div data-source="' + rel.source + '" data-id="' + rel.id + '">' +
-                '<em class="minimap-title"></em>' +
+          el.append(
+            '<div class="tile">' +
+              '<div data-source="' + rel.source + '" data-id="' + rel.id + '" data-update-text="1">' +
+                '<em class="minimap-title">' + rel.source + '/' + rel.id + '</em>' +
                 '<div class="minimap" />' +
               '</div>' +
-            '</li>'
+            '</div>'
           )
         })
       }
+      $('#sidebar-relationships .select').removeClass('is-loading')
     })
   }
 

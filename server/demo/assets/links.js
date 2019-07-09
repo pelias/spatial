@@ -36,11 +36,10 @@ $(document).on('DOMNodeInserted', function (e) {
   var el = $(e.target)
   if (el.prop('tagName') === 'A') {
     decorateLink(el)
-  } else {
-    el.find('a').each(function (e) {
-      decorateLink($(this))
-    })
   }
+  el.find('a').each(function (e) {
+    decorateLink($(this))
+  })
 })
 
 // initial load

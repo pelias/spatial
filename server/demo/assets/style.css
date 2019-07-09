@@ -148,35 +148,36 @@ nav.breadcrumb {
   color: #AAA;
 }
 
-ul.spatial-relationships {
-  padding: 10px 0;
+div.spatial-relationships {
+  padding-top: 5px;
+  margin-bottom: 10px;
 }
 
-ul.spatial-relationships li {
-  display: inline-block;
-  width: 230px;
-  height: 230px;
-  margin: 0 5px 10px 0;
+div.spatial-relationships .tile {
   background-color:  #FFF;
+  width: 20%;
+  display: inline-block;
 }
 
-ul.spatial-relationships li em {
+div.spatial-relationships .tile em {
   width: 100%;
+  padding-top: 3px;
+  min-height: 30px;
   display: block;
   font-style: normal;
   text-align: center;
 }
 
-ul.spatial-relationships div.minimap {
-  width: 230px;
-  height: 230px;
+div.spatial-relationships div.minimap {
+  width: 100%;
+  min-height: 210px;
 }
 
 #sidebar-relationships {
   position: relative;
-  margin-right: 10px;
+  /* margin-right: 10px; */
   margin-left: -40px;
-  margin-top: -10px;
+  margin-top: 10px;
 }
 
 #sidebar-relationships .control {

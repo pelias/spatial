@@ -19,7 +19,7 @@ function decorateMinimap (el) {
   }
 
   // text is empty
-  if (el.find('.minimap-title').html() === '') {
+  if (el.find('.minimap-title').html() === '' || el.attr('data-update-text') === '1') {
     el.find('.minimap-title').html(
       '<a data-source="' + source + '" data-id="' + id + '"></a>'
     )
@@ -30,6 +30,7 @@ function decorateMinimap (el) {
 
   var map = setupMap(mapid, {
     zoomControl: false,
+    interactive: false,
     attributionControl: false,
     layerControl: false,
     fullscreenControl: false
@@ -38,7 +39,7 @@ function decorateMinimap (el) {
   disableMapInteraction(map, mapid)
 
   // create a layer to store geojson geometries
-  var geojson = new L.geoJson([], { style: mapStyle.minimap })
+  var geojson = new L.geoJson([], { style: mapStyle.minimap, interactive: false })
   geojson.addTo(map)
 
   api.geometry({ source: source, id: id }, { simplify: 0.0001 }, function (err, res) {
@@ -57,11 +58,10 @@ $(document).on('DOMNodeInserted', function (e) {
   var el = $(e.target)
   if (el.prop('tagName') === 'DIV') {
     decorateMinimap(el)
-  } else {
-    el.find('div').each(function (e) {
-      decorateMinimap($(this))
-    })
   }
+  el.find('div').each(function (e) {
+    decorateMinimap($(this))
+  })
 })
 
 // initial load
