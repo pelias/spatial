@@ -42,7 +42,7 @@ class StatementRelationship extends SqliteStatement {
         )
         AND t1.geom IS NOT NULL
         AND t2.geom IS NOT NULL
-        AND (t2.source != @source OR t2.id != @id)
+        AND NOT (t2.source = @source AND t2.id = @id)
         AND INTERSECTS( t1.geom, t2.geom )
         GROUP BY t2.source, t2.id
         ORDER BY t2.source, t2.id
@@ -71,14 +71,14 @@ class StatementRelationship extends SqliteStatement {
           )
           AND t1.geom IS NOT NULL
           AND t2.geom IS NOT NULL
-          AND (t2.source != @source OR t2.id != @id)
+          AND NOT (t2.source = @source AND t2.id = @id)
           AND INTERSECTS( t1.geom, t2.geom )
           GROUP BY t2.source, t2.id
           ORDER BY t2.source, t2.id
         ) AS intersections
         JOIN geometry AS g1 ON (g1.source = @source AND g1.id = @id)
         JOIN geometry AS g2 ON (g2.source = intersections.source AND g2.id = intersections.id)
-        AND MbrContains( g1.geom, g2.geom )
+        AND Contains( g1.geom, g2.geom )
         LIMIT @limit;
       `)
 
@@ -104,14 +104,14 @@ class StatementRelationship extends SqliteStatement {
           )
           AND t1.geom IS NOT NULL
           AND t2.geom IS NOT NULL
-          AND (t2.source != @source OR t2.id != @id)
+          AND NOT (t2.source = @source AND t2.id = @id)
           AND INTERSECTS( t1.geom, t2.geom )
           GROUP BY t2.source, t2.id
           ORDER BY t2.source, t2.id
         ) AS intersections
         JOIN geometry AS g1 ON (g1.source = @source AND g1.id = @id)
         JOIN geometry AS g2 ON (g2.source = intersections.source AND g2.id = intersections.id)
-        AND MbrWithin( g1.geom, g2.geom )
+        AND Within( g1.geom, g2.geom )
         LIMIT @limit;
       `)
     } catch (e) {
