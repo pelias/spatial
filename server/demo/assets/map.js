@@ -87,10 +87,10 @@ function setupMap (elementId, settings) {
       iconSize: [40, 40], // size of the icon
       iconAnchor: [10, 10] // point of the icon which will correspond to marker's location
     })
-    var crosshair = new L.marker({
-      center: new L.LatLng(40.7259, -73.9805),
-      zoom: 12
-    }, { icon: crosshairIcon, interactive: false })
+    var crosshair = new L.marker(
+      [40.7259, -73.9805],
+      { icon: crosshairIcon, interactive: false }
+    )
     crosshair.addTo(map)
 
     // Move the crosshair to the center of the map when the user pans

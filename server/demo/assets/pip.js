@@ -22,6 +22,11 @@ $('document').ready(function () {
     return layer
   }
 
+  function clearLayers (map) {
+    getMapLayer(map, 'geojson').clearLayers()
+    getMapLayer(map, 'labels').clearLayers()
+  }
+
   function updateMap (map, res) {
     let geojson = getMapLayer(map, 'geojson')
     geojson.clearLayers()
@@ -95,6 +100,7 @@ $('document').ready(function () {
   }
 
   var map = document.querySelector('#map')._leaflet_map
+  map.on('movestart', function (e) { clearLayers(map) })
   map.on('moveend', function (e) { pointInPolygon(map) })
   map.on('resize', function (e) { pointInPolygon(map) })
   $('#simplification').change(function () { pointInPolygon(map) })
