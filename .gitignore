@@ -1,5 +1,6 @@
 node_modules
 tmp
+build/tmp
 package-lock.json
 *.db
 *.db-journal

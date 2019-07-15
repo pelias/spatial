@@ -29,7 +29,7 @@ module.exports.tests.dependencies = (test, common) => {
 
     res = db.prepare(`SELECT spatialite_version()`).get()
     actual = semver.coerce(res['spatialite_version()'])
-    expected = semver.coerce('4.3.0a')
+    expected = semver.coerce('5.0.0')
     t.true(semver.gte(actual, expected), 'spatialite_version')
 
     res = db.prepare(`SELECT spatialite_target_cpu()`).get()
@@ -48,8 +48,10 @@ module.exports.tests.dependencies = (test, common) => {
     expected = semver.coerce('3.6.2-CAPI-1.10.2 4d2925d6')
     t.true(semver.gte(actual, expected), 'geos_version')
 
-    // res = db.prepare(`SELECT lwgeom_version()`).get()
-    // t.equals(res['lwgeom_version()'], null, 'lwgeom_version')
+    res = db.prepare(`SELECT rttopo_version()`).get()
+    actual = semver.coerce(res['rttopo_version()'])
+    expected = semver.coerce('1.1.0')
+    t.true(semver.gte(actual, expected), 'rttopo_version')
 
     res = db.prepare(`SELECT libxml2_version()`).get()
     actual = semver.coerce(res['libxml2_version()'])
@@ -75,10 +77,11 @@ module.exports.tests.features = (test, common) => {
       t.equals(res['HasMathSQL()'], 1, 'HasMathSQL')
     }, 'HasMathSQL')
 
-    t.doesNotThrow(() => {
-      res = db.prepare(`SELECT HasGeoCallbacks()`).get()
-      t.equals(res['HasGeoCallbacks()'], 1, 'HasGeoCallbacks')
-    }, 'HasGeoCallbacks')
+    // I don't believe this is required
+    // t.doesNotThrow(() => {
+    //   res = db.prepare(`SELECT HasGeoCallbacks()`).get()
+    //   t.equals(res['HasGeoCallbacks()'], 1, 'HasGeoCallbacks')
+    // }, 'HasGeoCallbacks')
 
     t.doesNotThrow(() => {
       res = db.prepare(`SELECT HasProj()`).get()
