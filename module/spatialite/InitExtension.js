@@ -4,7 +4,8 @@ const Sqlite = require('../../sqlite/Sqlite')
 
 const EXTENSION_PATHS = [
   path.resolve(__dirname, '../../build/', os.platform() + '-' + os.arch()),
-  path.resolve(__dirname, '../../build/tmp/libspatialite-5.0.0-beta0/src/.libs'),
+  path.resolve(__dirname, '../../build/tmp/libspatialite/src/.libs'),
+  path.resolve(__dirname, '../../build/tmp/libspatialite-5.0.0-beta1/src/.libs'),
   process.env.SPATIALITE_EXTENSION_PATH,
   ''
 ]

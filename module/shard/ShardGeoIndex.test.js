@@ -1,7 +1,7 @@
 const SqliteIntrospect = require('../../sqlite/SqliteIntrospect')
 const TableShard = require('./TableShard')
-const GeoColumnGeom = require('./GeoColumnGeom')
-const GeoIndexGeom = require('./GeoIndexGeom')
+const ShardGeoColumn = require('./ShardGeoColumn')
+const ShardGeoIndex = require('./ShardGeoIndex')
 
 module.exports.tests = {}
 
@@ -24,11 +24,11 @@ module.exports.tests.create_drop = (test, common) => {
     t.false(introspectIndex().length, 'prior state')
 
     // create column
-    let column = new GeoColumnGeom()
+    let column = new ShardGeoColumn()
     column.create(db)
 
     // create index
-    let index = new GeoIndexGeom()
+    let index = new ShardGeoIndex()
     index.create(db)
 
     // column exists
@@ -47,7 +47,7 @@ module.exports.tests.create_drop = (test, common) => {
 
 module.exports.all = (tape, common) => {
   function test (name, testFunction) {
-    return tape(`GeoIndexGeom: ${name}`, testFunction)
+    return tape(`ShardGeoIndex: ${name}`, testFunction)
   }
 
   for (var testCase in module.exports.tests) {

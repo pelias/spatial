@@ -1,6 +1,6 @@
 const SqliteIntrospect = require('../../sqlite/SqliteIntrospect')
 const TableShard = require('./TableShard')
-const GeoColumnGeom = require('./GeoColumnGeom')
+const ShardGeoColumn = require('./ShardGeoColumn')
 
 module.exports.tests = {}
 
@@ -17,7 +17,7 @@ module.exports.tests.create_drop = (test, common) => {
     t.false(introspect.geometryColumns('shard').filter(c => c.f_geometry_column === 'geom').length, 'prior state')
 
     // create column
-    let column = new GeoColumnGeom()
+    let column = new ShardGeoColumn()
     column.create(db)
 
     // column exists
@@ -45,17 +45,17 @@ module.exports.tests.definition = (test, common) => {
     table.create(db)
 
     // create column
-    let column = new GeoColumnGeom()
+    let column = new ShardGeoColumn()
     column.create(db)
 
     // test indices
     let geom = introspect.columns('shard').filter(c => c.name === 'geom')
 
-    // shard_idx_complexity
+    // geom
     t.deepEqual(geom[0], {
       cid: 4,
       name: 'geom',
-      type: 'MULTIPOLYGON',
+      type: 'POLYGON',
       notnull: 1,
       dflt_value: `''`,
       pk: 0
@@ -67,7 +67,7 @@ module.exports.tests.definition = (test, common) => {
 
 module.exports.all = (tape, common) => {
   function test (name, testFunction) {
-    return tape(`GeoColumnGeom: ${name}`, testFunction)
+    return tape(`ShardGeoColumn: ${name}`, testFunction)
   }
 
   for (var testCase in module.exports.tests) {

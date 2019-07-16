@@ -1,6 +1,6 @@
 const SqliteIntrospect = require('../../sqlite/SqliteIntrospect')
 const TableShard = require('./TableShard')
-const GeoColumnGeom = require('./GeoColumnGeom')
+const ShardGeoColumn = require('./ShardGeoColumn')
 const GeoViewPointInPolygon = require('./GeoViewPointInPolygon')
 
 module.exports.tests = {}
@@ -15,7 +15,7 @@ module.exports.tests.create_drop = (test, common) => {
     table.create(db)
 
     // create column
-    let column = new GeoColumnGeom()
+    let column = new ShardGeoColumn()
     column.create(db)
 
     // column does not exist

@@ -72,9 +72,6 @@ class ImportService {
           info = this.module.geometry.insert(doc, this.config)
           if (info && info.changes) { stats.geometry += info.changes }
 
-          info = this.module.shard.insert(doc, this.config)
-          if (info && info.changes) { stats.shard += info.changes }
-
           info = this.module.hierarchy.insert(doc, this.config)
           if (info && info.changes) { stats.hierarchy += info.changes }
         })

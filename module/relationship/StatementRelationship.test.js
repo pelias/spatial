@@ -28,7 +28,7 @@ module.exports.tests.function = (test, common) => {
     let geometry = new GeometryModule(db)
     geometry.setup()
 
-    // geometry module
+    // shard module
     let shard = new ShardModule(db)
     shard.setup()
 
@@ -43,11 +43,6 @@ module.exports.tests.function = (test, common) => {
       role: 'example1',
       geom: OUTER.toWkb()
     })
-    shard.statement.insert.run({
-      source: 'example_source1',
-      id: 'example_id1',
-      geom: OUTER.toWkb()
-    })
 
     // insert middle square
     geometry.statement.insert.run({
@@ -56,22 +51,12 @@ module.exports.tests.function = (test, common) => {
       role: 'example2',
       geom: MIDDLE.toWkb()
     })
-    shard.statement.insert.run({
-      source: 'example_source2',
-      id: 'example_id2',
-      geom: MIDDLE.toWkb()
-    })
 
     // insert inner square
     geometry.statement.insert.run({
       source: 'example_source3',
       id: 'example_id3',
       role: 'example3',
-      geom: INNER.toWkb()
-    })
-    shard.statement.insert.run({
-      source: 'example_source3',
-      id: 'example_id3',
       geom: INNER.toWkb()
     })
 
