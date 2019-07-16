@@ -24,9 +24,9 @@ export CPPFLAGS="${CPPFLAGS} -I${SQLITE3}/include"
 export LDFLAGS="${LDFLAGS} -L${SQLITE3}/lib"
 
 # location of spatialite
-SPATIALITE="$(pwd)/libspatialite-5.0.0-beta0"
-export CPPFLAGS="${CPPFLAGS} -I${SQLITE3}/include"
-export LDFLAGS="${LDFLAGS} -L${SQLITE3}/lib"
+SPATIALITE="$(pwd)/../libspatialite-5.0.0-beta0"
+export CPPFLAGS="${CPPFLAGS} -I${SPATIALITE}/src/headers"
+export LDFLAGS="${LDFLAGS} -L${SPATIALITE}/src"
 
 # # location of proj
 # PROJ6='/usr/local/Cellar/proj/6.1.0'
@@ -42,6 +42,7 @@ export LDFLAGS="${LDFLAGS} -L${LIBXML2}/lib"
 ./configure --disable-dependency-tracking
 make -j8
 
+# export LD_LIBRARY_PATH="/usr/local/lib"
 ./spatialite -silent :memory: <<SQL
   SELECT 'sqlite_version', sqlite_version();
   SELECT 'spatialite_version', spatialite_version();
