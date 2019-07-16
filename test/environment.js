@@ -11,10 +11,12 @@ module.exports.tests.compile_options = (test, common) => {
       return obj
     }, {})
 
-    t.equals(pragmas.THREADSAFE, '0', 'THREADSAFE')
-    // t.equals(pragmas.ENABLE_RTREE, '1', 'ENABLE_RTREE')
-    // t.equals(pragmas.ENABLE_JSON1, '1', 'ENABLE_JSON1')
-    // t.equals(pragmas.SOUNDEX, '1', 'SOUNDEX')
+    t.true(pragmas.hasOwnProperty('ENABLE_RTREE'), 'ENABLE_RTREE')
+    t.notEqual(pragmas.ENABLE_RTREE, '0', 'ENABLE_RTREE != 0')
+    t.true(pragmas.hasOwnProperty('ENABLE_COLUMN_METADATA'), 'ENABLE_COLUMN_METADATA')
+    t.notEqual(pragmas.ENABLE_COLUMN_METADATA, '0', 'ENABLE_COLUMN_METADATA != 0')
+    t.true(pragmas.hasOwnProperty('ENABLE_JSON1'), 'ENABLE_JSON1')
+    t.notEqual(pragmas.ENABLE_JSON1, '0', 'ENABLE_JSON1 != 0')
     t.end()
   })
 }
@@ -25,38 +27,41 @@ module.exports.tests.dependencies = (test, common) => {
     let res, actual, expected
 
     res = db.prepare(`SELECT sqlite_version()`).get()
-    t.equals(res['sqlite_version()'], '3.28.0', 'sqlite_version')
+    t.equals(res['sqlite_version()'], '3.28.0', `sqlite_version: ${res['sqlite_version()']}`)
 
     res = db.prepare(`SELECT spatialite_version()`).get()
     actual = semver.coerce(res['spatialite_version()'])
     expected = semver.coerce('5.0.0')
-    t.true(semver.gte(actual, expected), 'spatialite_version')
+    t.true(semver.gte(actual, expected), `spatialite_version: ${res['spatialite_version()']}`)
+    t.equal(res['spatialite_version()'], '5.0.0-beta1', 'spatialite 5 beta1 required')
 
     res = db.prepare(`SELECT spatialite_target_cpu()`).get()
-    t.true(res['spatialite_target_cpu()'].startsWith('x86_64'), 'spatialite_target_cpu')
+    t.true(res['spatialite_target_cpu()'].startsWith('x86_64'), `spatialite_target_cpu: ${res['spatialite_target_cpu()']}`)
 
     res = db.prepare(`SELECT freexl_version()`).get()
-    t.equals(res['freexl_version()'], '1.0.5', 'freexl_version')
+    actual = semver.coerce(res['freexl_version()'])
+    expected = semver.coerce('1.0.5')
+    t.true(semver.gte(actual, expected), `freexl_version: ${res['freexl_version()']}`)
 
     res = db.prepare(`SELECT proj4_version()`).get()
     actual = semver.coerce(res['proj4_version()'])
     expected = semver.coerce('Rel. 4.9.3, 15 August 2016')
-    t.true(semver.gte(actual, expected), 'proj4_version')
+    t.true(semver.gte(actual, expected), `proj4_version: ${res['proj4_version()']}`)
 
     res = db.prepare(`SELECT geos_version()`).get()
     actual = semver.coerce(res['geos_version()'])
     expected = semver.coerce('3.6.2-CAPI-1.10.2 4d2925d6')
-    t.true(semver.gte(actual, expected), 'geos_version')
+    t.true(semver.gte(actual, expected), `geos_version: ${res['geos_version()']}`)
 
     res = db.prepare(`SELECT rttopo_version()`).get()
     actual = semver.coerce(res['rttopo_version()'])
     expected = semver.coerce('1.1.0')
-    t.true(semver.gte(actual, expected), 'rttopo_version')
+    t.true(semver.gte(actual, expected), `rttopo_version: ${res['rttopo_version()']}`)
 
     res = db.prepare(`SELECT libxml2_version()`).get()
     actual = semver.coerce(res['libxml2_version()'])
     expected = semver.coerce('2.9.7')
-    t.true(semver.gte(actual, expected), 'libxml2_version')
+    t.true(semver.gte(actual, expected), `libxml2_version: ${res['libxml2_version()']}`)
 
     t.end()
   })
@@ -103,25 +108,20 @@ module.exports.tests.features = (test, common) => {
       t.equals(res['HasGeosTrunk()'], 0, 'HasGeosTrunk')
     }, 'HasGeosTrunk')
 
-    // t.doesNotThrow(() => {
-    //   res = db.prepare(`SELECT HasGeosReentrant()`).get()
-    //   t.equals(res['HasGeosReentrant()'], 1, 'HasGeosReentrant')
-    // }, 'HasGeosReentrant')
+    t.doesNotThrow(() => {
+      res = db.prepare(`SELECT HasGeosReentrant()`).get()
+      t.equals(res['HasGeosReentrant()'], 1, 'HasGeosReentrant')
+    }, 'HasGeosReentrant')
 
-    // t.doesNotThrow(() => {
-    //   res = db.prepare(`SELECT HasGeosOnlyReentrant()`).get()
-    //   t.equals(res['HasGeosOnlyReentrant()'], 1, 'HasGeosOnlyReentrant')
-    // }, 'HasGeosOnlyReentrant')
+    t.throws(() => {
+      res = db.prepare(`SELECT HasLwGeom()`).get()
+      t.equals(res['HasLwGeom()'], 0, 'HasLwGeom')
+    }, 'NOT HasLwGeom')
 
-    // t.doesNotThrow(() => {
-    //   res = db.prepare(`SELECT HasLwGeom()`).get()
-    //   t.equals(res['HasLwGeom()'], 0, 'HasLwGeom')
-    // }, 'HasLwGeom')
-
-    // t.doesNotThrow(() => {
-    //   res = db.prepare(`SELECT HasRtTopo()`).get()
-    //   t.equals(res['HasRtTopo()'], 1, 'HasRtTopo')
-    // }, 'HasRtTopo')
+    t.doesNotThrow(() => {
+      res = db.prepare(`SELECT HasRtTopo()`).get()
+      t.equals(res['HasRtTopo()'], 1, 'HasRtTopo')
+    }, 'HasRtTopo')
 
     t.doesNotThrow(() => {
       res = db.prepare(`SELECT HasLibXML2()`).get()

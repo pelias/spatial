@@ -1,21 +1,22 @@
 FROM missinglink/spatialite as spatialite
 
 # --- base ---
-FROM alpine AS base
+FROM alpine:3.7 as base
 COPY --from=spatialite /usr/lib/ /usr/lib
 COPY --from=spatialite /usr/bin/ /usr/bin
+COPY --from=spatialite /usr/share/proj/proj.db /usr/share/proj/proj.db
 
-RUN echo "@edge http://nl.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories
-RUN echo "@3.7 http://nl.alpinelinux.org/alpine/v3.7/main" >> /etc/apk/repositories
+RUN echo "@edge http://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories
 
 RUN apk update && \
   apk --no-cache --update upgrade musl && \
-  apk add --upgrade apk-tools@edge && \
-  apk add --update gcc g++ musl-dev icu-dev@3.7=59.1-r1 icu-libs@3.7=59.1-r1 make python curl unzip jq nodejs nodejs-npm && \
+  apk add --upgrade --force-overwrite apk-tools@edge && \
+  apk add --update --force-overwrite gcc g++ musl-dev icu-dev icu-libs make sqlite python curl unzip jq nodejs nodejs-npm && \
   rm -rf /var/cache/apk/*
 
 RUN spatialite ':memory:' 'SELECT sqlite_version()'
 RUN spatialite ':memory:' 'SELECT spatialite_version()'
+RUN sqlite3 :memory: 'SELECT load_extension("mod_spatialite")'
 
 # create working dir
 RUN mkdir /code /data
