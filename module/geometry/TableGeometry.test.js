@@ -112,6 +112,16 @@ module.exports.tests.definition = (test, common) => {
       pk: 0
     }, 'id')
 
+    // role
+    t.deepEqual(columns[2], {
+      cid: 2,
+      name: 'role',
+      type: 'TEXT',
+      notnull: 1,
+      dflt_value: `'default'`,
+      pk: 0
+    }, 'role')
+
     t.end()
   })
 }

@@ -1,8 +1,8 @@
 const format = require('../../import/format')
 const TableShard = require('./TableShard')
-const GeoColumnGeom = require('./GeoColumnGeom')
+const ShardGeoColumn = require('./ShardGeoColumn')
 const StatementInsert = require('./StatementInsert')
-const TRIANGLE = format.from('geometry', 'geojson', require('../../test/fixture/geojson.triangle'))
+const TRIANGLE = format.from('polygon', 'geojson', require('../../test/fixture/geojson.triangle'))
 
 module.exports.tests = {}
 
@@ -15,7 +15,7 @@ module.exports.tests.function = (test, common) => {
     table.create(db)
 
     // create geo column
-    let column = new GeoColumnGeom()
+    let column = new ShardGeoColumn()
     column.create(db)
 
     // prepare statement
@@ -29,6 +29,8 @@ module.exports.tests.function = (test, common) => {
     let info = stmt.run({
       source: 'example_source',
       id: 'example_id',
+      role: 'default',
+      element: 1,
       geom: TRIANGLE.toWkb()
     })
 
@@ -39,8 +41,8 @@ module.exports.tests.function = (test, common) => {
     t.deepEqual(db.prepare(`SELECT *, AsBinary(geom) AS geom FROM shard`).all(), [{
       source: 'example_source',
       id: 'example_id',
-      path: '0',
-      complexity: null,
+      role: 'default',
+      element: 1,
       geom: TRIANGLE.toWkb()
     }], 'read')
 

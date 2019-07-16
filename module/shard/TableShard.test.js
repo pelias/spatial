@@ -1,5 +1,6 @@
 const SqliteIntrospect = require('../../sqlite/SqliteIntrospect')
-const Shard = require('./Shard')
+const GeometryModule = require('../geometry/Geometry')
+const ShardModule = require('./Shard')
 
 module.exports.tests = {}
 
@@ -11,15 +12,19 @@ module.exports.tests.create_drop = (test, common) => {
     // table does not exist
     t.false(introspect.tables().includes('shard'), 'prior state')
 
-    // setup module
-    let mod = new Shard(db)
-    mod.setup()
+    // set up geometry module
+    let geometry = new GeometryModule(db)
+    geometry.setup()
+
+    // set up shard module
+    let shard = new ShardModule(db)
+    shard.setup()
 
     // table exists
     t.true(introspect.tables().includes('shard'), 'create')
 
     // drop table
-    mod.table.shard.drop(db)
+    shard.table.shard.drop(db)
 
     // table does not exist
     t.false(introspect.tables().includes('shard'), 'drop')
@@ -32,22 +37,26 @@ module.exports.tests.merge = (test, common) => {
   test('merge', (t) => {
     let external = common.tempSpatialDatabase({ memory: false })
 
-    // setup module
-    let mod = new Shard(external)
-    mod.setup()
+    // set up geometry module
+    let geometry = new GeometryModule(external)
+    geometry.setup()
+
+    // set up shard module
+    let shard = new ShardModule(external)
+    shard.setup()
 
     // ensure table is empty
     t.equal(external.prepare(`SELECT * FROM shard`).all().length, 0, 'prior state')
 
     // insert some data
     let stmt = external.prepare(`
-      INSERT INTO shard (source, id, path, geom)
-      VALUES (@source, @id, @path, CastToMultiPolygon( Buffer( MakePoint( @lon, @lat, 4326 ), 1 ) ) )
+      INSERT INTO shard (source, id, role, element, geom)
+      VALUES (@source, @id, @role, @element, Buffer( MakePoint( @lon, @lat, 4326 ), 1 ) )
     `)
 
-    stmt.run({ source: 'example', id: 'id1', path: '01', lat: 1, lon: 1 })
-    stmt.run({ source: 'example', id: 'id2', path: '02', lat: 2, lon: 2 })
-    stmt.run({ source: 'example', id: 'id3', path: '03', lat: 3, lon: 3 })
+    stmt.run({ source: 'example', id: 'id1', role: 'default', element: 1, lat: 1, lon: 1 })
+    stmt.run({ source: 'example', id: 'id2', role: 'default', element: 1, lat: 2, lon: 2 })
+    stmt.run({ source: 'example', id: 'id3', role: 'default', element: 1, lat: 3, lon: 3 })
 
     // ensure table is populated
     t.equal(external.prepare(`SELECT * FROM shard`).all().length, 3, 'write')
@@ -60,9 +69,13 @@ module.exports.tests.merge = (test, common) => {
     // generate second database
     let db = common.tempSpatialDatabase()
 
-    // setup module on second db
-    mod = new Shard(db)
-    mod.setup()
+    // set up geometry module
+    geometry = new GeometryModule(db)
+    geometry.setup()
+
+    // set up shard module
+    shard = new ShardModule(db)
+    shard.setup()
 
     // attach external database
     db.prepare(`ATTACH DATABASE '${external.name}' as 'external'`).run()
@@ -71,7 +84,7 @@ module.exports.tests.merge = (test, common) => {
     t.equal(db.prepare(`SELECT * FROM external.shard`).all().length, 3, 'external state')
 
     // table does not exist
-    mod.table.shard.merge(db, 'external', 'main')
+    shard.table.shard.merge(db, 'external', 'main')
 
     // ensure table is merged to main db
     t.equal(db.prepare(`SELECT * FROM shard`).all().length, 3, 'merged')
@@ -85,9 +98,13 @@ module.exports.tests.definition = (test, common) => {
     let db = common.tempSpatialDatabase()
     let introspect = new SqliteIntrospect(db)
 
-    // setup module
-    let mod = new Shard(db)
-    mod.setup()
+    // set up geometry module
+    let geometry = new GeometryModule(db)
+    geometry.setup()
+
+    // set up shard module
+    let shard = new ShardModule(db)
+    shard.setup()
 
     // test columns
     let columns = introspect.columns('shard')
@@ -112,25 +129,25 @@ module.exports.tests.definition = (test, common) => {
       pk: 0
     }, 'id')
 
-    // path
+    // role
     t.deepEqual(columns[2], {
       cid: 2,
-      name: 'path',
+      name: 'role',
       type: 'TEXT',
       notnull: 1,
-      dflt_value: `'0'`,
+      dflt_value: `'default'`,
       pk: 0
-    }, 'path')
+    }, 'role')
 
-    // complexity
+    // element
     t.deepEqual(columns[3], {
       cid: 3,
-      name: 'complexity',
+      name: 'element',
       type: 'INTEGER',
-      notnull: 0,
-      dflt_value: 'NULL',
+      notnull: 1,
+      dflt_value: null,
       pk: 0
-    }, 'complexity')
+    }, 'element')
 
     t.end()
   })

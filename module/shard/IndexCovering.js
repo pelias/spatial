@@ -7,7 +7,7 @@ class IndexCovering extends SqliteIndex {
       let dbname = _.get(config, 'database', 'main')
       db.prepare(`
         CREATE UNIQUE INDEX IF NOT EXISTS ${dbname}.shard_idx_covering
-        ON shard(source, id, path)
+        ON shard(source, id, role, element)
       `).run()
     } catch (e) {
       this.error('CREATE INDEX', e)

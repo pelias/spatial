@@ -9,8 +9,8 @@ class TableShard extends SqliteTable {
         CREATE TABLE IF NOT EXISTS ${dbname}.shard (
           source TEXT NOT NULL,
           id TEXT NOT NULL,
-          path TEXT NOT NULL DEFAULT '0',
-          complexity INTEGER DEFAULT NULL
+          role TEXT NOT NULL DEFAULT 'default',
+          element INTEGER NOT NULL
         )
       `).run()
     } catch (e) {
