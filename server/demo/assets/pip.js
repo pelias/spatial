@@ -53,15 +53,11 @@ $('document').ready(function () {
     res.forEach(function (place) {
       api.property(place, {}, function (err2, res2) {
         if (err2) { console.error(err2) } else {
-          var props = (res2 || []).reduce(function (memo, row) {
-            memo[row.key] = row.value
-            return memo
-          }, {})
           api.geometry(place, { simplify: simplify }, function (err3, res3) {
             if (err3) { console.error(err3) } else {
               geojson.addData({
                 type: 'Feature',
-                properties: _.extend({}, place, props),
+                properties: _.extend({}, place, res2),
                 geometry: res3[0].geom
               })
             }
