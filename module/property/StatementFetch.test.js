@@ -53,13 +53,10 @@ module.exports.tests.function = (test, common) => {
     })
 
     // test response structure
-    t.deepEqual(rows, [{
-      key: 'example_key_1',
-      value: 'example_value_1'
-    }, {
-      key: 'example_key_2',
-      value: 'example_value_2'
-    }], 'read')
+    t.deepEqual(rows, {
+      example_key_1: 'example_value_1',
+      example_key_2: 'example_value_2'
+    }, 'read')
 
     t.end()
   })

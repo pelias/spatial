@@ -21,12 +21,8 @@ function decorateLink (el) {
 
   api.property({ source: source, id: id }, {}, function (err, res) {
     if (err) { console.error(err) } else {
-      (res || []).forEach(function (prop) {
-        if (prop.key === 'name') {
-          el.attr('href', '/demo/place/' + encodeURIComponent(source) + '/' + encodeURIComponent(id))
-          el.text(prop.value)
-        }
-      })
+      el.attr('href', '/demo/place/' + encodeURIComponent(source) + '/' + encodeURIComponent(id))
+      el.text(_.get(res, 'name', 'unknown'))
     }
   })
 }

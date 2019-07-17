@@ -16,6 +16,13 @@ class StatementFetch extends SqliteStatement {
       this.error('PREPARE STATEMENT', e)
     }
   }
+  // reduce results (convert from array to object)
+  _transform (res) {
+    return res.reduce((memo, item) => {
+      memo[ item.key ] = item.value
+      return memo
+    }, {})
+  }
 }
 
 module.exports = StatementFetch
