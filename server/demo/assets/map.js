@@ -101,7 +101,7 @@ function setupMap (elementId, settings) {
 
   // disable map interaction for touch devices
   if (Modernizr && Modernizr.touch) {
-    disableMapInteraction()
+    disableMapInteraction(map, elementId)
   }
 
   return map
