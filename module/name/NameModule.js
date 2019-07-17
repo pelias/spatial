@@ -4,6 +4,7 @@ const IndexIdentity = require('./IndexIdentity')
 const IndexUnique = require('./IndexUnique')
 const StatementInsert = require('./StatementInsert')
 const StatementFetch = require('./StatementFetch')
+const StatementSearch = require('./StatementSearch')
 
 class NameModule extends Module {
   constructor (db) {
@@ -17,7 +18,8 @@ class NameModule extends Module {
     }
     this.statement = {
       insert: new StatementInsert(),
-      fetch: new StatementFetch()
+      fetch: new StatementFetch(),
+      search: new StatementSearch()
     }
   }
   insert (doc) {

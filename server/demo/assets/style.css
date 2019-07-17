@@ -115,8 +115,8 @@ nav.breadcrumb {
 }
 
 .map-hero,
-.map-hero div.map {
-  height: 100%;
+.map-hero {
+  height: 80%;
 }
 
 .geom-marker{
@@ -179,7 +179,7 @@ div.spatial-relationships div.minimap {
 #sidebar-relationships {
   position: relative;
   /* margin-right: 10px; */
-  margin-left: -40px;
+  margin-left: 8px;
   margin-top: 10px;
 }
 
@@ -187,4 +187,8 @@ div.spatial-relationships div.minimap {
   position: absolute;
   right: 7px;
   top: 7px;
+}
+
+.navbar-end input {
+  width: 335px;
 }

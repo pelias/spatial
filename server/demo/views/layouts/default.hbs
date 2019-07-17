@@ -27,8 +27,12 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bulma-extensions@4.0.1/dist/js/bulma-extensions.min.js"></script>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-typeahead/2.10.6/jquery.typeahead.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-typeahead/2.10.6/jquery.typeahead.min.css" />
+
   <link href="/demo/assets/tree.css" rel="stylesheet" />
   <link href="/demo/assets/style.css" rel="stylesheet" />
+  <script src="/demo/assets/typeahead.js"></script>
   <script src="/demo/assets/links.js"></script>
   <script src="/demo/assets/minimap.js"></script>
   <script src="/demo/assets/api.js"></script>
@@ -39,27 +43,71 @@
 
 <body>
 
-  <div id="outer" class="columns is-marginless">
-    <div id="menu">
-      <aside class="menu">
-        <ul class="menu-list">
-          <li><a href="/demo/place">
-            <i class="fas fa-database"></i>
-            <em>Browse</em>
-          </a></li>
-          <li><a href="/demo/pip">
-            <i class="fas fa-draw-polygon"></i>
-            <em>PIP</em>
-          </a></li>
-          <li class="bottom"><a id="menu-toggle" class="inverse">
-            <i class="fas fa-plus"></i>
-          </a></li>
-        </ul>
-      </aside>
+  <nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://bulma.io">
+        <img src="https://geocode.earth/assets/ge-cda725f9fc7647fcb49d5fc9df2a3acb5fc4237c1db021d4e28f52f7cb924e7a.png" width="28" height="28">
+      </a>
+  
+      <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
+        data-target="navbarBasicExample">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
     </div>
-    <div class="column is-paddingless" style="height: 100%;">
-      {{{body}}}
+  
+    <div id="navbarBasicExample" class="navbar-menu">
+      <div class="navbar-start">
+        <a href="/demo/place" class="navbar-item">
+          Discover
+        </a>
+        <!--<a href="/demo/place" class="navbar-item">
+          Browse
+        </a>-->
+      </div>
+  
+      <div class="navbar-end">
+        <div class="navbar-item">
+
+          <div class="typeahead__container">
+            <div class="typeahead__field">
+              <div class="typeahead__query">
+
+                <div class="field">
+                  <p class="control has-icons-left">
+                    <input id="search" class="input" type="search" placeholder="search" autocomplete="off">
+                    <span class="icon is-small is-left">
+                      <i class="fas fa-search"></i>
+                    </span>
+                  </p>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
     </div>
+  </nav>
+
+    {{!-- <div class="typeahead__container">
+      <div class="typeahead__field">
+        <div class="typeahead__query">
+          <input class="js-typeahead" name="q" type="search" autocomplete="off">
+        </div>
+        <div class="typeahead__button">
+          <button type="submit">
+            <span class="typeahead__search-icon"></span>
+          </button>
+        </div>
+      </div>
+    </div> --}}
+
+  <div class="column is-paddingless" style="height: 100%;">
+    {{{body}}}
   </div>
 
 </body>

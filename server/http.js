@@ -101,6 +101,7 @@ app.get('/place/:source/:id/property', require('./routes/property'))
 app.get('/place/:source/:id/name', require('./routes/name'))
 app.get('/place/:source/:id/hierarchy', require('./routes/hierarchy'))
 app.get('/query/pip', require('./routes/pip'))
+app.get('/query/search', require('./routes/search'))
 
 // demo pages
 app.use('/demo', express.static(`${__dirname}/demo`))
