@@ -1,23 +1,19 @@
 const Module = require('../Module')
-const TableGeometry = require('./TableGeometry')
+const TablePlace = require('./TablePlace')
+const IndexCovering = require('./IndexCovering')
 const IndexIdentityUnique = require('./IndexIdentityUnique')
-const IndexGeometryType = require('./IndexGeometryType')
-const GeoColumnGeom = require('./GeoColumnGeom')
-const GeoIndexGeom = require('./GeoIndexGeom')
 const StatementInsert = require('./StatementInsert')
 const StatementFetch = require('./StatementFetch')
 
-class Geometry extends Module {
+class PlaceModule extends Module {
   constructor (db) {
     super(db)
     this.table = {
-      geometry: new TableGeometry(),
-      geom: new GeoColumnGeom()
+      place: new TablePlace()
     }
     this.index = {
-      identity: new IndexIdentityUnique(),
-      geometryType: new IndexGeometryType(),
-      geometry: new GeoIndexGeom()
+      covering: new IndexCovering(),
+      identity: new IndexIdentityUnique()
     }
     this.statement = {
       insert: new StatementInsert(),
@@ -28,10 +24,10 @@ class Geometry extends Module {
     return this.statement.insert.run({
       source: doc.source.toString(),
       id: doc.source_id.toString(),
-      role: 'default',
-      geom: doc.geometry.toWkb()
+      class: doc.class.toString(),
+      type: doc.type.toString()
     })
   }
 }
 
-module.exports = Geometry
+module.exports = PlaceModule

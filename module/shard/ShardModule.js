@@ -9,7 +9,7 @@ const StatementInsert = require('./StatementInsert')
 const TriggerGeometryInsert = require('./TriggerGeometryInsert')
 const GeoViewPointInPolygon = require('./GeoViewPointInPolygon')
 
-class Shard extends Module {
+class ShardModule extends Module {
   constructor (db) {
     super(db)
     this.table = {
@@ -35,4 +35,4 @@ class Shard extends Module {
   insert () { /* no-op (handled by triggers) */ }
 }
 
-module.exports = Shard
+module.exports = ShardModule

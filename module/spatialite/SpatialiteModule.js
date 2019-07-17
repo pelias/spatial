@@ -4,7 +4,7 @@ const InitSpatialMetaData = require('./InitSpatialMetaData')
 const InitSpatialOptions = require('./InitSpatialOptions')
 const InitDebugVersions = require('./InitDebugVersions')
 
-class Spatialite extends Module {
+class SpatialiteModule extends Module {
   constructor (db) {
     super(db)
 
@@ -17,4 +17,4 @@ class Spatialite extends Module {
   }
 }
 
-module.exports = Spatialite
+module.exports = SpatialiteModule

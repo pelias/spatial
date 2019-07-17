@@ -1,13 +1,13 @@
 const through = require('through2')
 const Database = require('better-sqlite3')
 const ServiceConfiguration = require('../config/ServiceConfiguration')
-const Spatialite = require('../module/spatialite/Spatialite')
-const Place = require('../module/place/Place')
-const Property = require('../module/property/Property')
-const Geometry = require('../module/geometry/Geometry')
-const Shard = require('../module/shard/Shard')
-const Hierarchy = require('../module/hierarchy/Hierarchy')
-const PointInPolygon = require('../module/pip/PointInPolygon')
+const SpatialiteModule = require('../module/spatialite/SpatialiteModule')
+const PlaceModule = require('../module/place/PlaceModule')
+const PropertyModule = require('../module/property/PropertyModule')
+const GeometryModule = require('../module/geometry/GeometryModule')
+const ShardModule = require('../module/shard/ShardModule')
+const HierarchyModule = require('../module/hierarchy/HierarchyModule')
+const PointInPolygonModule = require('../module/pip/PointInPolygonModule')
 const ticker = require('../import/ticker')
 
 class ImportService {
@@ -23,13 +23,13 @@ class ImportService {
 
     // set up modules
     this.module = {
-      spatialite: new Spatialite(this.db),
-      place: new Place(this.db),
-      property: new Property(this.db),
-      geometry: new Geometry(this.db),
-      shard: new Shard(this.db),
-      hierarchy: new Hierarchy(this.db),
-      pip: new PointInPolygon(this.db)
+      spatialite: new SpatialiteModule(this.db),
+      place: new PlaceModule(this.db),
+      property: new PropertyModule(this.db),
+      geometry: new GeometryModule(this.db),
+      shard: new ShardModule(this.db),
+      hierarchy: new HierarchyModule(this.db),
+      pip: new PointInPolygonModule(this.db)
     }
 
     // attach external databases

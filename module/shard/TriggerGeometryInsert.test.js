@@ -1,8 +1,8 @@
 const format = require('../../import/format')
 const SqliteIntrospect = require('../../sqlite/SqliteIntrospect')
 const TableShard = require('./TableShard')
-const GeometryModule = require('../geometry/Geometry')
-const ShardModule = require('./Shard')
+const GeometryModule = require('../geometry/GeometryModule')
+const ShardModule = require('./ShardModule')
 const TriggerGeometryInsert = require('./TriggerGeometryInsert')
 const POLYGON = format.from('geometry', 'geojson', require('../../test/fixture/geojson.singapore'))
 

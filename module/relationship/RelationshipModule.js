@@ -1,7 +1,7 @@
 const Module = require('../Module')
 const StatementRelationship = require('./StatementRelationship')
 
-class Relationship extends Module {
+class RelationshipModule extends Module {
   constructor (db) {
     super(db)
     this.statement = {
@@ -12,4 +12,4 @@ class Relationship extends Module {
   }
 }
 
-module.exports = Relationship
+module.exports = RelationshipModule

@@ -1,5 +1,5 @@
 const SqliteIntrospect = require('../../sqlite/SqliteIntrospect')
-const Place = require('./Place')
+const PlaceModule = require('./PlaceModule')
 
 module.exports.tests = {}
 
@@ -12,7 +12,7 @@ module.exports.tests.create_drop = (test, common) => {
     t.false(introspect.tables().includes('place'), 'prior state')
 
     // setup module
-    let mod = new Place(db)
+    let mod = new PlaceModule(db)
     mod.setup()
 
     // table exists
@@ -33,7 +33,7 @@ module.exports.tests.merge = (test, common) => {
     let external = common.tempDatabase({ memory: false })
 
     // setup module
-    let mod = new Place(external)
+    let mod = new PlaceModule(external)
     mod.setup()
 
     // ensure table is empty
@@ -76,7 +76,7 @@ module.exports.tests.merge = (test, common) => {
     let db = common.tempDatabase()
 
     // setup module on second db
-    mod = new Place(db)
+    mod = new PlaceModule(db)
     mod.setup()
 
     // attach external database
@@ -101,7 +101,7 @@ module.exports.tests.definition = (test, common) => {
     let introspect = new SqliteIntrospect(db)
 
     // setup module
-    let mod = new Place(db)
+    let mod = new PlaceModule(db)
     mod.setup()
 
     // test columns

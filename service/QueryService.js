@@ -1,12 +1,12 @@
 const Database = require('better-sqlite3')
 const ServiceConfiguration = require('../config/ServiceConfiguration')
-const Spatialite = require('../module/spatialite/Spatialite')
-const Place = require('../module/place/Place')
-const Property = require('../module/property/Property')
-const Geometry = require('../module/geometry/Geometry')
-const PointInPolygon = require('../module/pip/PointInPolygon')
-const Hierarchy = require('../module/hierarchy/Hierarchy')
-const Relationship = require('../module/relationship/Relationship')
+const SpatialiteModule = require('../module/spatialite/SpatialiteModule')
+const PlaceModule = require('../module/place/PlaceModule')
+const PropertyModule = require('../module/property/PropertyModule')
+const GeometryModule = require('../module/geometry/GeometryModule')
+const PointInPolygonModule = require('../module/pip/PointInPolygonModule')
+const HierarchyModule = require('../module/hierarchy/HierarchyModule')
+const RelationshipModule = require('../module/relationship/RelationshipModule')
 
 class QueryService {
   constructor (config) {
@@ -21,13 +21,13 @@ class QueryService {
 
     // set up modules
     this.module = {
-      spatialite: new Spatialite(this.db),
-      place: new Place(this.db),
-      property: new Property(this.db),
-      geometry: new Geometry(this.db),
-      pip: new PointInPolygon(this.db),
-      hierarchy: new Hierarchy(this.db),
-      relationship: new Relationship(this.db)
+      spatialite: new SpatialiteModule(this.db),
+      place: new PlaceModule(this.db),
+      property: new PropertyModule(this.db),
+      geometry: new GeometryModule(this.db),
+      pip: new PointInPolygonModule(this.db),
+      hierarchy: new HierarchyModule(this.db),
+      relationship: new RelationshipModule(this.db)
     }
 
     // attach external databases

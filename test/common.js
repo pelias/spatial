@@ -2,7 +2,7 @@ const os = require('os')
 const path = require('path')
 const _ = require('lodash')
 const Database = require('better-sqlite3')
-const Spatialite = require('../module/spatialite/Spatialite')
+const SpatialiteModule = require('../module/spatialite/SpatialiteModule')
 const DEFAULTS = { memory: true, tmpdir: os.tmpdir() }
 
 module.exports = {
@@ -15,7 +15,7 @@ module.exports = {
   },
   tempSpatialDatabase: (config) => {
     let db = module.exports.tempDatabase(config)
-    let mod = new Spatialite(db)
+    let mod = new SpatialiteModule(db)
     mod.setup()
     return db
   }

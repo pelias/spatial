@@ -1,5 +1,5 @@
 const SqliteIntrospect = require('../../sqlite/SqliteIntrospect')
-const Geometry = require('./Geometry')
+const GeometryModule = require('./GeometryModule')
 
 module.exports.tests = {}
 
@@ -12,7 +12,7 @@ module.exports.tests.create_drop = (test, common) => {
     t.false(introspect.tables().includes('geometry'), 'prior state')
 
     // setup module
-    let module = new Geometry(db)
+    let module = new GeometryModule(db)
     module.setup()
 
     // table exists
@@ -33,7 +33,7 @@ module.exports.tests.merge = (test, common) => {
     let external = common.tempSpatialDatabase({ memory: false })
 
     // setup module
-    let mod = new Geometry(external)
+    let mod = new GeometryModule(external)
     mod.setup()
 
     // ensure table is empty
@@ -61,7 +61,7 @@ module.exports.tests.merge = (test, common) => {
     let db = common.tempSpatialDatabase()
 
     // setup module on second db
-    mod = new Geometry(db)
+    mod = new GeometryModule(db)
     mod.setup()
 
     // attach external database
@@ -86,7 +86,7 @@ module.exports.tests.definition = (test, common) => {
     let introspect = new SqliteIntrospect(db)
 
     // setup module
-    let module = new Geometry(db)
+    let module = new GeometryModule(db)
     module.setup()
 
     // test columns

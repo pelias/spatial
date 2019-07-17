@@ -1,6 +1,6 @@
 const SqliteIntrospect = require('../../sqlite/SqliteIntrospect')
-const GeometryModule = require('../geometry/Geometry')
-const ShardModule = require('./Shard')
+const GeometryModule = require('../geometry/GeometryModule')
+const ShardModule = require('./ShardModule')
 
 module.exports.tests = {}
 

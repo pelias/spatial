@@ -1,7 +1,7 @@
 const format = require('../../import/format')
-const GeometryModule = require('../geometry/Geometry')
-const ShardModule = require('../shard/Shard')
-const RelationshipModule = require('./Relationship')
+const GeometryModule = require('../geometry/GeometryModule')
+const ShardModule = require('../shard/ShardModule')
+const RelationshipModule = require('./RelationshipModule')
 
 const OUTER = format.from('geometry', 'geojson', {
   'type': 'Polygon',

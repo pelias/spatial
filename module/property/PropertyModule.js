@@ -6,7 +6,7 @@ const IndexUnique = require('./IndexUnique')
 const StatementInsert = require('./StatementInsert')
 const StatementFetch = require('./StatementFetch')
 
-class Property extends Module {
+class PropertyModule extends Module {
   constructor (db) {
     super(db)
     this.table = {
@@ -48,4 +48,4 @@ class Property extends Module {
   }
 }
 
-module.exports = Property
+module.exports = PropertyModule

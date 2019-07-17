@@ -8,7 +8,7 @@ const StatementFetch = require('./StatementFetch')
 const ViewInsertProxy = require('./ViewInsertProxy')
 const TriggerOnInsert = require('./TriggerOnInsert')
 
-class Hierarchy extends Module {
+class HierarchyModule extends Module {
   constructor (db) {
     super(db)
     this.table = {
@@ -46,4 +46,4 @@ class Hierarchy extends Module {
   }
 }
 
-module.exports = Hierarchy
+module.exports = HierarchyModule

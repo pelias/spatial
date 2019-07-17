@@ -2,7 +2,7 @@ const Module = require('../Module')
 const GeoViewPointInPolygon = require('../shard/GeoViewPointInPolygon')
 const StatementPointInPolygon = require('./StatementPointInPolygon')
 
-class PointInPolygon extends Module {
+class PointInPolygonModule extends Module {
   constructor (db) {
     super(db)
     this.statement = {
@@ -14,4 +14,4 @@ class PointInPolygon extends Module {
   }
 }
 
-module.exports = PointInPolygon
+module.exports = PointInPolygonModule
