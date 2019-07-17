@@ -60,7 +60,7 @@
           <span class="panel-icon">
             <input type="checkbox" checked="checked" />
           </span>
-          <em>[{{this.geom.type}}]</em>
+          <span class="tag is-light">{{this.geom.type}}</span>
           <strong>{{this.role}}</strong>
         </a>
       {{/each}}
@@ -93,7 +93,7 @@
           {{#each params.place.hierarchy}}
           <tr>
             <td>
-              <a data-source="{{this.parent_source}}" data-id="{{this.parent_id}}">
+              <a data-source="{{this.parent_source}}" data-id="{{this.parent_id}}" data-show-source="1">
                 {{this.parent_source}}/{{this.parent_id}}
               </a>
             </td>

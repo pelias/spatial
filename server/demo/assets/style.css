@@ -96,10 +96,13 @@ nav.breadcrumb {
   font-size: 1.4em;
 }
 
-.sidebar-element em {
-  font-style: normal;
-  font-size: 12px;
+.tag {
   text-transform: uppercase;
+}
+
+.link-tag {
+  margin-right: 5px;
+  font-size: 0.7em !important;
 }
 
 .sidebar-element strong {
@@ -162,7 +165,7 @@ div.spatial-relationships .tile {
 div.spatial-relationships .tile em {
   width: 100%;
   padding-top: 3px;
-  min-height: 30px;
+  min-height: 35px;
   display: block;
   font-style: normal;
   text-align: center;

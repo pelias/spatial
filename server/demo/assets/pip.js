@@ -77,7 +77,7 @@ $('document').ready(function () {
 
     res.forEach(function (place) {
       var tr = $('<tr></tr>')
-      tr.append('<td><a data-source="' + place.source + '" data-id="' + place.id + '"></a></td>')
+      tr.append('<td><a data-source="' + place.source + '" data-id="' + place.id + '"  data-show-source="1"></a></td>')
       tr.append('<td>' + place.class + '</td>')
       tr.append('<td>' + place.type + '</td>')
       tbody.append(tr)

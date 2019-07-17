@@ -22,7 +22,18 @@ function decorateLink (el) {
   api.property({ source: source, id: id }, {}, function (err, res) {
     if (err) { console.error(err) } else {
       el.attr('href', '/demo/place/' + encodeURIComponent(source) + '/' + encodeURIComponent(id))
-      el.text(_.get(res, 'name', 'unknown'))
+      el.empty()
+
+      var displaySourceAttr = el.attr('data-show-source')
+      if (displaySourceAttr && displaySourceAttr !== '0') {
+        var tagSpan = $('<span class="tag is-light link-tag"></span>')
+        tagSpan.text(source)
+        el.append(tagSpan)
+      }
+
+      var textSpan = $('<span></span>')
+      textSpan.text(_.get(res, 'name', 'unknown'))
+      el.append(textSpan)
     }
   })
 }
