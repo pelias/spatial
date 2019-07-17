@@ -7,6 +7,7 @@ const PropertyModule = require('../module/property/PropertyModule')
 const GeometryModule = require('../module/geometry/GeometryModule')
 const ShardModule = require('../module/shard/ShardModule')
 const HierarchyModule = require('../module/hierarchy/HierarchyModule')
+const NameModule = require('../module/name/NameModule')
 const PointInPolygonModule = require('../module/pip/PointInPolygonModule')
 const ticker = require('../import/ticker')
 
@@ -29,6 +30,7 @@ class ImportService {
       geometry: new GeometryModule(this.db),
       shard: new ShardModule(this.db),
       hierarchy: new HierarchyModule(this.db),
+      name: new NameModule(this.db),
       pip: new PointInPolygonModule(this.db)
     }
 
@@ -49,7 +51,7 @@ class ImportService {
     }
   }
   createImportStream () {
-    let stats = { error: 0, imports: 0, place: 0, property: 0, geometry: 0, shard: 0 }
+    let stats = { error: 0, imports: 0, place: 0, property: 0, geometry: 0, name: 0, shard: 0 }
 
     ticker.addIncrementOperation('error', () => stats.error)
     ticker.addIncrementOperation('imports', () => stats.place, true, true)
@@ -74,6 +76,9 @@ class ImportService {
 
           info = this.module.hierarchy.insert(doc, this.config)
           if (info && info.changes) { stats.hierarchy += info.changes }
+
+          info = this.module.name.insert(doc, this.config)
+          if (info && info.changes) { stats.name += info.changes }
         })
         transaction(doc)
 

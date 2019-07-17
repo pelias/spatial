@@ -19,6 +19,9 @@ module.exports.place = function (req, res) {
   // load properties
   place.property = service.module.property.statement.fetch.all(_.extend({}, identity, { limit: 100 }))
 
+  // load names
+  place.name = service.module.name.statement.fetch.all(_.extend({}, identity, { limit: 100 }))
+
   // load hierarchies
   place.hierarchy = service.module.hierarchy.statement.fetch.all(_.extend({}, identity, { limit: 100 }))
 

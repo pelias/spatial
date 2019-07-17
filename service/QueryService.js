@@ -6,6 +6,7 @@ const PropertyModule = require('../module/property/PropertyModule')
 const GeometryModule = require('../module/geometry/GeometryModule')
 const PointInPolygonModule = require('../module/pip/PointInPolygonModule')
 const HierarchyModule = require('../module/hierarchy/HierarchyModule')
+const NameModule = require('../module/name/NameModule')
 const RelationshipModule = require('../module/relationship/RelationshipModule')
 
 class QueryService {
@@ -27,6 +28,7 @@ class QueryService {
       geometry: new GeometryModule(this.db),
       pip: new PointInPolygonModule(this.db),
       hierarchy: new HierarchyModule(this.db),
+      name: new NameModule(this.db),
       relationship: new RelationshipModule(this.db)
     }
 

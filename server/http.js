@@ -98,6 +98,7 @@ app.get('/place/:source/:id/relationship/intersects', require('./routes/relation
 app.get('/place/:source/:id/relationship/contains', require('./routes/relationship').contains)
 app.get('/place/:source/:id/relationship/within', require('./routes/relationship').within)
 app.get('/place/:source/:id/property', require('./routes/property'))
+app.get('/place/:source/:id/name', require('./routes/name'))
 app.get('/place/:source/:id/hierarchy', require('./routes/hierarchy'))
 app.get('/query/pip', require('./routes/pip'))
 

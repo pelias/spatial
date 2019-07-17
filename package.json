@@ -34,6 +34,8 @@
     "express": "^4.17.1",
     "express-handlebars": "^3.1.0",
     "handlebars-helpers": "^0.10.0",
+    "iso-639-3": "^1.2.0",
+    "locale": "^0.1.0",
     "lodash": "^4.17.11",
     "morgan": "^1.9.1",
     "pelias-logger": "^1.4.1",

@@ -78,6 +78,34 @@
       </table>
     </nav>
 
+    <!-- name sidebar -->
+    <nav id="sidebar-name" class="panel">
+      <p class="panel-heading">Names</p>
+      <table class="table is-fullwidth">
+        <thead>
+          <tr>
+            <th>lang</th>
+            <th>tag</th>
+            <th>name</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each params.place.name}}
+          <tr>
+            <td>{{uppercase this.lang}}</td>
+            <td>
+              {{this.tag}}
+              {{#if (isTruthy this.abbr)}}
+                <span class="tag is-light">ABBR</span>
+              {{/if}}
+            </td>
+            <th>{{this.name}}</th>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </nav>
+
     <!-- hierarchy sidebar -->
     <nav id="sidebar-hierarchy" class="panel">
       <p class="panel-heading">Hierarchies</p>
