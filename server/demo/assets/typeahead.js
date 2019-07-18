@@ -42,7 +42,7 @@ $('document').ready(function () {
       onClick: function (node, a, item, event) {
         // console.log('onClick')
         // console.error(JSON.stringify(item))
-        window.location = '/demo/place/' + item.source + '/' + item.id
+        window.location = '/explore/place/' + item.source + '/' + item.id
       },
       onSendRequest: function (node, query) {
         // console.log('request is sent')

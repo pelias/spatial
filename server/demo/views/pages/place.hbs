@@ -40,6 +40,15 @@
             <th>id</th>
             <td>{{params.place.id}}</td>
           </tr>
+        </tbody>
+      </table>
+    </nav>
+
+    <!-- ontology sidebar -->
+    <nav id="sidebar-ontology" class="panel">
+      <p class="panel-heading">Ontology</p>
+      <table class="table is-fullwidth">
+        <tbody>
           <tr>
             <th>class</th>
             <td>{{params.place.class}}</td>
@@ -140,5 +149,5 @@
   var events = $({});
   var params = JSON.parse(decodeURIComponent("{{{json}}}"));
 </script>
-<script src="/demo/assets/map.load.js"></script>
-<script src="/demo/assets/relationships.js"></script>
+<script src="/explore/assets/map.load.js"></script>
+<script src="/explore/assets/relationships.js"></script>

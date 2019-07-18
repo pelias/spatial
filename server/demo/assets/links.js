@@ -21,7 +21,7 @@ function decorateLink (el) {
 
   api.property({ source: source, id: id }, {}, function (err, res) {
     if (err) { console.error(err) } else {
-      el.attr('href', '/demo/place/' + encodeURIComponent(source) + '/' + encodeURIComponent(id))
+      el.attr('href', '/explore/place/' + encodeURIComponent(source) + '/' + encodeURIComponent(id))
       el.empty()
 
       var displaySourceAttr = el.attr('data-show-source')

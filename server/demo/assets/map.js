@@ -83,7 +83,7 @@ function setupMap (elementId, settings) {
   if (settings.crosshairControl === true) {
     // Add in a crosshair for the map
     var crosshairIcon = L.icon({
-      iconUrl: '/demo/assets/vendor/icons/MapCenterCoordIcon1.svg',
+      iconUrl: '/explore/assets/vendor/icons/MapCenterCoordIcon1.svg',
       iconSize: [40, 40], // size of the icon
       iconAnchor: [10, 10] // point of the icon which will correspond to marker's location
     })

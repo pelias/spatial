@@ -104,10 +104,10 @@ app.get('/query/pip', require('./routes/pip'))
 app.get('/query/search', require('./routes/search'))
 
 // demo pages
-app.use('/demo', express.static(`${__dirname}/demo`))
-app.get('/demo/place/:source/:id', require('./routes/demo').place)
-app.get('/demo/pip', require('./routes/demo').pip)
-app.use('/', (req, res) => { res.redirect('/demo/pip') })
+app.use('/explore', express.static(`${__dirname}/demo`))
+app.get('/explore/place/:source/:id', require('./routes/demo').place)
+app.get('/explore/pip', require('./routes/demo').pip)
+app.use('/', (req, res) => { res.redirect('/explore/pip') })
 
 // handle SIGTERM (required for fast docker restarts)
 process.on('SIGTERM', () => { app.close() })
