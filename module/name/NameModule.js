@@ -22,25 +22,23 @@ class NameModule extends Module {
       search: new StatementSearch()
     }
   }
-  insert (doc) {
+  insert (place) {
     let info = { changes: 0, lastInsertRowid: 0 }
-    if (Array.isArray(doc.name)) {
-      doc.name.forEach(row => {
-        // insert names
-        let _info = this.statement.insert.run({
-          source: doc.source.toString(),
-          id: doc.source_id.toString(),
-          lang: row.lang.toString().toLowerCase().substring(0, 3),
-          tag: (row.tag || '').toString().toLowerCase().substring(0, 16),
-          abbr: (row.abbr === 1 || row.abbr === true) ? 1 : 0,
-          name: (row.name || '').trim()
-        })
-
-        // update aggregate info
-        info.changes += _info.changes
-        info.lastInsertRowid = _info.lastInsertRowid
+    place.name.forEach(name => {
+      // insert name
+      let _info = this.statement.insert.run({
+        source: place.identity.source,
+        id: place.identity.id,
+        lang: name.lang,
+        tag: name.tag,
+        abbr: name.abbr ? 1 : 0,
+        name: name.name
       })
-    }
+
+      // update aggregate info
+      info.changes += _info.changes
+      info.lastInsertRowid = _info.lastInsertRowid
+    })
     return info
   }
 }

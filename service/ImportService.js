@@ -60,27 +60,27 @@ class ImportService {
     // ticker.addIncrementOperation('geometry', () => stats.place)
     // ticker.addIncrementOperation('shard', () => stats.place)
 
-    return through.obj((doc, _, next) => {
+    return through.obj((place, _, next) => {
       try {
-        const transaction = this.db.transaction(doc => {
+        const transaction = this.db.transaction(place => {
           let info
 
-          info = this.module.place.insert(doc, this.config)
+          info = this.module.place.insert(place, this.config)
           if (info && info.changes) { stats.place += info.changes }
 
-          info = this.module.property.insert(doc, this.config)
+          info = this.module.property.insert(place, this.config)
           if (info && info.changes) { stats.property += info.changes }
 
-          info = this.module.geometry.insert(doc, this.config)
+          info = this.module.geometry.insert(place, this.config)
           if (info && info.changes) { stats.geometry += info.changes }
 
-          info = this.module.hierarchy.insert(doc, this.config)
+          info = this.module.hierarchy.insert(place, this.config)
           if (info && info.changes) { stats.hierarchy += info.changes }
 
-          info = this.module.name.insert(doc, this.config)
+          info = this.module.name.insert(place, this.config)
           if (info && info.changes) { stats.name += info.changes }
         })
-        transaction(doc)
+        transaction(place)
 
         // process.stderr.write('✓')
         stats.imports++

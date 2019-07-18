@@ -24,13 +24,22 @@ class GeometryModule extends Module {
       fetch: new StatementFetch()
     }
   }
-  insert (doc) {
-    return this.statement.insert.run({
-      source: doc.source.toString(),
-      id: doc.source_id.toString(),
-      role: 'default',
-      geom: doc.geometry.toWkb()
+  insert (place) {
+    let info = { changes: 0, lastInsertRowid: 0 }
+    place.geometry.forEach((geometry, i) => {
+      // insert geometry
+      let _info = this.statement.insert.run({
+        source: place.identity.source,
+        id: place.identity.id,
+        role: (i === 0) ? 'default' : `extra:${i}`,
+        geom: geometry.toWkb()
+      })
+
+      // update aggregate info
+      info.changes += _info.changes
+      info.lastInsertRowid = _info.lastInsertRowid
     })
+    return info
   }
 }
 

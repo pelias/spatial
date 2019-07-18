@@ -30,18 +30,22 @@ class HierarchyModule extends Module {
       insertProxy: new ViewInsertProxy()
     }
   }
-  insert (doc) {
+  insert (place) {
     let info = { changes: 0, lastInsertRowid: 0 }
-    if (doc.hierarchy) {
-      doc.hierarchy.forEach(relation => {
-        // insert property
-        let _info = this.statement.insert.run(relation)
-
-        // update aggregate info
-        info.changes += _info.changes
-        info.lastInsertRowid = _info.lastInsertRowid
+    place.hierarchy.forEach(hierarchy => {
+      // insert hierarchy
+      let _info = this.statement.insert.run({
+        child_source: hierarchy.child.source,
+        child_id: hierarchy.child.id,
+        parent_source: hierarchy.parent.source,
+        parent_id: hierarchy.parent.id,
+        branch: hierarchy.branch
       })
-    }
+
+      // update aggregate info
+      info.changes += _info.changes
+      info.lastInsertRowid = _info.lastInsertRowid
+    })
     return info
   }
 }
