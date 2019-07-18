@@ -1,6 +1,6 @@
 const split = require('split2')
 const parser = require('./parser/parser')
-const mapper = require('./mapper')
+const mapperStream = require('./mapperStream')
 const progress = require('./progress')
 
 // create importer stream
@@ -9,7 +9,7 @@ function streamFactory (source) {
     .pipe(progress())
     .pipe(split(source.record_separator))
     .pipe(parser(source.format))
-    .pipe(mapper(source.mapping))
+    .pipe(mapperStream(source.mapper))
 
   // pause stream until a sink is attached
   stream.pause()

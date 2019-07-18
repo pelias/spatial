@@ -1,4 +1,3 @@
-const _ = require('lodash')
 const Module = require('../Module')
 const TableProperty = require('./TableProperty')
 const IndexIdentity = require('./IndexIdentity')
@@ -21,29 +20,21 @@ class PropertyModule extends Module {
       fetch: new StatementFetch()
     }
   }
-  insert (doc) {
+  insert (place) {
     let info = { changes: 0, lastInsertRowid: 0 }
-    if (doc.property) {
-      for (let key in doc.property) {
-        // validate/normalize value
-        let value = doc.property[key]
-        if (!_.isString(value)) { continue }
-        value = value.trim() // trim value
-        if (!value.length) { continue }
+    place.property.forEach(property => {
+      // insert property
+      let _info = this.statement.insert.run({
+        source: place.identity.source,
+        id: place.identity.id,
+        key: property.key,
+        value: property.value
+      })
 
-        // insert property
-        let _info = this.statement.insert.run({
-          source: doc.source.toString(),
-          id: doc.source_id.toString(),
-          key: key.toString(),
-          value: value
-        })
-
-        // update aggregate info
-        info.changes += _info.changes
-        info.lastInsertRowid = _info.lastInsertRowid
-      }
-    }
+      // update aggregate info
+      info.changes += _info.changes
+      info.lastInsertRowid = _info.lastInsertRowid
+    })
     return info
   }
 }

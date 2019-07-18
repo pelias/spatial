@@ -8,12 +8,12 @@ class Hierarchy {
     this.setBranch(branch)
   }
   setChild (child) {
-    if (child instanceof Identity) {
+    if (child instanceof Identity && child._isValid()) {
       this.child = child
     }
   }
   setParent (parent) {
-    if (parent instanceof Identity) {
+    if (parent instanceof Identity && parent._isValid()) {
       this.parent = parent
     }
   }

@@ -15,27 +15,27 @@ class Place {
     this.geometry = []
   }
   setIdentity (identity) {
-    if (identity instanceof Identity) {
+    if (identity instanceof Identity && identity._isValid()) {
       this.identity = identity
     }
   }
   setOntology (ontology) {
-    if (ontology instanceof Ontology) {
+    if (ontology instanceof Ontology && ontology._isValid()) {
       this.ontology = ontology
     }
   }
   addProperty (property) {
-    if (property instanceof Property) {
+    if (property instanceof Property && property._isValid()) {
       this.property.push(property)
     }
   }
   addName (name) {
-    if (name instanceof Name) {
+    if (name instanceof Name && name._isValid()) {
       this.name.push(name)
     }
   }
   addHierarchy (hierarchy) {
-    if (hierarchy instanceof Hierarchy) {
+    if (hierarchy instanceof Hierarchy && hierarchy._isValid()) {
       this.hierarchy.push(hierarchy)
     }
   }

@@ -20,12 +20,12 @@ class PlaceModule extends Module {
       fetch: new StatementFetch()
     }
   }
-  insert (doc) {
+  insert (place) {
     return this.statement.insert.run({
-      source: doc.source.toString(),
-      id: doc.source_id.toString(),
-      class: doc.class.toString(),
-      type: doc.type.toString()
+      source: place.identity.source,
+      id: place.identity.id,
+      class: place.ontology.class,
+      type: place.ontology.type
     })
   }
 }
