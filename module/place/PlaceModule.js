@@ -1,6 +1,6 @@
 const Module = require('../Module')
 const TablePlace = require('./TablePlace')
-const IndexCovering = require('./IndexCovering')
+const IndexOntology = require('./IndexOntology')
 const IndexIdentityUnique = require('./IndexIdentityUnique')
 const StatementInsert = require('./StatementInsert')
 const StatementFetch = require('./StatementFetch')
@@ -13,8 +13,8 @@ class PlaceModule extends Module {
       place: new TablePlace()
     }
     this.index = {
-      covering: new IndexCovering(),
-      identity: new IndexIdentityUnique()
+      identity: new IndexIdentityUnique(),
+      ontology: new IndexOntology()
     }
     this.statement = {
       insert: new StatementInsert(),
