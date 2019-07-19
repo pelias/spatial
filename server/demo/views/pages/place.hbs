@@ -81,7 +81,21 @@
       <table class="table is-fullwidth">
         <tbody>
           {{#each params.place.property}}
-            <tr><th>{{@key}}</th><td>{{this}}</td></tr>
+            <tr>
+              <th>{{@key}}</th>
+              <td>
+                <p>
+                  {{#is @key compare="alpha2"}}
+                    {{#isnt this compare="XX"}}
+                      {{#equalsLength this 2}}
+                        <img class="flag" src="https://www.countryflags.io/{{this}}/flat/16.png">
+                      {{/equalsLength}}
+                    {{/isnt}}
+                  {{/is}}
+                  {{this}}
+                </p>
+              </td>
+            </tr>
           {{/each}}
         </tbody>
       </table>
