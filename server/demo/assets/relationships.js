@@ -13,9 +13,11 @@ $('document').ready(function () {
       if (err) { console.error(err) } else {
         (res || []).forEach(function (rel) {
           el.append(
-            '<div class="tile">' +
+            '<div class="minimap-container">' +
               '<div data-source="' + rel.source + '" data-id="' + rel.id + '" data-update-text="1">' +
-                '<em class="minimap-title">' + rel.source + '/' + rel.id + '</em>' +
+                '<a class="minimap-title" data-source="' + rel.source + '" data-id="' + rel.id + '" data-show-source="1" href="/explore/place/' + rel.source + '/' + rel.id + '">' +
+                  rel.source + '/' + rel.id +
+                '</a>' +
                 '<div class="minimap" />' +
               '</div>' +
             '</div>'

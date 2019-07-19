@@ -18,8 +18,20 @@ function mapper (doc) {
   // instantiate a new place
   const place = new Place(
     new Identity('osm', _.get(properties, '@type') + DELIM + _.get(properties, '@id')),
-    new Ontology('admin', _.get(properties, 'place', 'unknown'))
+    new Ontology('admin', _.get(properties, 'place', 'unknown').trim().toLowerCase().split(/\s+/).join('_'))
   )
+
+  // try to avoid 'unknown' ontology type
+  if (place.ontology.type === 'unknown') {
+    // use 'landuse' property if available
+    place.ontology.setType(_.get(properties, 'landuse', 'unknown').trim().toLowerCase())
+
+    // use 'boundary' property if available
+    if (place.ontology.type === 'unknown') {
+      const boundary = _.get(properties, 'boundary', 'unknown').trim().toLowerCase()
+      if (boundary !== 'multipolygon') { place.ontology.setType(boundary) }
+    }
+  }
 
   // add geometry
   const geometry = _.get(doc, 'geometry')

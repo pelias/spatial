@@ -1,0 +1,16 @@
+<div class="container">
+  <div style="margin-top: 30px;">
+    <h1 class="title">{{params.query.type}} <span class="tag is-dark">{{params.query.class}}</span></span></h1>
+    {{#each params.place}}<div class="minimap-container">
+        <div data-source="{{source}}" data-id="{{id}}" data-update-text="1">
+          <a class="minimap-title" data-source="{{source}}" data-id="{{id}}" data-show-source="1" href="/explore/place/{{source}}/{{id}}">{{source}}/{{id}}</a>
+          <div class="minimap"></div>
+        </div>
+      </div>{{/each}}
+  </div>
+</div>
+
+<script>
+  var events = $({});
+  var params = JSON.parse(decodeURIComponent("{{{json}}}"));
+</script>

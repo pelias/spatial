@@ -1,6 +1,6 @@
 const SqliteIntrospect = require('../../sqlite/SqliteIntrospect')
 const TablePlace = require('./TablePlace')
-const IndexCovering = require('./IndexCovering')
+const IndexOntology = require('./IndexOntology')
 
 module.exports.tests = {}
 
@@ -17,7 +17,7 @@ module.exports.tests.create_drop = (test, common) => {
     t.false(introspect.indices('place').length, 'prior state')
 
     // create index
-    let index = new IndexCovering()
+    let index = new IndexOntology()
     index.create(db)
 
     // index exists
@@ -43,20 +43,20 @@ module.exports.tests.definition = (test, common) => {
     table.create(db)
 
     // create index
-    let index = new IndexCovering()
+    let index = new IndexOntology()
     index.create(db)
 
     // test indices
     let indices = introspect.indices('place')
 
-    // place_idx_covering
+    // place_idx_ontology
     t.deepEqual(indices[0], {
       seq: 0,
-      name: 'place_idx_covering',
+      name: 'place_idx_ontology',
       unique: 0,
       origin: 'c',
       partial: 0
-    }, 'place_idx_covering')
+    }, 'place_idx_ontology')
 
     t.end()
   })
@@ -64,7 +64,7 @@ module.exports.tests.definition = (test, common) => {
 
 module.exports.all = (tape, common) => {
   function test (name, testFunction) {
-    return tape(`IndexCovering: ${name}`, testFunction)
+    return tape(`IndexOntology: ${name}`, testFunction)
   }
 
   for (var testCase in module.exports.tests) {

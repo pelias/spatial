@@ -18,13 +18,6 @@ function decorateMinimap (el) {
     el.attr('data-loaded', '1')
   }
 
-  // text is empty
-  if (el.find('.minimap-title').html() === '' || el.attr('data-update-text') === '1') {
-    el.find('.minimap-title').html(
-      '<a data-source="' + source + '" data-id="' + id + '" data-show-source="1"></a>'
-    )
-  }
-
   var mapid = 'map' + uniqId()
   el.find('.minimap').attr('id', mapid)
 

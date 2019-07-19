@@ -21,7 +21,7 @@ function mapper (doc) {
   // instantiate a new place
   const place = new Place(
     new Identity('wof', _.get(doc, 'id', '').toString()),
-    new Ontology('admin', _.get(properties, 'wof:placetype'))
+    new Ontology('admin', _.get(properties, 'wof:placetype', 'unknown').trim().toLowerCase().split(/\s+/).join('_'))
   )
 
   // add geometry

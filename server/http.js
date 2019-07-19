@@ -102,11 +102,16 @@ app.get('/place/:source/:id/name', require('./routes/name'))
 app.get('/place/:source/:id/hierarchy', require('./routes/hierarchy'))
 app.get('/query/pip', require('./routes/pip'))
 app.get('/query/search', require('./routes/search'))
+app.get('/ontology', require('./routes/ontology'))
+app.get('/ontology/:class', require('./routes/ontology'))
+app.get('/ontology/:class/:type', require('./routes/ontology'))
 
 // demo pages
 app.use('/explore', express.static(`${__dirname}/demo`))
 app.get('/explore/place/:source/:id', require('./routes/demo').place)
 app.get('/explore/pip', require('./routes/demo').pip)
+app.get('/explore/ontology', require('./routes/demo').ontology.enumerate)
+app.get('/explore/ontology/:class/:type', require('./routes/demo').ontology.search)
 app.use('/', (req, res) => { res.redirect('/explore/pip') })
 
 // handle SIGTERM (required for fast docker restarts)
