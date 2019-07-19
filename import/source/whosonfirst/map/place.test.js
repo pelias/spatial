@@ -23,6 +23,34 @@ module.exports.tests.mapper = (test) => {
     t.equal(place.ontology.type, 'locality')
     t.end()
   })
+  test('mapper: ontology type - trim & lowercase', (t) => {
+    let place = map({
+      id: 1,
+      properties: {
+        'wof:placetype': ' \tLocaLity\n'
+      }
+    })
+    t.true(place instanceof Place)
+    t.equal(place.identity.source, 'wof')
+    t.equal(place.identity.id, '1')
+    t.equal(place.ontology.class, 'admin')
+    t.equal(place.ontology.type, 'locality')
+    t.end()
+  })
+  test('mapper: ontology type - replace spaces with underscores', (t) => {
+    let place = map({
+      id: 1,
+      properties: {
+        'wof:placetype': ' \tLocaLity  SquAre\n'
+      }
+    })
+    t.true(place instanceof Place)
+    t.equal(place.identity.source, 'wof')
+    t.equal(place.identity.id, '1')
+    t.equal(place.ontology.class, 'admin')
+    t.equal(place.ontology.type, 'locality_square')
+    t.end()
+  })
   test('mapper: maps geometry', (t) => {
     let place = map({
       id: 1,
