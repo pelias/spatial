@@ -1,0 +1,21 @@
+<div class="container">
+  {{#each params.ontology}}
+    <div style="margin-top: 30px;">
+      <h1 class="title">{{class}} <span class="tag is-dark">{{total}}</span></h1>
+      {{#each type}}
+        <div class="box" style="display: inline-block; margin-right: 10px; margin-top: 10px;">
+          <div class="content">
+            <a href="/explore/ontology/{{../class}}/{{type}}">
+              <strong>{{type}}</strong> <span class="tag is-grey-light">{{total}}</span>
+            </a>
+          </div>
+        </div>
+      {{/each}}
+    </div>
+  {{/each}}
+</div>
+
+<script>
+  var events = $({});
+  var params = JSON.parse(decodeURIComponent("{{{json}}}"));
+</script>

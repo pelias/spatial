@@ -4,7 +4,7 @@ const util = require('./util')
 const format = require('../../import/format')
 
 module.exports.place = function (req, res) {
-  var service = req.app.locals.service
+  const service = req.app.locals.service
 
   // document identity
   let identity = {
@@ -53,6 +53,51 @@ module.exports.pip = function (req, res) {
   let params = {}
 
   res.render('pages/pip', {
+    layout: 'default',
+    params: params,
+    json: encodeURIComponent(JSON.stringify(params))
+  })
+}
+
+module.exports.ontology = {}
+
+module.exports.ontology.enumerate = function (req, res) {
+  const service = req.app.locals.service
+  let params = { ontology: {} }
+
+  // enumerate all classes
+  params.ontology = service.module.place.statement.ontology.all({ limit: 100 })
+
+  // enumerate all types per class
+  params.ontology.forEach(_class => {
+    _class.type = service.module.place.statement.ontology.all({
+      class: _class.class,
+      limit: 1000
+    })
+  })
+
+  res.render('pages/ontology', {
+    layout: 'default',
+    params: params,
+    json: encodeURIComponent(JSON.stringify(params))
+  })
+}
+
+module.exports.ontology.search = function (req, res) {
+  const service = req.app.locals.service
+
+  let query = {
+    class: req.params.class,
+    type: req.params.type,
+    limit: 100
+  }
+
+  let params = { query: query }
+
+  // search by ontology
+  params.place = service.module.place.statement.ontology.all(query)
+
+  res.render('pages/ontology_search', {
     layout: 'default',
     params: params,
     json: encodeURIComponent(JSON.stringify(params))

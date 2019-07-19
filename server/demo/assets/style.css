@@ -159,13 +159,13 @@ div.spatial-relationships {
   margin-bottom: 10px;
 }
 
-div.spatial-relationships .tile {
+.minimap-container {
   background-color:  #FFF;
   width: 20%;
   display: inline-block;
 }
 
-div.spatial-relationships .tile em {
+.minimap-container a {
   width: 100%;
   padding-top: 3px;
   min-height: 35px;
@@ -174,7 +174,7 @@ div.spatial-relationships .tile em {
   text-align: center;
 }
 
-div.spatial-relationships div.minimap {
+div.minimap {
   width: 100%;
   min-height: 210px;
 }

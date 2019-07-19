@@ -4,6 +4,7 @@ const IndexCovering = require('./IndexCovering')
 const IndexIdentityUnique = require('./IndexIdentityUnique')
 const StatementInsert = require('./StatementInsert')
 const StatementFetch = require('./StatementFetch')
+const StatementOntology = require('./StatementOntology')
 
 class PlaceModule extends Module {
   constructor (db) {
@@ -17,7 +18,8 @@ class PlaceModule extends Module {
     }
     this.statement = {
       insert: new StatementInsert(),
-      fetch: new StatementFetch()
+      fetch: new StatementFetch(),
+      ontology: new StatementOntology()
     }
   }
   insert (place) {
