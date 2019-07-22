@@ -53,19 +53,6 @@ $('document').ready(function () {
     res.forEach(function (place) {
       api.name(place, {}, function (err2, res2) {
         if (err2) { console.error(err2) } else {
-          // sort names by display preference
-          res2.sort(function (a, b) {
-            var alang = (a.lang || '').toUpperCase()
-            var blang = (b.lang || '').toUpperCase()
-            if (alang !== 'ENG' && alang !== 'UND') { return 1 }
-            if (blang !== 'ENG' && blang !== 'UND') { return -1 }
-            if (blang === 'ENG' && blang === 'UND') { return -1 }
-            if (alang === 'UND' && blang === 'ENG') { return 1 }
-            var atag = (a.tag || '').toUpperCase()
-            if (atag === 'PREFERRED') { return -1 }
-            return 0
-          })
-
           var chosenName = 'unknown'
           if (res2.length > 0) { chosenName = res2[0].name }
 
