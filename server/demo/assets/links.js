@@ -26,11 +26,11 @@ function decorateLink (el) {
         var alang = (a.lang || '').toUpperCase()
         var blang = (b.lang || '').toUpperCase()
         if (alang !== 'ENG' && alang !== 'UND') { return 1 }
+        if (blang !== 'ENG' && blang !== 'UND') { return -1 }
         if (blang === 'ENG' && blang === 'UND') { return -1 }
         if (alang === 'UND' && blang === 'ENG') { return 1 }
         var atag = (a.tag || '').toUpperCase()
         if (atag === 'PREFERRED') { return -1 }
-        return 0
       })
 
       var chosen = 'unknown'
