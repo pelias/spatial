@@ -59,7 +59,7 @@ module.exports.tests.mapper = (test) => {
     t.equals(p.geometry.length, 1)
     t.true(p.geometry[0] instanceof Geometry)
     t.equal(p.geometry[0].geometry.constructor.name.toUpperCase(), 'POINT')
-    t.equal(p.geometry[0].role, 'boundary')
+    t.equal(p.geometry[0].role, 'centroid')
     t.end()
   })
 }

@@ -3,15 +3,21 @@ const wkx = require('wkx')
 const format = require('../../../format')
 const Geometry = require('../../../../model/Geometry')
 
-function mapper (place, doc, properties) {
+function mapper (place, doc) {
   // main geometry
   const geometry = _.get(doc, 'geometry')
+  const properties = _.get(doc, 'properties', {})
+  const isPolygon = _.get(geometry, 'type', '').trim().toUpperCase().endsWith('POLYGON')
+
   if (geometry) {
     place.addGeometry(new Geometry(
       format.from('geometry', 'geojson', geometry),
-      'boundary'
+      isPolygon ? 'boundary' : 'centroid'
     ))
   }
+
+  // skip additional geometries if main geometry is not a polygon
+  if (!isPolygon) { return }
 
   // label position
   let lon = _.get(properties, 'lbl:longitude')

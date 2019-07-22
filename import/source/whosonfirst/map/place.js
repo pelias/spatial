@@ -28,7 +28,7 @@ function mapper (doc) {
   map.properties(place, properties)
   map.names(place, properties)
   map.hierarchies(place, properties)
-  map.geometries(place, doc, properties)
+  map.geometries(place, doc)
 
   return place
 }
