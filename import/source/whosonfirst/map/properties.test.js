@@ -31,24 +31,6 @@ module.exports.tests.mapper = (test) => {
     t.equals(p.property[1].value, 'USA', 'alpha3')
     t.end()
   })
-  test('mapper: name', (t) => {
-    let p = new Place()
-    map(p, { 'wof:name': 'example' })
-
-    t.equals(p.property.length, 2)
-    t.equals(p.property[1].key, 'name', 'name')
-    t.equals(p.property[1].value, 'example', 'name')
-    t.end()
-  })
-  test('mapper: abbr', (t) => {
-    let p = new Place()
-    map(p, { 'wof:abbreviation': 'example' })
-
-    t.equals(p.property.length, 2)
-    t.equals(p.property[1].key, 'abbr', 'abbr')
-    t.equals(p.property[1].value, 'example', 'abbr')
-    t.end()
-  })
   test('mapper: modified', (t) => {
     let p = new Place()
     map(p, { 'wof:lastmodified': 1561745825 })

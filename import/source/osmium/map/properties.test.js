@@ -42,24 +42,15 @@ module.exports.tests.mapper = (test) => {
     t.equals(p.property[1].value, 'USA', 'alpha3')
     t.end()
   })
-  test('mapper: name', (t) => {
-    let p = new Place()
-    map(p, { 'name': 'example' })
-
-    t.equals(p.property.length, 2)
-    t.equals(p.property[0].key, 'name', 'name')
-    t.equals(p.property[0].value, 'example', 'name')
-    t.end()
-  })
   test('mapper: osm-specific', (t) => {
     let p = new Place()
     map(p, { '@foo': 'filtered', 'bar': 'bar', 'baz': 'baz', 'name': 'name' })
 
-    t.equals(p.property.length, 4)
-    t.equals(p.property[2].key, 'osm:bar', 'osm:bar')
-    t.equals(p.property[2].value, 'bar', 'osm:bar')
-    t.equals(p.property[3].key, 'osm:baz', 'osm:baz')
-    t.equals(p.property[3].value, 'baz', 'osm:baz')
+    t.equals(p.property.length, 3)
+    t.equals(p.property[1].key, 'osm:bar', 'osm:bar')
+    t.equals(p.property[1].value, 'bar', 'osm:bar')
+    t.equals(p.property[2].key, 'osm:baz', 'osm:baz')
+    t.equals(p.property[2].value, 'baz', 'osm:baz')
     t.end()
   })
 }

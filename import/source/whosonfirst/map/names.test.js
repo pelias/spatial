@@ -11,6 +11,28 @@ module.exports.tests.mapper = (test) => {
     t.equals(p.name.length, 0)
     t.end()
   })
+  test('mapper: wof:name', (t) => {
+    let p = new Place()
+    map(p, { 'wof:name': 'example1' })
+
+    t.equals(p.name.length, 1)
+    t.equals(p.name[0].lang, 'und')
+    t.equals(p.name[0].tag, 'default')
+    t.equals(p.name[0].abbr, false)
+    t.equals(p.name[0].name, 'example1')
+    t.end()
+  })
+  test('mapper: wof:abbreviation', (t) => {
+    let p = new Place()
+    map(p, { 'wof:abbreviation': 'example1' })
+
+    t.equals(p.name.length, 1)
+    t.equals(p.name[0].lang, 'und')
+    t.equals(p.name[0].tag, 'default')
+    t.equals(p.name[0].abbr, true)
+    t.equals(p.name[0].name, 'example1')
+    t.end()
+  })
   test('mapper: name', (t) => {
     let p = new Place()
     map(p, { 'name:eng_x_preferred': [ 'example1', 'example2' ] })

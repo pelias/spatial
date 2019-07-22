@@ -2,9 +2,6 @@ const _ = require('lodash')
 const Property = require('../../../../model/Property')
 
 function mapper (place, properties) {
-  // generic properties
-  place.addProperty(new Property('name', _.get(properties, 'name', '').trim()))
-
   // country codes
   // https://wiki.openstreetmap.org/wiki/Country_code
 
@@ -30,7 +27,10 @@ function mapper (place, properties) {
     if (key.startsWith('@')) { return false }
     if (key === 'name') { return false }
     if (key.startsWith('name:')) { return false }
-    if (key.startsWith('alt_name')) { return false }
+    if (key.startsWith('alt_name:')) { return false }
+    if (key.startsWith('short_name:')) { return false }
+    if (key.startsWith('official_name:')) { return false }
+    if (key.startsWith('old_name:')) { return false }
     if (key.startsWith('ISO3166-1:alpha')) { return false }
     if (key.startsWith('ISO3166-2')) { return false }
     return true
