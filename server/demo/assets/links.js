@@ -19,8 +19,23 @@ function decorateLink (el) {
     el.text(source + '/' + id)
   }
 
-  api.property({ source: source, id: id }, {}, function (err, res) {
+  api.name({ source: source, id: id }, {}, function (err, res) {
     if (err) { console.error(err) } else {
+      // sort names by display preference
+      res.sort(function (a, b) {
+        var alang = (a.lang || '').toUpperCase()
+        var blang = (b.lang || '').toUpperCase()
+        if (alang !== 'ENG' && alang !== 'UND') { return 1 }
+        if (blang === 'ENG' && blang === 'UND') { return -1 }
+        if (alang === 'UND' && blang === 'ENG') { return 1 }
+        var atag = (a.tag || '').toUpperCase()
+        if (atag === 'PREFERRED') { return -1 }
+        return 0
+      })
+
+      var chosen = 'unknown'
+      if (res.length > 0) { chosen = res[0].name }
+
       el.attr('href', '/explore/place/' + encodeURIComponent(source) + '/' + encodeURIComponent(id))
       el.empty()
 
@@ -32,7 +47,7 @@ function decorateLink (el) {
       }
 
       var textSpan = $('<span></span>')
-      textSpan.text(_.get(res, 'name', 'unknown'))
+      textSpan.text(chosen)
       el.append(textSpan)
     }
   })

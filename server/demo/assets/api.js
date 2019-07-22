@@ -21,6 +21,11 @@ function property (place, params, cb) {
   api.request(url, 'GET', params, cb)
 }
 
+function name (place, params, cb) {
+  let url = '/place/' + place.source + '/' + place.id + '/name'
+  api.request(url, 'GET', params, cb)
+}
+
 function geometry (place, params, cb) {
   let url = '/place/' + place.source + '/' + place.id + '/geometry'
   api.request(url, 'GET', params, cb)
@@ -55,6 +60,7 @@ var api = {
   request: request,
   place: place,
   property: property,
+  name: name,
   geometry: geometry,
   hierarchy: hierarchy,
   pip: pip,
