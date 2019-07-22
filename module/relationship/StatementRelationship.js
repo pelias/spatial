@@ -78,7 +78,10 @@ class StatementRelationship extends SqliteStatement {
         ) AS intersections
         JOIN geometry AS g1 ON (g1.source = @source AND g1.id = @id)
         JOIN geometry AS g2 ON (g2.source = intersections.source AND g2.id = intersections.id)
+        WHERE GeometryType( g1.geom ) LIKE '%POLYGON'
+        AND GeometryType( g2.geom ) LIKE '%POLYGON'
         AND Contains( g1.geom, g2.geom )
+        GROUP BY g2.source, g2.id
         LIMIT @limit;
       `)
 
@@ -111,7 +114,10 @@ class StatementRelationship extends SqliteStatement {
         ) AS intersections
         JOIN geometry AS g1 ON (g1.source = @source AND g1.id = @id)
         JOIN geometry AS g2 ON (g2.source = intersections.source AND g2.id = intersections.id)
+        WHERE GeometryType( g1.geom ) LIKE '%POLYGON'
+        AND GeometryType( g2.geom ) LIKE '%POLYGON'
         AND Within( g1.geom, g2.geom )
+        GROUP BY g2.source, g2.id
         LIMIT @limit;
       `)
     } catch (e) {

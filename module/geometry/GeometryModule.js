@@ -6,6 +6,7 @@ const GeoColumnGeom = require('./GeoColumnGeom')
 const GeoIndexGeom = require('./GeoIndexGeom')
 const StatementInsert = require('./StatementInsert')
 const StatementFetch = require('./StatementFetch')
+const TriggerComputeCentroid = require('./TriggerComputeCentroid')
 
 class GeometryModule extends Module {
   constructor (db) {
@@ -23,16 +24,19 @@ class GeometryModule extends Module {
       insert: new StatementInsert(),
       fetch: new StatementFetch()
     }
+    this.trigger = {
+      centroid: new TriggerComputeCentroid()
+    }
   }
   insert (place) {
     let info = { changes: 0, lastInsertRowid: 0 }
-    place.geometry.forEach((geometry, i) => {
+    place.geometry.forEach(geometry => {
       // insert geometry
       let _info = this.statement.insert.run({
         source: place.identity.source,
         id: place.identity.id,
-        role: (i === 0) ? 'default' : `extra:${i}`,
-        geom: geometry.toWkb()
+        role: geometry.role,
+        geom: geometry.geometry.toWkb()
       })
 
       // update aggregate info

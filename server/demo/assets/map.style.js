@@ -18,6 +18,30 @@ mapStyle.minimap = {
   fillOpacity: 0.6
 }
 
+mapStyle.pointToLayer = function (feature, latlng) {
+  var options = {}
+  if (feature && feature.properties) {
+    var role = feature.properties.role
+    if (role === 'centroid') {
+      options.icon = L.AwesomeMarkers.icon({
+        icon: 'crosshairs',
+        markerColor: 'blue'
+      })
+    } else if (role === 'label_position') {
+      options.icon = L.AwesomeMarkers.icon({
+        icon: 'quote-right',
+        markerColor: 'orange'
+      })
+    } else if (role === 'reversegeo_position') {
+      options.icon = L.AwesomeMarkers.icon({
+        icon: 'compass',
+        markerColor: 'green'
+      })
+    }
+  }
+  return L.marker(latlng, options)
+}
+
 // dynamic geometry styling
 function featureStyle (feature) {
   // style for linestrings

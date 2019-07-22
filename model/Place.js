@@ -3,7 +3,7 @@ const Ontology = require('./Ontology')
 const Property = require('./Property')
 const Name = require('./Name')
 const Hierarchy = require('./Hierarchy')
-const WKXBaseClass = require('wkx/lib/geometry')
+const Geometry = require('./Geometry')
 
 class Place {
   constructor (identity, ontology) {
@@ -40,7 +40,7 @@ class Place {
     }
   }
   addGeometry (geometry) {
-    if (geometry instanceof WKXBaseClass) {
+    if (geometry instanceof Geometry) {
       this.geometry.push(geometry)
     }
   }

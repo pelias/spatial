@@ -61,7 +61,7 @@ module.exports.tests.function = (test, common) => {
     })
 
     // ensure data written
-    t.equal(db.prepare(`SELECT * FROM geometry`).all().length, 3, 'write')
+    t.equal(db.prepare(`SELECT * FROM geometry WHERE GeometryType( geom ) LIKE '%POLYGON'`).all().length, 3, 'write')
     t.equal(db.prepare(`SELECT * FROM shard`).all().length, 3, 'write')
 
     let query = { source: 'example_source2', id: 'example_id2', limit: 10 }
