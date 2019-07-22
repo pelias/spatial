@@ -79,12 +79,12 @@ app.locals.service = service
 if (process.env.NODE_ENV === 'production') {
   app.use((req, res, next) => {
     res.header('Charset', 'utf8')
-    if (req.url.startsWith('/demo')) {
+    if (req.url.startsWith('/explore')) {
       // demo pages
       res.header('Cache-Control', 'public, max-age=3600') // 1 hour
     } else {
       // api endpoints
-      res.header('Cache-Control', 'public, max-age=604800') // 7 days
+      res.header('Cache-Control', 'public, max-age=7200') // 2 hours
     }
     next()
   })
