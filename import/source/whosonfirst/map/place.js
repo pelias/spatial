@@ -1,5 +1,4 @@
 const _ = require('lodash')
-const format = require('../../../format')
 const Identity = require('../../../../model/Identity')
 const Ontology = require('../../../../model/Ontology')
 const Place = require('../../../../model/Place')
@@ -7,7 +6,8 @@ const Place = require('../../../../model/Place')
 const map = {
   properties: require('./properties'),
   names: require('./names'),
-  hierarchies: require('./hierarchies')
+  hierarchies: require('./hierarchies'),
+  geometries: require('./geometries')
 }
 
 function mapper (doc) {
@@ -24,16 +24,11 @@ function mapper (doc) {
     new Ontology('admin', _.get(properties, 'wof:placetype', 'unknown').trim().toLowerCase().split(/\s+/).join('_'))
   )
 
-  // add geometry
-  const geometry = _.get(doc, 'geometry')
-  if (geometry) {
-    place.addGeometry(format.from('geometry', 'geojson', geometry))
-  }
-
   // run mappers
   map.properties(place, properties)
   map.names(place, properties)
   map.hierarchies(place, properties)
+  map.geometries(place, doc, properties)
 
   return place
 }

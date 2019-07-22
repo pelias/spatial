@@ -11,6 +11,11 @@ html {
   background: #ECF0F1;
 }
 
+.awesome-marker i {
+  font-size: 14px;
+  margin-top: 11px;
+}
+
 #menu {
   width: 50px;
   background-color: #001f3f;
@@ -95,6 +100,14 @@ nav.breadcrumb {
   background-color: #FFF;
   border: none;
   font-size: 0.85em;
+}
+
+#map-sidebar .geometry-row {
+  align-items: center;
+  color: #363636;
+  display: flex;
+  justify-content: flex-start;
+  padding: .5em .75em;
 }
 
 .panel-heading {

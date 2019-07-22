@@ -64,15 +64,32 @@
     <!-- geometry sidebar -->
     <nav id="sidebar-geometry" class="panel">
       <p class="panel-heading">Geometries</p>
-      {{#each params.place.geometry}}
-        <a class="sidebar-element panel-block is-active">
-          <span class="panel-icon">
-            <input type="checkbox" checked="checked" />
-          </span>
-          <span class="tag is-light">{{this.geom.type}}</span>
-          <strong>{{this.role}}</strong>
-        </a>
-      {{/each}}
+      <table class="table is-fullwidth">
+        <tbody>
+          {{#each params.place.geometry}}
+            <tr>
+              <td>
+                <span class="tag is-light">
+                  {{#is this.role compare="boundary"}}
+                    <i class="far fa-object-ungroup"></i>
+                  {{/is}}
+                  {{#is this.role compare="centroid"}}
+                    <i class="fa fa-crosshairs"></i>
+                  {{/is}}
+                  {{#is this.role compare="label_position"}}
+                    <i class="fa fa-quote-right"></i>
+                  {{/is}}
+                  {{#is this.role compare="reversegeo_position"}}
+                    <i class="fa fa-compass"></i>
+                  {{/is}}
+                </span>
+                <span class="tag is-light">{{this.geom.type}}</span>
+                <strong>{{this.role}}</strong>
+              </td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
     </nav>
 
     <!-- property sidebar -->

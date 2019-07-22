@@ -142,7 +142,8 @@ module.exports.tests.mapper = (test) => {
     })
     t.true(place instanceof Place)
     t.equal(place.geometry.length, 1)
-    t.equal(place.geometry[0].constructor.name.toUpperCase(), 'POLYGON')
+    t.equal(place.geometry[0].geometry.constructor.name.toUpperCase(), 'POLYGON')
+    t.equal(place.geometry[0].role, 'boundary')
     t.end()
   })
 }

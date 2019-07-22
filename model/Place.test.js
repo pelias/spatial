@@ -5,6 +5,7 @@ const Ontology = require('./Ontology')
 const Property = require('./Property')
 const Name = require('./Name')
 const Hierarchy = require('./Hierarchy')
+const Geometry = require('./Geometry')
 
 module.exports.tests = {}
 
@@ -18,7 +19,10 @@ const fixture = {
     new Identity('B', '2'),
     'branch'
   ),
-  geometry: format.from('polygon', 'geojson', require('../test/fixture/geojson.triangle'))
+  geometry: new Geometry(
+    format.from('polygon', 'geojson', require('../test/fixture/geojson.triangle')),
+    'default'
+  )
 }
 
 module.exports.tests.constructor = (test) => {

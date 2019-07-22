@@ -32,14 +32,24 @@ function decorateMinimap (el) {
   disableMapInteraction(map, mapid)
 
   // create a layer to store geojson geometries
-  var geojson = new L.geoJson([], { style: mapStyle.minimap, interactive: false })
+  var geojson = new L.geoJson([], {
+    style: mapStyle.minimap,
+    interactive: false,
+    pointToLayer: mapStyle.pointToLayer
+  })
   geojson.addTo(map)
 
   api.geometry({ source: source, id: id }, { simplify: 0.0001 }, function (err, res) {
     if (err) { console.error(err) } else {
       // render geometries on map
       (res || []).forEach(function (row) {
-        geojson.addData(row.geom)
+        geojson.addData({
+          type: 'Feature',
+          properties: {
+            role: row.role
+          },
+          geometry: row.geom
+        })
       })
       map.fitBounds(geojson.getBounds())
     }

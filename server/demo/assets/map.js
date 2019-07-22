@@ -1,3 +1,6 @@
+// configure 'awesome markers' to use font awesome
+L.AwesomeMarkers.Icon.prototype.options.prefix = 'fa'
+
 function setupMap (elementId, settings) {
   var provider = {}
 
