@@ -11,3 +11,6 @@ sqlite3 "${DATABASE}" "${QUERY}" | node bin/spatial.js --db='geo.db' 'import' 'w
 
 # run osm import
 # gzcat /data/geoengine/osm.jsonl.gz | head -n10000 | node bin/spatial.js --db='geo.db' 'import' 'osmium'
+
+# run zcta import
+# gzcat /data/zcta/tl_2018_us_zcta510.geojsonl.gz | node bin/spatial.js --db='geo.db' 'import' 'zcta'

@@ -1,7 +1,5 @@
-const _ = require('lodash')
 const ImportService = require('../../service/ImportService')
 const importStream = require('../../import/stream')
-const file = require('../../import/file')
 
 module.exports = {
   command: 'import <source>',
@@ -11,7 +9,7 @@ module.exports = {
     yargs.positional('source', {
       type: 'string',
       describe: 'name of data source',
-      choices: ['whosonfirst', 'osmium'],
+      choices: ['whosonfirst', 'osmium', 'zcta'],
       demand: 'source is required'
     })
 
@@ -66,7 +64,7 @@ module.exports = {
   handler: (argv) => {
     // configure source
     const source = require(`../../import/source/${argv.source}`)
-    const stream = importStream(_.extend(source, { ingress: file(argv.file) }))
+    const stream = importStream(source, argv.file)
 
     // configure service
     const service = new ImportService({

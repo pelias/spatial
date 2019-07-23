@@ -4,5 +4,5 @@ module.exports = {
   ingress: file,
   record_separator: /\r?\n/,
   format: 'json',
-  mapper: require('./whosonfirst/map/place')
+  mapper: require('./zcta/map/place')
 }
