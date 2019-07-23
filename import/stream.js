@@ -4,8 +4,8 @@ const mapperStream = require('./mapperStream')
 const progress = require('./progress')
 
 // create importer stream
-function streamFactory (source) {
-  let stream = source.ingress
+function streamFactory (source, filename) {
+  let stream = source.ingress(filename)
     .pipe(progress())
     .pipe(split(source.record_separator))
     .pipe(parser(source.format))
