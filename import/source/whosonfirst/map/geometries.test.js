@@ -99,7 +99,8 @@ module.exports.tests.mapper = (test) => {
     t.equal(p.geometry[1].role, 'label_position')
     t.end()
   })
-  test('mapper: reversegeo position', (t) => {
+
+  test('mapper: mapshaper position', (t) => {
     let p = new Place()
     map(p, {
       geometry: {
@@ -126,14 +127,14 @@ module.exports.tests.mapper = (test) => {
         ]
       },
       properties: {
-        'reversegeo:longitude': 1.1,
-        'reversegeo:latitude': 2.2
+        'mps:longitude': 1.1,
+        'mps:latitude': 2.2
       }
     })
     t.equals(p.geometry.length, 2)
     t.true(p.geometry[1] instanceof Geometry)
     t.equal(p.geometry[1].geometry.constructor.name.toUpperCase(), 'POINT')
-    t.equal(p.geometry[1].role, 'reversegeo_position')
+    t.equal(p.geometry[1].role, 'mapshaper_position')
     t.end()
   })
 }

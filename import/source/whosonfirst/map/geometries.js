@@ -38,6 +38,16 @@ function mapper (place, doc) {
       'reversegeo_position'
     ))
   }
+
+  // mapshaper position
+  lon = _.get(properties, 'mps:longitude')
+  lat = _.get(properties, 'mps:latitude')
+  if (_.isNumber(lat) && _.isNumber(lon)) {
+    place.addGeometry(new Geometry(
+      wkx.Geometry.parse(`POINT(${lon} ${lat})`),
+      'mapshaper_position'
+    ))
+  }
 }
 
 module.exports = mapper
