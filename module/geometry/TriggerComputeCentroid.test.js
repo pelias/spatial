@@ -68,7 +68,7 @@ module.exports.tests.definition = (test, common) => {
         WHEN GeometryType( NEW.geom ) LIKE '%POLYGON'
         BEGIN
           INSERT OR IGNORE INTO geometry ( source, id, role, geom )
-          VALUES ( NEW.source, NEW.id, 'centroid', Centroid( NEW.geom ) );
+          VALUES ( NEW.source, NEW.id, 'centroid', PointOnSurface( NEW.geom ) );
         END
       `.trim().replace(' IF NOT EXISTS', '')
     }, 'geometry_compute_centroid')
@@ -107,7 +107,7 @@ module.exports.tests.function = (test, common) => {
         source: 'example_source',
         id: 'example_id',
         role: 'centroid',
-        geom: 'POINT(103.8165746 1.360758)'
+        geom: 'POINT(103.825964 1.3653959)'
       }
     ], 'centroid')
 

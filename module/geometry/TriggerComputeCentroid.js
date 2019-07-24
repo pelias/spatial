@@ -12,7 +12,7 @@ class TriggerComputeCentroid extends SqliteStatement {
         WHEN GeometryType( NEW.geom ) LIKE '%POLYGON'
         BEGIN
           INSERT OR IGNORE INTO geometry ( source, id, role, geom )
-          VALUES ( NEW.source, NEW.id, 'centroid', Centroid( NEW.geom ) );
+          VALUES ( NEW.source, NEW.id, 'centroid', PointOnSurface( NEW.geom ) );
         END
       `).run()
     } catch (e) {
