@@ -12,7 +12,8 @@ class Ontology {
   }
   setType (type) {
     if (_.isString(type)) {
-      this.type = type
+      // normalize type
+      this.type = type.trim().toLowerCase().split(/\s+/).join('_')
     }
   }
   _isValid () {

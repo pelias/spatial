@@ -129,6 +129,24 @@ module.exports.tests.setType = (test) => {
     t.equals(o.type, '')
     t.end()
   })
+  test('setType: normalize: trim', (t) => {
+    let o = new Ontology()
+    o.setType(' \t\ntest \n\t')
+    t.equals(o.type, 'test')
+    t.end()
+  })
+  test('setType: normalize: lowercase', (t) => {
+    let o = new Ontology()
+    o.setType('TeST')
+    t.equals(o.type, 'test')
+    t.end()
+  })
+  test('setType: normalize: replace spaces with underscores', (t) => {
+    let o = new Ontology()
+    o.setType('test type')
+    t.equals(o.type, 'test_type')
+    t.end()
+  })
 }
 
 module.exports.tests.isValid = (test) => {

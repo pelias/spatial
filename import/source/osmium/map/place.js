@@ -18,7 +18,7 @@ function mapper (doc) {
   // instantiate a new place
   const place = new Place(
     new Identity('osm', _.get(properties, '@type') + DELIM + _.get(properties, '@id')),
-    new Ontology('admin', _.get(properties, 'place', 'unknown').trim().toLowerCase().split(/\s+/).join('_'))
+    new Ontology('admin', _.get(properties, 'place', 'unknown'))
   )
 
   // try to avoid 'unknown' ontology type
