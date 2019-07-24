@@ -37,6 +37,11 @@ mapStyle.pointToLayer = function (feature, latlng) {
         icon: 'compass',
         markerColor: 'green'
       })
+    } else if (role === 'mapshaper_position') {
+      options.icon = L.AwesomeMarkers.icon({
+        icon: 'drafting-compass',
+        markerColor: 'cadetblue'
+      })
     }
   }
   return L.marker(latlng, options)

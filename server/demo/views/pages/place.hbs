@@ -82,6 +82,9 @@
                   {{#is this.role compare="reversegeo_position"}}
                     <i class="fa fa-compass"></i>
                   {{/is}}
+                  {{#is this.role compare="mapshaper_position"}}
+                  <i class="fa fa-drafting-compass"></i>
+                  {{/is}}
                 </span>
                 <span class="tag is-light">{{this.geom.type}}</span>
                 <strong>{{this.role}}</strong>
