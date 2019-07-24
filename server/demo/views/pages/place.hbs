@@ -86,7 +86,11 @@
                   <i class="fa fa-drafting-compass"></i>
                   {{/is}}
                 </span>
-                <span class="tag is-light">{{this.geom.type}}</span>
+                {{#contains (lowercase this.geom.type) "point"}}
+                  <span class="tag is-light tooltip" data-tooltip="{{this.geom.coordinates}}">{{this.geom.type}}</span>
+                {{else}}
+                  <span class="tag is-light">{{this.geom.type}}</span>
+                {{/contains}}
                 <strong>{{this.role}}</strong>
               </td>
             </tr>
