@@ -8,8 +8,24 @@ function mapper (place, properties) {
   place.addProperty(new Property('modified', _.get(properties, 'wof:lastmodified', '').toString()))
 
   // wof-specific properties
-  place.addProperty(new Property('wof:shortcode', _.get(properties, 'wof:shortcode', '').toUpperCase()))
-  place.addProperty(new Property('wof:repo', _.get(properties, 'wof:repo')))
+  const picked = _.pickBy(properties, (val, key) => {
+    if (!key.startsWith('wof:')) { return false }
+    if (!_.isString(val) && !_.isNumber(val)) { return false }
+    if (key === 'wof:id') { return false }
+    if (key === 'wof:name') { return false }
+    if (key === 'wof:parent_id') { return false }
+    if (key === 'wof:placetype') { return false }
+    if (key === 'wof:geomhash') { return false }
+    if (key === 'wof:country') { return false }
+    if (key === 'wof:country_alpha3') { return false }
+    if (key === 'wof:lastmodified') { return false }
+    return true
+  })
+  for (let key in picked) {
+    let val = picked[key]
+    if (typeof val.toString === 'function') { val = val.toString() }
+    place.addProperty(new Property(`${key}`, val))
+  }
 }
 
 module.exports = mapper

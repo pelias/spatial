@@ -42,7 +42,7 @@ module.exports.tests.mapper = (test) => {
   })
   test('mapper: wof:shortcode', (t) => {
     let p = new Place()
-    map(p, { 'wof:shortcode': 'foo' })
+    map(p, { 'wof:shortcode': 'FOO' })
 
     t.equals(p.property.length, 2)
     t.equals(p.property[1].key, 'wof:shortcode', 'wof:shortcode')
@@ -56,6 +56,29 @@ module.exports.tests.mapper = (test) => {
     t.equals(p.property.length, 2)
     t.equals(p.property[1].key, 'wof:repo', 'wof:repo')
     t.equals(p.property[1].value, 'example', 'wof:repo')
+    t.end()
+  })
+  test('mapper: wof:population', (t) => {
+    let p = new Place()
+    map(p, { 'wof:population': 1000 })
+
+    t.equals(p.property.length, 2)
+    t.equals(p.property[1].key, 'wof:population', 'wof:population')
+    t.equals(p.property[1].value, '1000', 'wof:population')
+    t.end()
+  })
+  test('mapper: do not map arrays', (t) => {
+    let p = new Place()
+    map(p, { 'wof:array': [ 'value' ] })
+
+    t.equals(p.property.length, 1)
+    t.end()
+  })
+  test('mapper: do not map objects', (t) => {
+    let p = new Place()
+    map(p, { 'wof:object': { key: 'value' } })
+
+    t.equals(p.property.length, 1)
     t.end()
   })
 }
