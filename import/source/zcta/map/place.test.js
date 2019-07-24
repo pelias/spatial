@@ -17,9 +17,9 @@ module.exports.tests.mapper = (test) => {
     })
     t.true(place instanceof Place)
     t.equal(place.identity.source, 'uscensus')
-    t.equal(place.identity.id, '90210')
-    t.equal(place.ontology.class, 'postalcode')
-    t.equal(place.ontology.type, 'zcta')
+    t.equal(place.identity.id, 'zcta:90210')
+    t.equal(place.ontology.class, 'admin')
+    t.equal(place.ontology.type, 'postalcode')
     t.end()
   })
   test('mapper: maps geometry', (t) => {

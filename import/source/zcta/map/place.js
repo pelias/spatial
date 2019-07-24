@@ -1,4 +1,5 @@
 const _ = require('lodash')
+const DELIM = ':'
 const Identity = require('../../../../model/Identity')
 const Ontology = require('../../../../model/Ontology')
 const Place = require('../../../../model/Place')
@@ -16,8 +17,8 @@ function mapper (doc) {
 
   // instantiate a new place
   const place = new Place(
-    new Identity('uscensus', _.get(properties, 'ZCTA5CE10', '').trim()),
-    new Ontology('postalcode', 'zcta')
+    new Identity('uscensus', 'zcta' + DELIM + _.get(properties, 'ZCTA5CE10', '').trim()),
+    new Ontology('admin', 'postalcode')
   )
 
   // run mappers
