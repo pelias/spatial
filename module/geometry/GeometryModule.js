@@ -7,6 +7,7 @@ const GeoIndexGeom = require('./GeoIndexGeom')
 const StatementInsert = require('./StatementInsert')
 const StatementFetch = require('./StatementFetch')
 const TriggerComputeCentroid = require('./TriggerComputeCentroid')
+const TriggerComputeEnvelope = require('./TriggerComputeEnvelope')
 
 class GeometryModule extends Module {
   constructor (db) {
@@ -25,7 +26,8 @@ class GeometryModule extends Module {
       fetch: new StatementFetch()
     }
     this.trigger = {
-      centroid: new TriggerComputeCentroid()
+      centroid: new TriggerComputeCentroid(),
+      envelope: new TriggerComputeEnvelope()
     }
   }
   insert (place) {

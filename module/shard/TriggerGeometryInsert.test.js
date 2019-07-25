@@ -74,6 +74,7 @@ module.exports.tests.definition = (test, common) => {
         AFTER INSERT ON main.geometry
         -- only polygon types currently supported
         WHEN GeometryType( NEW.geom ) LIKE '%POLYGON'
+        AND UPPER( NEW.role ) = 'BOUNDARY'
         BEGIN
 
           -- remove prior shards for same geometry
@@ -137,7 +138,7 @@ module.exports.tests.function = (test, common) => {
     geometry.statement.insert.run({
       source: 'example_source',
       id: 'example_id',
-      role: 'default',
+      role: 'boundary',
       element: 1,
       geom: POLYGON.toWkb()
     })

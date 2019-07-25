@@ -40,7 +40,7 @@ module.exports.tests.function = (test, common) => {
     geometry.statement.insert.run({
       source: 'example_source1',
       id: 'example_id1',
-      role: 'example1',
+      role: 'boundary',
       geom: OUTER.toWkb()
     })
 
@@ -48,7 +48,7 @@ module.exports.tests.function = (test, common) => {
     geometry.statement.insert.run({
       source: 'example_source2',
       id: 'example_id2',
-      role: 'example2',
+      role: 'boundary',
       geom: MIDDLE.toWkb()
     })
 
@@ -56,12 +56,12 @@ module.exports.tests.function = (test, common) => {
     geometry.statement.insert.run({
       source: 'example_source3',
       id: 'example_id3',
-      role: 'example3',
+      role: 'boundary',
       geom: INNER.toWkb()
     })
 
     // ensure data written
-    t.equal(db.prepare(`SELECT * FROM geometry WHERE GeometryType( geom ) LIKE '%POLYGON'`).all().length, 3, 'write')
+    t.equal(db.prepare(`SELECT * FROM geometry WHERE role = 'boundary'`).all().length, 3, 'write')
     t.equal(db.prepare(`SELECT * FROM shard`).all().length, 3, 'write')
 
     let query = { source: 'example_source2', id: 'example_id2', limit: 10 }

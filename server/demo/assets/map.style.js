@@ -1,54 +1,53 @@
 var mapStyle = {}
 
-mapStyle.place = {
-  fillColor: '#FF851B',
-  color: '#0000ff',
-  weight: 0,
-  opacity: 1,
-  // dashArray: '3',
-  fillOpacity: 0.8
-}
-
-mapStyle.minimap = {
-  fillColor: '#FF851B',
-  color: '#0000ff',
-  weight: 0,
-  opacity: 1,
-  // dashArray: '3',
-  fillOpacity: 0.6
-}
-
-mapStyle.pointToLayer = function (feature, latlng) {
-  var options = {}
-  if (feature && feature.properties) {
-    var role = feature.properties.role
-    if (role === 'centroid') {
-      options.icon = L.AwesomeMarkers.icon({
-        icon: 'crosshairs',
-        markerColor: 'blue'
-      })
-    } else if (role === 'label_position') {
-      options.icon = L.AwesomeMarkers.icon({
-        icon: 'quote-right',
-        markerColor: 'orange'
-      })
-    } else if (role === 'reversegeo_position') {
-      options.icon = L.AwesomeMarkers.icon({
-        icon: 'compass',
-        markerColor: 'green'
-      })
-    } else if (role === 'mapshaper_position') {
-      options.icon = L.AwesomeMarkers.icon({
-        icon: 'drafting-compass',
-        markerColor: 'cadetblue'
-      })
+// place view
+mapStyle.place = {}
+mapStyle.place.pointToLayer = pointToLayer
+mapStyle.place.style = function (feature) {
+  if (feature.properties.role === 'envelope') {
+    return {
+      color: '#FF851B',
+      weight: 3,
+      opacity: 0.05,
+      dashArray: '5',
+      fillOpacity: 0
     }
   }
-  return L.marker(latlng, options)
+  return {
+    fillColor: '#FF851B',
+    weight: 0,
+    opacity: 1,
+    // dashArray: '3',
+    fillOpacity: 0.7
+  }
 }
 
-// dynamic geometry styling
-function featureStyle (feature) {
+// minimap view
+mapStyle.minimap = {}
+mapStyle.minimap.pointToLayer = pointToLayer
+mapStyle.minimap.style = function (feature) {
+  if (feature.properties.role === 'envelope') {
+    return {
+      color: '#FF851B',
+      weight: 3,
+      opacity: 0.05,
+      dashArray: '5',
+      fillOpacity: 0
+    }
+  }
+  return {
+    fillColor: '#FF851B',
+    color: '#0000ff',
+    weight: 0,
+    opacity: 1,
+    // dashArray: '3',
+    fillOpacity: 0.6
+  }
+}
+
+// point-in-polygon view
+mapStyle.pip = {}
+mapStyle.pip.style = function (feature) {
   // style for linestrings
   if (feature.geometry.type.indexOf('LineString') !== -1) {
     return {
@@ -83,8 +82,8 @@ function featureStyle (feature) {
     }
   }
 
-  // ordnance survey
-  else if (feature.properties.source === 'os') {
+  // uscensus
+  else if (feature.properties.source === 'uscensus') {
     style.color = 'green'
   }
 
@@ -99,4 +98,33 @@ function featureStyle (feature) {
 
   // style for polygons
   return style
+}
+
+function pointToLayer (feature, latlng) {
+  var options = {}
+  if (feature && feature.properties) {
+    var role = feature.properties.role
+    if (role === 'centroid') {
+      options.icon = L.AwesomeMarkers.icon({
+        icon: 'crosshairs',
+        markerColor: 'blue'
+      })
+    } else if (role === 'label_position') {
+      options.icon = L.AwesomeMarkers.icon({
+        icon: 'quote-right',
+        markerColor: 'orange'
+      })
+    } else if (role === 'reversegeo_position') {
+      options.icon = L.AwesomeMarkers.icon({
+        icon: 'compass',
+        markerColor: 'green'
+      })
+    } else if (role === 'mapshaper_position') {
+      options.icon = L.AwesomeMarkers.icon({
+        icon: 'drafting-compass',
+        markerColor: 'cadetblue'
+      })
+    }
+  }
+  return L.marker(latlng, options)
 }

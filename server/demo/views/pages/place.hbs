@@ -71,7 +71,10 @@
               <td>
                 <span class="tag is-light">
                   {{#is this.role compare="boundary"}}
-                    <i class="far fa-object-ungroup"></i>
+                    <i class="fas fa-draw-polygon"></i>
+                  {{/is}}
+                  {{#is this.role compare="envelope"}}
+                  <i class="fa fa-vector-square"></i>
                   {{/is}}
                   {{#is this.role compare="centroid"}}
                     <i class="fa fa-crosshairs"></i>
