@@ -18,8 +18,6 @@ module.exports = function (req, res) {
     wofonly: util.flatten(req.query.wofonly) ? 1 : 0
   }
 
-  console.error(query)
-
   // perform query
   console.time('took')
   let rows = service.module.pip.statement.verbose.all(query)
@@ -28,7 +26,6 @@ module.exports = function (req, res) {
   // rewrite response to emulate 'wof-admin-lookup' format
   let resp = {}
   rows.forEach(row => {
-    let id = (row.source === 'wof') ? parseInt(row.id, 10) : row.id
     let centroid = row.centroid.split(',').map(util.floatPrecision7)
 
     let nameAlias = []
@@ -41,7 +38,7 @@ module.exports = function (req, res) {
 
     if (!Array.isArray(resp[row.type])) { resp[row.type] = [] }
     resp[row.type].push({
-      id: id,
+      id: row.id,
       source: row.source,
       name: row.name || undefined,
       name_alias: nameAlias,
@@ -54,6 +51,11 @@ module.exports = function (req, res) {
       bounding_box: row.bounds.split(',').map(util.floatPrecision7).join(',')
     })
   })
+
+  // allow other views to utilize this view
+  if (typeof this.remap === 'function') {
+    resp = this.remap(resp)
+  }
 
   // send json
   res.status(200).json(resp)

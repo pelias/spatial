@@ -11,5 +11,21 @@ module.exports = function (req, res) {
     wofonly: 1
   }
 
-  verbose(req, res)
+  verbose.bind({ remap: remap })(req, res)
+}
+
+// rewite the verbose view to match the expected format
+function remap (resp) {
+  for (let placetype in resp) {
+    resp[placetype] = resp[placetype].map(row => {
+      return {
+        id: parseInt(row.id, 10),
+        name: row.name,
+        abbr: row.abbr,
+        centroid: row.centroid,
+        bounding_box: row.bounding_box
+      }
+    })
+  }
+  return resp
 }
