@@ -8,9 +8,9 @@ class StatementPointInPolygon extends SqliteStatement {
       this.statement = db.prepare(`
         SELECT place.*
         FROM ${dbname}.point_in_polygon AS pip
-        LEFT JOIN place USING ( id, source )
+        LEFT JOIN place USING (source, id)
         WHERE search_frame = MakePoint( @lon, @lat, 4326 )
-        AND INTERSECTS( geom, MakePoint( @lon, @lat, 4326 ) )
+        AND INTERSECTS( pip.geom, MakePoint( @lon, @lat, 4326 ) )
         AND place.source IS NOT NULL
         LIMIT @limit
       `)
