@@ -3,12 +3,12 @@ const SqliteIntrospect = require('../../sqlite/SqliteIntrospect')
 const GeometryModule = require('./GeometryModule')
 const TableGeometry = require('./TableGeometry')
 const GeoColumnGeom = require('./GeoColumnGeom')
-const TriggerComputeCentroid = require('./TriggerComputeCentroid')
+const TriggerComputeEnvelope = require('./TriggerComputeEnvelope')
 const POLYGON = format.from('geometry', 'geojson', require('../../test/fixture/geojson.singapore'))
 
 module.exports.tests = {}
 
-const filter = function (t) { return t.name === 'geometry_compute_centroid' }
+const filter = function (t) { return t.name === 'geometry_compute_envelope' }
 
 module.exports.tests.create_drop = (test, common) => {
   test('create & drop', (t) => {
@@ -27,7 +27,7 @@ module.exports.tests.create_drop = (test, common) => {
     t.false(introspect.triggers('geometry').filter(filter).length, 'prior state')
 
     // create trigger
-    let trigger = new TriggerComputeCentroid()
+    let trigger = new TriggerComputeEnvelope()
     trigger.create(db)
 
     // trigger exists
@@ -55,24 +55,24 @@ module.exports.tests.definition = (test, common) => {
     // test triggers
     let triggers = introspect.triggers('geometry').filter(filter)
 
-    // geometry_compute_centroid
+    // geometry_compute_envelope
     t.deepEqual(triggers[0], {
       type: 'trigger',
-      name: 'geometry_compute_centroid',
+      name: 'geometry_compute_envelope',
       tbl_name: 'geometry',
       rootpage: 0,
       sql: `
-        CREATE TRIGGER IF NOT EXISTS geometry_compute_centroid
+        CREATE TRIGGER IF NOT EXISTS geometry_compute_envelope
         AFTER INSERT ON main.geometry
         -- only polygon types supported
         WHEN GeometryType( NEW.geom ) LIKE '%POLYGON'
         AND UPPER( NEW.role ) = 'BOUNDARY'
         BEGIN
           INSERT OR IGNORE INTO geometry ( source, id, role, geom )
-          VALUES ( NEW.source, NEW.id, 'centroid', PointOnSurface( NEW.geom ) );
+          VALUES ( NEW.source, NEW.id, 'envelope', Envelope( NEW.geom ) );
         END
       `.trim().replace(' IF NOT EXISTS', '')
-    }, 'geometry_compute_centroid')
+    }, 'geometry_compute_envelope')
 
     t.end()
   })
@@ -97,20 +97,20 @@ module.exports.tests.function = (test, common) => {
       geom: POLYGON.toWkb()
     })
 
-    // trigger has generated a centroid geometry
+    // trigger has generated a envelope geometry
     const query = db.prepare(`
       SELECT source, id, role, AsText(geom) as geom
       FROM geometry
-      WHERE role = 'centroid'
+      WHERE role = 'envelope'
     `)
     t.deepEqual(query.all(), [
       {
         source: 'example_source',
         id: 'example_id',
-        role: 'centroid',
-        geom: 'POINT(103.825964 1.3653959)'
+        role: 'envelope',
+        geom: 'POLYGON((103.6358366 1.1539654, 104.4067842 1.1539654, 104.4067842 1.4703098, 103.6358366 1.4703098, 103.6358366 1.1539654))'
       }
-    ], 'centroid')
+    ], 'envelope')
 
     t.end()
   })
@@ -118,7 +118,7 @@ module.exports.tests.function = (test, common) => {
 
 module.exports.all = (tape, common) => {
   function test (name, testFunction) {
-    return tape(`TriggerComputeCentroid: ${name}`, testFunction)
+    return tape(`TriggerComputeEnvelope: ${name}`, testFunction)
   }
 
   for (var testCase in module.exports.tests) {

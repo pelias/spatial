@@ -6,11 +6,7 @@ $('document').ready(function () {
     crosshairControl: (window.location.pathname === '/explore/pip')
   })
 
-  var geojson = L.geoJSON(null, {
-    style: mapStyle.place,
-    interactive: false,
-    pointToLayer: mapStyle.pointToLayer
-  })
+  var geojson = L.geoJSON(null, _.extend({ interactive: false }, mapStyle.place))
   geojson.addTo(map)
 
   // render geometries on map

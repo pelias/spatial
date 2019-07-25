@@ -120,12 +120,12 @@ $('document').ready(function () {
   }
 
   // create a layer to store geojson geometries
-  var geojson = new L.geoJson([], { style: featureStyle, onEachFeature: onEachFeature })
+  var geojson = new L.geoJson([], _.extend({ onEachFeature: onEachFeature }, mapStyle.pip))
   geojson.addTo(map)
   geojson.name = 'geojson'
 
   // create a layer for labels
-  var labels = new L.geoJson([], { style: featureStyle, onEachFeature: onEachFeature })
+  var labels = new L.geoJson([])
   labels.addTo(map)
   labels.name = 'labels'
 
