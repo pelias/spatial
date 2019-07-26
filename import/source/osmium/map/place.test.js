@@ -24,7 +24,7 @@ module.exports.tests.mapper = (test) => {
     t.equal(place.ontology.type, 'village')
     t.end()
   })
-  test('mapper: ontology type -  trim & lowercase', (t) => {
+  test('mapper: ontology type - trim & lowercase', (t) => {
     let place = map({
       properties: {
         '@type': 'relation',
@@ -44,7 +44,7 @@ module.exports.tests.mapper = (test) => {
       properties: {
         '@type': 'relation',
         '@id': '100',
-        'place': ' \tViLLage  SquAre\n'
+        'place': ' ViLLage  SquAre '
       }
     })
     t.true(place instanceof Place)
@@ -52,6 +52,21 @@ module.exports.tests.mapper = (test) => {
     t.equal(place.identity.id, 'relation:100')
     t.equal(place.ontology.class, 'admin')
     t.equal(place.ontology.type, 'village_square')
+    t.end()
+  })
+  test('mapper: ontology type - multivalue', (t) => {
+    let place = map({
+      properties: {
+        '@type': 'relation',
+        '@id': '100',
+        'place': 'village; square'
+      }
+    })
+    t.true(place instanceof Place)
+    t.equal(place.identity.source, 'osm')
+    t.equal(place.identity.id, 'relation:100')
+    t.equal(place.ontology.class, 'admin')
+    t.equal(place.ontology.type, 'village')
     t.end()
   })
   test('mapper: maps identity & unknown ontology', (t) => {
@@ -83,12 +98,42 @@ module.exports.tests.mapper = (test) => {
     t.equal(place.ontology.type, 'example_landuse_tag')
     t.end()
   })
+  test('mapper: derive ontology type from "landuse" tag - multivalue', (t) => {
+    let place = map({
+      properties: {
+        '@type': 'relation',
+        '@id': '100',
+        'landuse': 'example_landuse_tag; example_landuse_tag2'
+      }
+    })
+    t.true(place instanceof Place)
+    t.equal(place.identity.source, 'osm')
+    t.equal(place.identity.id, 'relation:100')
+    t.equal(place.ontology.class, 'admin')
+    t.equal(place.ontology.type, 'example_landuse_tag')
+    t.end()
+  })
   test('mapper: derive ontology type from "boundary" tag', (t) => {
     let place = map({
       properties: {
         '@type': 'relation',
         '@id': '100',
         'boundary': 'example_boundary_tag'
+      }
+    })
+    t.true(place instanceof Place)
+    t.equal(place.identity.source, 'osm')
+    t.equal(place.identity.id, 'relation:100')
+    t.equal(place.ontology.class, 'admin')
+    t.equal(place.ontology.type, 'example_boundary_tag')
+    t.end()
+  })
+  test('mapper: derive ontology type from "boundary" tag - multivalue', (t) => {
+    let place = map({
+      properties: {
+        '@type': 'relation',
+        '@id': '100',
+        'boundary': 'example_boundary_tag; example_boundary_tag2'
       }
     })
     t.true(place instanceof Place)

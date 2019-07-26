@@ -22,9 +22,31 @@ module.exports.tests.mapper = (test) => {
     t.equals(p.name[0].name, 'example1')
     t.end()
   })
+  test('mapper: name - multivalue', (t) => {
+    let p = new Place()
+    map(p, { 'name': 'example1; example2' })
+
+    t.equals(p.name.length, 1)
+    t.equals(p.name[0].lang, 'und')
+    t.equals(p.name[0].tag, 'default')
+    t.equals(p.name[0].abbr, false)
+    t.equals(p.name[0].name, 'example1')
+    t.end()
+  })
   test('mapper: name:lang', (t) => {
     let p = new Place()
     map(p, { 'name:en': 'example1' })
+
+    t.equals(p.name.length, 1)
+    t.equals(p.name[0].lang, 'eng')
+    t.equals(p.name[0].tag, 'preferred')
+    t.equals(p.name[0].abbr, false)
+    t.equals(p.name[0].name, 'example1')
+    t.end()
+  })
+  test('mapper: name:lang - multivalue', (t) => {
+    let p = new Place()
+    map(p, { 'name:en': 'example1; example2' })
 
     t.equals(p.name.length, 1)
     t.equals(p.name[0].lang, 'eng')

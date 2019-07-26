@@ -1,4 +1,5 @@
 const _ = require('lodash')
+const scalar = require('../config/scalar')
 const iso6393 = require('iso-639-3')
 const locale = require('locale')
 const Name = require('../../../../model/Name')
@@ -13,7 +14,7 @@ const allLocales = new locale.Locales(Object.keys(language))
 
 function mapper (place, properties) {
   // generic name properties
-  place.addName(new Name('und', 'default', false, _.get(properties, 'name', '').trim()))
+  place.addName(new Name('und', 'default', false, scalar(_.get(properties, 'name', '').trim())))
 
   for (let attr in properties) {
     // https://wiki.openstreetmap.org/wiki/Multilingual_names
@@ -36,7 +37,7 @@ function mapper (place, properties) {
         lang,
         (match[1].endsWith('_name')) ? match[1].replace('_name', '') : 'preferred',
         false,
-        properties[attr]
+        scalar(properties[attr])
       ))
     }
   }

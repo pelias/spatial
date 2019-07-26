@@ -53,6 +53,17 @@ module.exports.tests.mapper = (test) => {
     t.equals(p.property[2].value, 'baz', 'osm:baz')
     t.end()
   })
+  test('mapper: osm-specific - multivalue', (t) => {
+    let p = new Place()
+    map(p, { '@foo': 'filtered', 'bar': 'bar; abar', 'baz': 'baz; abaz', 'name': 'name' })
+
+    t.equals(p.property.length, 3)
+    t.equals(p.property[1].key, 'osm:bar', 'osm:bar')
+    t.equals(p.property[1].value, 'bar; abar', 'osm:bar')
+    t.equals(p.property[2].key, 'osm:baz', 'osm:baz')
+    t.equals(p.property[2].value, 'baz; abaz', 'osm:baz')
+    t.end()
+  })
 }
 
 module.exports.all = (tape) => {
