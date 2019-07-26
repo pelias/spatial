@@ -1,4 +1,8 @@
 $('document').ready(function () {
+  addExternalLink()
+})
+
+function addExternalLink () {
   var el = $('#sidebar-identity p.panel-heading')
   var identity = params.identity
   if (el.length && identity.source && identity.id) {
@@ -26,11 +30,11 @@ $('document').ready(function () {
     if (url && url.length) {
       el.append(
         '<a href="' + url + '" target="' + identity.source + '" class="external-link">' +
-          '<span class="icon is-small">' +
-            '<i class="fas fa-external-link-alt"></i>' +
-          '</span>' +
+        '<span class="icon is-small">' +
+        '<i class="fas fa-external-link-alt"></i>' +
+        '</span>' +
         '</a>'
       )
     }
   }
-})
+}

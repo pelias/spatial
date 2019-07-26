@@ -62,8 +62,10 @@ function setupMap (elementId, settings) {
     L.control.layers(tiles).addTo(map)
   }
 
-  // map.setView({ lng: -73.9805, lat: 40.7259 }, 12)
-  // map.setView({ lng: 174.7786, lat: -41.29 }, 12)
+  // a fallback location when other methods of detection fail
+  function zoomToManhattan () {
+    map.setView({ lng: -73.9805, lat: 40.7259 }, 12)
+  }
 
   if (settings.fullscreenControl !== false) {
     map.addControl(new L.Control.Fullscreen({
@@ -77,10 +79,12 @@ function setupMap (elementId, settings) {
   if (settings.hashControl === true) {
     var hash = new L.Hash(map)
     if (!location.hash) {
-      map.setView({ lng: -73.9805, lat: 40.7259 }, 12)
+      // user declined popup
+      map.once('locationerror', zoomToManhattan)
+      map.locate({ setView: true, watch: false, maxZoom: 17 })
     }
   } else {
-    map.setView({ lng: -73.9805, lat: 40.7259 }, 12)
+    zoomToManhattan()
   }
 
   if (settings.crosshairControl === true) {
@@ -105,6 +109,19 @@ function setupMap (elementId, settings) {
   // disable map interaction for touch devices
   if (Modernizr && Modernizr.touch) {
     disableMapInteraction(map, elementId)
+  }
+
+  if (typeof settings.addHashToLink === 'string') {
+    var el = $(settings.addHashToLink)
+    var appendHash = function () {
+      if (!el.length) { return }
+      var href = el.attr('href')
+      if (!href || !href.length) { return }
+      el.attr('href', href.split('#')[0] + L.Hash.formatHash(map))
+    }
+
+    map.on('moveend', appendHash.bind(el))
+    map.on('zoomend', appendHash.bind(el))
   }
 
   return map

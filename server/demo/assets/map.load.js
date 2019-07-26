@@ -3,7 +3,8 @@ $('document').ready(function () {
     zoomControl: true,
     attributionControl: !!true,
     hashControl: (window.location.pathname === '/explore/pip'),
-    crosshairControl: (window.location.pathname === '/explore/pip')
+    crosshairControl: (window.location.pathname === '/explore/pip'),
+    addHashToLink: 'a[data-append-hash]'
   })
 
   var geojson = L.geoJSON(null, _.extend({ interactive: false }, mapStyle.place))
