@@ -6,7 +6,7 @@ module.exports = function (req, res) {
   // inputs
   let query = {
     text: util.flatten(req.query.text),
-    prefix: true,
+    wildcard: { start: false, end: true },
     limit: 100
   }
 

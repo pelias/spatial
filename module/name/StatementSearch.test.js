@@ -54,7 +54,7 @@ module.exports.tests.function = (test, common) => {
     // read data
     let rows = search.all({
       text: 'example_name',
-      prefix: true,
+      wildcard: { start: false, end: true },
       limit: 2
     })
 

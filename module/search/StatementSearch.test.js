@@ -50,7 +50,7 @@ module.exports.tests.function = (test, common) => {
     // search
     let rows = search.statement.search.all({
       text: 'example_name',
-      prefix: true,
+      wildcard: { start: false, end: true },
       limit: 2
     })
 

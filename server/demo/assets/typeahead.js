@@ -7,7 +7,7 @@ $('document').ready(function () {
     maxItem: 15,
     order: null,
     dynamic: true,
-    delay: 100,
+    hint: true,
     backdrop: {
       'background-color': '#fff'
     },
