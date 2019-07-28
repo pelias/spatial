@@ -8,6 +8,7 @@ const GeometryModule = require('../module/geometry/GeometryModule')
 const ShardModule = require('../module/shard/ShardModule')
 const HierarchyModule = require('../module/hierarchy/HierarchyModule')
 const NameModule = require('../module/name/NameModule')
+const SearchModule = require('../module/search/SearchModule')
 const PointInPolygonModule = require('../module/pip/PointInPolygonModule')
 const ticker = require('../import/ticker')
 
@@ -31,6 +32,7 @@ class ImportService {
       shard: new ShardModule(this.db),
       hierarchy: new HierarchyModule(this.db),
       name: new NameModule(this.db),
+      search: new SearchModule(this.db),
       pip: new PointInPolygonModule(this.db)
     }
 

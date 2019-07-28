@@ -134,7 +134,7 @@ module.exports.tests.function = (test, common) => {
     // table empty
     t.equal(db.prepare(`SELECT COUNT(*) AS cnt FROM shard`).get().cnt, 0, 'prior state')
 
-    // insert data in to geomeetry column (which fires the triggeer)
+    // insert data in to geometry column (which fires the triggeer)
     geometry.statement.insert.run({
       source: 'example_source',
       id: 'example_id',

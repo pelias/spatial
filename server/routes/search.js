@@ -5,13 +5,14 @@ module.exports = function (req, res) {
 
   // inputs
   let query = {
-    name: util.flatten(req.query.name),
+    text: util.flatten(req.query.text),
+    prefix: true,
     limit: 100
   }
 
   // perform query
   console.time('took')
-  let rows = service.module.name.statement.search.all(query)
+  let rows = service.module.search.statement.search.all(query)
   console.timeEnd('took')
 
   // send json

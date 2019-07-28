@@ -4,7 +4,8 @@ $('document').ready(function () {
   $.typeahead({
     input: '#search',
     minLength: 1,
-    order: 'asc',
+    maxItem: 15,
+    order: null,
     dynamic: true,
     delay: 100,
     backdrop: {
@@ -26,7 +27,7 @@ $('document').ready(function () {
             type: 'GET',
             url: '/query/search',
             data: {
-              name: '{{query}}'
+              text: '{{query}}'
             },
             callback: {
               done: function (data) {
