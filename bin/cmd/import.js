@@ -9,7 +9,7 @@ module.exports = {
     yargs.positional('source', {
       type: 'string',
       describe: 'name of data source',
-      choices: ['whosonfirst', 'osmium', 'zcta'],
+      choices: ['whosonfirst', 'osmium', 'zcta', 'statcan'],
       demand: 'source is required'
     })
 
