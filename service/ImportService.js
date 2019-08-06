@@ -11,6 +11,7 @@ const NameModule = require('../module/name/NameModule')
 const SearchModule = require('../module/search/SearchModule')
 const PointInPolygonModule = require('../module/pip/PointInPolygonModule')
 const ticker = require('../import/ticker')
+const options = { highWaterMark: 256 }
 
 class ImportService {
   constructor (config) {
@@ -92,7 +93,7 @@ class ImportService {
         stats.error++
       }
       next()
-    })
+    }, options)
   }
 }
 

@@ -1,4 +1,5 @@
 const through = require('through2')
+const options = { highWaterMark: 256 }
 
 function streamFactory (mapper) {
   return through.obj((doc, enc, next) => {
@@ -15,7 +16,7 @@ function streamFactory (mapper) {
       console.error('mapping error', e)
       next()
     }
-  })
+  }, options)
 }
 
 module.exports = streamFactory
