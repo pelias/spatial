@@ -56,10 +56,13 @@ module.exports.tests.mapper = (test) => {
         ]
       }
     })
-    t.equals(p.geometry.length, 1)
+    t.equals(p.geometry.length, 2)
     t.true(p.geometry[0] instanceof Geometry)
     t.equal(p.geometry[0].geometry.constructor.name.toUpperCase(), 'POINT')
     t.equal(p.geometry[0].role, 'centroid')
+    t.true(p.geometry[1] instanceof Geometry)
+    t.equal(p.geometry[1].geometry.constructor.name.toUpperCase(), 'POLYGON')
+    t.equal(p.geometry[1].role, 'boundary')
     t.end()
   })
   test('mapper: label position', (t) => {

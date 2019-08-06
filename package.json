@@ -30,6 +30,7 @@
     "node": ">=8.0.0"
   },
   "dependencies": {
+    "@turf/buffer": "^5.1.5",
     "better-sqlite3": "^5.4.0",
     "csv-parse": "^4.4.3",
     "express": "^4.17.1",
@@ -42,6 +43,7 @@
     "pelias-logger": "^1.4.1",
     "split2": "^3.1.1",
     "through2": "^3.0.1",
+    "turf-point": "^2.0.1",
     "wkx": "^0.4.7",
     "yargs": "^13.2.4"
   },
