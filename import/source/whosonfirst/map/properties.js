@@ -9,7 +9,7 @@ function mapper (place, properties) {
 
   // wof-specific properties
   const picked = _.pickBy(properties, (val, key) => {
-    if (!key.startsWith('wof:')) { return false }
+    if (!key.startsWith('wof:') && !key.startsWith('src:')) { return false }
     if (!_.isString(val) && !_.isNumber(val)) { return false }
     if (key === 'wof:id') { return false }
     if (key === 'wof:name') { return false }

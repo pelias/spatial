@@ -67,6 +67,15 @@ module.exports.tests.mapper = (test) => {
     t.equals(p.property[1].value, '1000', 'wof:population')
     t.end()
   })
+  test('mapper: src:geom', (t) => {
+    let p = new Place()
+    map(p, { 'src:geom': 'quattroshapes' })
+
+    t.equals(p.property.length, 2)
+    t.equals(p.property[1].key, 'src:geom', 'src:geom')
+    t.equals(p.property[1].value, 'quattroshapes', 'src:geom')
+    t.end()
+  })
   test('mapper: do not map arrays', (t) => {
     let p = new Place()
     map(p, { 'wof:array': [ 'value' ] })
