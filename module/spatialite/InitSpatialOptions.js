@@ -9,6 +9,16 @@ class InitSpatialOptions extends Sqlite {
     } catch (e) {
       this.error('SetDecimalPrecision', e)
     }
+
+    // Reduce the number of bytes required to represent a POINT geometry
+    // note: this is a libspatialite-5.0.0 feature, databases generated with this setting
+    // cannot be read by older versions of spatialite.
+    // see: https://www.gaia-gis.it/fossil/libspatialite/wiki?name=BLOB-TinyPoint
+    try {
+      db.prepare(`SELECT EnableTinyPoint()`).get()
+    } catch (e) {
+      this.error('EnableTinyPoint', e)
+    }
   }
 }
 
