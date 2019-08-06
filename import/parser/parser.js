@@ -4,6 +4,8 @@ function parser (format) {
     case 'jsonl':
     case 'geojson':
       return require('./json')()
+    case 'csv':
+      return require('./csv')()
     default:
       console.error(`unknown format: ${format}`)
       process.exit(1)
