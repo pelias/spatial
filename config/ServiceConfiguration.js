@@ -11,7 +11,7 @@ class ServiceConfiguration {
 
     this.pragma = _.get(config, 'pragma', [
       new PragmaStatement('journal_mode', ['MEMORY', 'OFF']),
-      new PragmaStatement('locking_mode', ['NORMAL', 'EXCLUSIVE'], true),
+      new PragmaStatement('locking_mode', ['EXCLUSIVE', 'NORMAL'], true),
       new PragmaStatement('default_cache_size', ['2000']),
       new PragmaStatement('mmap_size', ['0', '268435456'], true), // @todo is this optimal?
       new PragmaStatement('synchronous', ['OFF']),
