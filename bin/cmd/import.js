@@ -1,5 +1,12 @@
+const fs = require('fs')
+const path = require('path')
 const ImportService = require('../../service/ImportService')
 const importStream = require('../../import/stream')
+
+// generate a list of valid sources by scanning the filesystem
+const sources = fs.readdirSync(path.resolve(__dirname, '../../import/source'))
+  .filter(file => file.endsWith('.js'))
+  .map(file => file.replace('.js', ''))
 
 module.exports = {
   command: 'import <source>',
@@ -9,7 +16,7 @@ module.exports = {
     yargs.positional('source', {
       type: 'string',
       describe: 'name of data source',
-      choices: ['whosonfirst', 'osmium', 'zcta'],
+      choices: sources,
       demand: 'source is required'
     })
 
