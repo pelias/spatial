@@ -25,8 +25,8 @@ function mapper (place, doc) {
         'centroid'
       ))
 
-      // select a buffer radius based on placetype
-      const rad = radius(_.get(place, 'ontology.type', ''))
+      // select a buffer radius based on ontology
+      const rad = radius(place)
 
       // buffer POINT to a create a POLYGON
       var point = turf.point(geometry.coordinates)
