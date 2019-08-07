@@ -2,15 +2,11 @@ const _ = require('lodash')
 const wkx = require('wkx')
 const format = require('../../../format')
 const Geometry = require('../../../../model/Geometry')
+const radius = require('../config/radius')
+
 const turf = {
   point: require('turf-point'),
   buffer: require('@turf/buffer')
-}
-
-const buffer = {
-  radius: 0.0001,
-  units: 'degrees',
-  steps: 4
 }
 
 function mapper (place, doc) {
@@ -29,12 +25,17 @@ function mapper (place, doc) {
         'centroid'
       ))
 
+      // select a buffer radius based on placetype
+      const rad = radius(_.get(place, 'ontology.type', ''))
+
       // buffer POINT to a create a POLYGON
       var point = turf.point(geometry.coordinates)
-      var buffered = turf.buffer(point, buffer.radius, { units: buffer.units, steps: buffer.steps })
-      geometry = buffered.geometry
-      geomType = _.get(geometry, 'type', '').trim().toUpperCase()
-      isPolygon = geomType.endsWith('POLYGON')
+      var buffered = turf.buffer(point, rad, { units: 'degrees', steps: 8 })
+
+      place.addGeometry(new Geometry(
+        format.from('geometry', 'geojson', buffered.geometry),
+        'buffer'
+      ))
     }
 
     if (isPolygon) {

@@ -13,8 +13,15 @@ iso6393.filter(i => !!i.iso6391).forEach(i => { language[i.iso6391] = i })
 const allLocales = new locale.Locales(Object.keys(language))
 
 function mapper (place, properties) {
+  let name = _.get(properties, 'name', '').trim()
+  if (!name.length) {
+    // some 'place' records use place_name instad of name
+    // https://www.openstreetmap.org/relation/3815205
+    name = _.get(properties, 'place_name', '').trim()
+  }
+
   // generic name properties
-  place.addName(new Name('und', 'default', false, scalar(_.get(properties, 'name', '').trim())))
+  place.addName(new Name('und', 'default', false, scalar(name)))
 
   for (let attr in properties) {
     // https://wiki.openstreetmap.org/wiki/Multilingual_names

@@ -1,15 +1,12 @@
 const _ = require('lodash')
 const format = require('../../../format')
 const Geometry = require('../../../../model/Geometry')
+const Rank = require('../config/Rank')
+const radius = require('../config/radius')
+
 const turf = {
   point: require('turf-point'),
   buffer: require('@turf/buffer')
-}
-
-const buffer = {
-  radius: 0.0001,
-  units: 'degrees',
-  steps: 4
 }
 
 function mapper (place, doc) {
@@ -26,12 +23,21 @@ function mapper (place, doc) {
         'centroid'
       ))
 
+      // compute the nominatum rank
+      const rank = new Rank()
+      rank.infer(place, doc)
+
+      // select a buffer radius based on place rank
+      const rad = radius(rank)
+
       // buffer POINT to a create a POLYGON
       var point = turf.point(geometry.coordinates)
-      var buffered = turf.buffer(point, buffer.radius, { units: buffer.units, steps: buffer.steps })
-      geometry = buffered.geometry
-      geomType = _.get(geometry, 'type', '').trim().toUpperCase()
-      isPolygon = geomType.endsWith('POLYGON')
+      var buffered = turf.buffer(point, rad, { units: 'degrees', steps: 8 })
+
+      place.addGeometry(new Geometry(
+        format.from('geometry', 'geojson', buffered.geometry),
+        'buffer'
+      ))
     }
 
     if (isPolygon) {

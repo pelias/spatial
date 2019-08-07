@@ -1,0 +1,2 @@
+https://github.com/openstreetmap/Nominatim/blob/master/settings/address-levels.json
+https://github.com/openstreetmap/Nominatim/blob/master/docs/develop/Ranking.md

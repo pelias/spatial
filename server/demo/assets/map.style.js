@@ -12,6 +12,14 @@ mapStyle.place.style = function (feature) {
       dashArray: '5',
       fillOpacity: 0
     }
+  } else if (feature.properties.role === 'buffer') {
+    return {
+      color: '#FF851B',
+      weight: 2,
+      opacity: 1,
+      dashArray: '4',
+      fillOpacity: 0
+    }
   }
   return {
     fillColor: '#FF851B',
@@ -94,6 +102,11 @@ mapStyle.pip.style = function (feature) {
     if (!level || level < 4) {
       style.fillOpacity = 0.0
     }
+  }
+
+  // buffered geometries
+  if (feature.properties.role === 'buffer') {
+    style.fillOpacity = 0
   }
 
   // style for polygons

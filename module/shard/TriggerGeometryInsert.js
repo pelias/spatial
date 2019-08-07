@@ -11,7 +11,7 @@ class TriggerGeometryInsert extends SqliteStatement {
         AFTER INSERT ON ${dbname}.geometry
         -- only polygon types currently supported
         WHEN GeometryType( NEW.geom ) LIKE '%POLYGON'
-        AND UPPER( NEW.role ) = 'BOUNDARY'
+        AND UPPER( NEW.role ) IN ( 'BOUNDARY', 'BUFFER' )
         BEGIN
 
           -- remove prior shards for same geometry

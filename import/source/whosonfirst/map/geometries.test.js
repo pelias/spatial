@@ -62,7 +62,7 @@ module.exports.tests.mapper = (test) => {
     t.equal(p.geometry[0].role, 'centroid')
     t.true(p.geometry[1] instanceof Geometry)
     t.equal(p.geometry[1].geometry.constructor.name.toUpperCase(), 'POLYGON')
-    t.equal(p.geometry[1].role, 'boundary')
+    t.equal(p.geometry[1].role, 'buffer')
     t.end()
   })
   test('mapper: label position', (t) => {

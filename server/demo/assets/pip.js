@@ -60,7 +60,7 @@ $('document').ready(function () {
             if (err3) { console.error(err3) } else {
               geojson.addData({
                 type: 'Feature',
-                properties: _.extend({}, place, { name: chosenName }),
+                properties: _.extend({}, place, { name: chosenName }, { role: res3[0].role }),
                 geometry: res3[0].geom
               })
             }

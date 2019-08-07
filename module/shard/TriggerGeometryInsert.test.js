@@ -74,7 +74,7 @@ module.exports.tests.definition = (test, common) => {
         AFTER INSERT ON main.geometry
         -- only polygon types currently supported
         WHEN GeometryType( NEW.geom ) LIKE '%POLYGON'
-        AND UPPER( NEW.role ) = 'BOUNDARY'
+        AND UPPER( NEW.role ) IN ( 'BOUNDARY', 'BUFFER' )
         BEGIN
 
           -- remove prior shards for same geometry
@@ -110,8 +110,8 @@ module.exports.tests.definition = (test, common) => {
   })
 }
 
-module.exports.tests.function = (test, common) => {
-  test('function', (t) => {
+module.exports.tests.functional = (test, common) => {
+  test('functional - boundary', (t) => {
     let db = common.tempSpatialDatabase()
 
     // set up geometry module
@@ -139,6 +139,83 @@ module.exports.tests.function = (test, common) => {
       source: 'example_source',
       id: 'example_id',
       role: 'boundary',
+      element: 1,
+      geom: POLYGON.toWkb()
+    })
+
+    // trigger has split the geometry in half horizontally
+    t.deepEqual(db.prepare(`SELECT element FROM shard`).all(), [
+      { element: 0 },
+      { element: 1 },
+      { element: 2 },
+      { element: 3 },
+      { element: 4 },
+      { element: 5 },
+      { element: 6 },
+      { element: 7 },
+      { element: 8 },
+      { element: 9 },
+      { element: 10 },
+      { element: 11 },
+      { element: 12 },
+      { element: 13 },
+      { element: 14 },
+      { element: 15 },
+      { element: 16 },
+      { element: 17 },
+      { element: 18 },
+      { element: 19 },
+      { element: 20 },
+      { element: 21 },
+      { element: 22 },
+      { element: 23 },
+      { element: 24 },
+      { element: 25 },
+      { element: 26 },
+      { element: 27 },
+      { element: 28 },
+      { element: 29 },
+      { element: 30 },
+      { element: 31 },
+      { element: 32 },
+      { element: 33 },
+      { element: 34 },
+      { element: 35 },
+      { element: 36 },
+      { element: 37 },
+      { element: 38 }
+    ], 'split')
+
+    t.end()
+  })
+  test('functional - buffer', (t) => {
+    let db = common.tempSpatialDatabase()
+
+    // set up geometry module
+    let geometry = new GeometryModule(db)
+    geometry.setup()
+
+    // set up shard module
+    let shard = new ShardModule(db)
+    shard.setup()
+
+    // create trigger
+    let trigger = new TriggerGeometryInsert({
+      shard: {
+        complexity: 100,
+        path: '01'
+      }
+    })
+    trigger.create(db)
+
+    // table empty
+    t.equal(db.prepare(`SELECT COUNT(*) AS cnt FROM shard`).get().cnt, 0, 'prior state')
+
+    // insert data in to geometry column (which fires the triggeer)
+    geometry.statement.insert.run({
+      source: 'example_source',
+      id: 'example_id',
+      role: 'buffer',
       element: 1,
       geom: POLYGON.toWkb()
     })
