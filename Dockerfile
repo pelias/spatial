@@ -42,4 +42,7 @@ COPY . /code
 RUN npm i --link
 
 # run tests
+RUN npm t
+
+# entrypoint
 ENTRYPOINT ["node", "bin/spatial.js"]
