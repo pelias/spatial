@@ -21,9 +21,10 @@ function mapper (place, properties) {
   }
 
   const isPostalCode = (_.get(properties, 'boundary', '').trim() === 'postal_code')
-  if (!name.length && isPostalCode) {
-    // postal code boundaries usually don't have a 'name' tag
-    // they use the 'postal_code' tag instead.
+  if (isPostalCode) {
+    // postal code boundaries usually don't have a 'name' tag,
+    // they use the 'postal_code' tag instead, some also include a plain
+    // text name in the 'name' field which should be avoided.
     name = _.get(properties, 'postal_code', '').trim()
   }
 

@@ -44,6 +44,17 @@ module.exports.tests.mapper = (test) => {
     t.equals(p.name[0].name, 'example1')
     t.end()
   })
+  test('mapper: use postal_code tag even when name is available', (t) => {
+    let p = new Place()
+    map(p, { 'place_name': 'example1', 'boundary': 'postal_code', 'postal_code': 'example2' })
+
+    t.equals(p.name.length, 1)
+    t.equals(p.name[0].lang, 'und')
+    t.equals(p.name[0].tag, 'default')
+    t.equals(p.name[0].abbr, false)
+    t.equals(p.name[0].name, 'example2')
+    t.end()
+  })
   test('mapper: name - multivalue', (t) => {
     let p = new Place()
     map(p, { 'name': 'example1; example2' })
