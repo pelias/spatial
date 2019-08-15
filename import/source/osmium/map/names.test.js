@@ -22,6 +22,28 @@ module.exports.tests.mapper = (test) => {
     t.equals(p.name[0].name, 'example1')
     t.end()
   })
+  test('mapper: from place_name tag', (t) => {
+    let p = new Place()
+    map(p, { 'place_name': 'example1' })
+
+    t.equals(p.name.length, 1)
+    t.equals(p.name[0].lang, 'und')
+    t.equals(p.name[0].tag, 'default')
+    t.equals(p.name[0].abbr, false)
+    t.equals(p.name[0].name, 'example1')
+    t.end()
+  })
+  test('mapper: from postal_code tag', (t) => {
+    let p = new Place()
+    map(p, { 'boundary': 'postal_code', 'postal_code': 'example1' })
+
+    t.equals(p.name.length, 1)
+    t.equals(p.name[0].lang, 'und')
+    t.equals(p.name[0].tag, 'default')
+    t.equals(p.name[0].abbr, false)
+    t.equals(p.name[0].name, 'example1')
+    t.end()
+  })
   test('mapper: name - multivalue', (t) => {
     let p = new Place()
     map(p, { 'name': 'example1; example2' })

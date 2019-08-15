@@ -20,6 +20,13 @@ function mapper (place, properties) {
     name = _.get(properties, 'place_name', '').trim()
   }
 
+  const isPostalCode = (_.get(properties, 'boundary', '').trim() === 'postal_code')
+  if (!name.length && isPostalCode) {
+    // postal code boundaries usually don't have a 'name' tag
+    // they use the 'postal_code' tag instead.
+    name = _.get(properties, 'postal_code', '').trim()
+  }
+
   // generic name properties
   place.addName(new Name('und', 'default', false, scalar(name)))
 
