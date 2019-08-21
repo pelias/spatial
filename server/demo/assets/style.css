@@ -223,3 +223,25 @@ a.external-link {
   float:right;
   color:#FFF;
 }
+
+ul.typeahead__list ul.hierarchy {
+  font-size: 0.7em;
+}
+
+ul.typeahead__list ul.hierarchy li {
+  display: inline-block;
+}
+
+ul.typeahead__list ul.hierarchy li p {
+  display: inline;
+}
+
+ul.typeahead__list ul.hierarchy li a,
+ul.typeahead__list ul.hierarchy li p {
+  margin: 0 3px;
+}
+
+ul.typeahead__list ul.hierarchy li:not(:last-child)::after {
+  content: ">";
+  display: inline-block;
+}
