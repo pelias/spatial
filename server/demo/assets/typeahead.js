@@ -4,7 +4,7 @@ $('document').ready(function () {
   $.typeahead({
     input: '#search',
     minLength: 1,
-    maxItem: 15,
+    maxItem: 10,
     order: null,
     dynamic: true,
     hint: true,
@@ -12,10 +12,10 @@ $('document').ready(function () {
       'background-color': '#fff'
     },
     template: function (query, item) {
-      console.error('template', query, item)
+      // console.error('template', query, item)
       return '<span class="row">' +
-        '<span>{{name}}</span>' +
-        '<span class="tag is-light">{{source}}/{{id}}</span>' +
+        '<p style="margin-bottom: 4px">{{name}}</p>' +
+        '<ul class="hierarchy" data-source="{{source}}" data-id="{{id}}"></ul>' +
         '</span>'
     },
     emptyTemplate: 'no result for {{query}}',
