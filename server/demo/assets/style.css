@@ -156,6 +156,15 @@ nav.breadcrumb {
   padding-bottom: 1px;
 }
 
+#sidebar-roles .roles-box {
+  position: relative;
+  padding: 10px 10px;
+}
+
+#sidebar-roles .roles-box input {
+  margin-right: 10px;
+}
+
 #simplification-info {
   position: absolute;
   top: 2px;
@@ -244,4 +253,12 @@ ul.typeahead__list ul.hierarchy li p {
 ul.typeahead__list ul.hierarchy li:not(:last-child)::after {
   content: ">";
   display: inline-block;
+}
+
+div.pip-role {
+  font-size: 0.7em;
+  margin: 5px;
+  display:block;
+  float:right;
+  color:#FFF;
 }

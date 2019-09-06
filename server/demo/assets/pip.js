@@ -90,7 +90,13 @@ $('document').ready(function () {
     let labels = getMapLayer(map, 'labels')
     labels.clearLayers()
 
-    api.pip({ lon: latlng.lng, lat: latlng.lat }, function (err, res) {
+    // handle role checkbox
+    let role = ''
+    if (!$('#show-buffered-geoms').is(':checked')) {
+      role = 'boundary'
+    }
+
+    api.pip({ lon: latlng.lng, lat: latlng.lat, role: role }, function (err, res) {
       if (err) { console.error(err) } else {
         updateMap(map, res)
         updateSidebar(map, res)
@@ -103,6 +109,11 @@ $('document').ready(function () {
   map.on('moveend', function (e) { pointInPolygon(map) })
   map.on('resize', function (e) { pointInPolygon(map) })
   $('#simplification').change(function () { pointInPolygon(map) })
+
+  // listen for updates to the role checkbox
+  $('#show-buffered-geoms').change(function () {
+    pointInPolygon(map)
+  })
 
   function onEachFeature (feature, layer) {
     if (feature.geometry.type.indexOf('Polygon') !== -1) {
