@@ -7,6 +7,7 @@ module.exports = function (req, res) {
   let query = {
     lon: parseFloat(util.flatten(req.query.lon)),
     lat: parseFloat(util.flatten(req.query.lat)),
+    role: util.flatten(req.query.role),
     limit: 1000
   }
 
