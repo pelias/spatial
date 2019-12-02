@@ -32,29 +32,29 @@
   "dependencies": {
     "@turf/buffer": "^5.1.5",
     "better-sqlite3": "^5.4.3",
-    "csv-parse": "^4.4.3",
+    "csv-parse": "^4.8.2",
     "express": "^4.17.1",
     "express-handlebars": "^3.1.0",
     "handlebars-helpers": "^0.10.0",
     "iso-639-3": "^1.2.0",
     "locale": "^0.1.0",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.15",
     "morgan": "^1.9.1",
     "pelias-logger": "^1.4.1",
     "split2": "^3.1.1",
     "through2": "^3.0.1",
     "turf-point": "^2.0.1",
-    "wkx": "^0.4.7",
-    "yargs": "^13.2.4"
+    "wkx": "^0.4.8",
+    "yargs": "^13.3.0"
   },
   "devDependencies": {
     "difflet": "^1.0.1",
-    "glob": "^7.1.4",
+    "glob": "^7.1.6",
     "precommit-hook": "^3.0.0",
-    "semver": "^6.1.2",
+    "semver": "^6.3.0",
     "standard": "^12.0.1",
     "tap-spec": "^5.0.0",
-    "tape": "^4.10.2"
+    "tape": "^4.11.0"
   },
   "standard": {
     "ignore": [
