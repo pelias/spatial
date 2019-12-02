@@ -1,5 +1,7 @@
 const _ = require('lodash')
 const Property = require('../../../../model/Property')
+const flattenArrays = ['wof:lang_x_spoken', 'wof:lang_x_official']
+const flattenDelim = ','
 
 function mapper (place, properties) {
   // generic properties
@@ -26,6 +28,15 @@ function mapper (place, properties) {
     if (typeof val.toString === 'function') { val = val.toString() }
     place.addProperty(new Property(`${key}`, val))
   }
+
+  // flatten some arrays to delimited strings
+  flattenArrays.forEach(prop => {
+    const val = _.get(properties, prop)
+    if (_.isArray(val) && !_.isEmpty(val)) {
+      const valString = _.compact(val).join(flattenDelim)
+      place.addProperty(new Property(prop, valString))
+    }
+  })
 }
 
 module.exports = mapper
