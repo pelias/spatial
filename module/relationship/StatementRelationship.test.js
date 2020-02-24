@@ -1,3 +1,5 @@
+const tap = require('tap')
+const common = require('../../test/common')
 const format = require('../../import/format')
 const GeometryModule = require('../geometry/GeometryModule')
 const ShardModule = require('../shard/ShardModule')
@@ -18,85 +20,71 @@ const INNER = format.from('geometry', 'geojson', {
   'coordinates': [[[-1, -1], [1, -1], [1, 1], [-1, 1], [-1, -1]]]
 })
 
-module.exports.tests = {}
+tap.test('function', (t) => {
+  let db = common.tempSpatialDatabase()
 
-module.exports.tests.function = (test, common) => {
-  test('function', (t) => {
-    let db = common.tempSpatialDatabase()
+  // geometry module
+  let geometry = new GeometryModule(db)
+  geometry.setup()
 
-    // geometry module
-    let geometry = new GeometryModule(db)
-    geometry.setup()
+  // shard module
+  let shard = new ShardModule(db)
+  shard.setup()
 
-    // shard module
-    let shard = new ShardModule(db)
-    shard.setup()
+  // relationship module
+  let relationship = new RelationshipModule(db)
+  relationship.setup()
 
-    // relationship module
-    let relationship = new RelationshipModule(db)
-    relationship.setup()
-
-    // insert outer square
-    geometry.statement.insert.run({
-      source: 'example_source1',
-      id: 'example_id1',
-      role: 'boundary',
-      geom: OUTER.toWkb()
-    })
-
-    // insert middle square
-    geometry.statement.insert.run({
-      source: 'example_source2',
-      id: 'example_id2',
-      role: 'boundary',
-      geom: MIDDLE.toWkb()
-    })
-
-    // insert inner square
-    geometry.statement.insert.run({
-      source: 'example_source3',
-      id: 'example_id3',
-      role: 'boundary',
-      geom: INNER.toWkb()
-    })
-
-    // ensure data written
-    t.equal(db.prepare(`SELECT * FROM geometry WHERE role = 'boundary'`).all().length, 3, 'write')
-    t.equal(db.prepare(`SELECT * FROM shard`).all().length, 3, 'write')
-
-    let query = { source: 'example_source2', id: 'example_id2', limit: 10 }
-
-    // test intersects
-    t.deepEqual(relationship.statement.intersects.all(query), [{
-      source: 'example_source1',
-      id: 'example_id1'
-    }, {
-      source: 'example_source3',
-      id: 'example_id3'
-    }], 'intersects')
-
-    // test contains
-    t.deepEqual(relationship.statement.contains.all(query), [{
-      source: 'example_source3',
-      id: 'example_id3'
-    }], 'contains')
-
-    // test within
-    t.deepEqual(relationship.statement.within.all(query), [{
-      source: 'example_source1',
-      id: 'example_id1'
-    }], 'within')
-
-    t.end()
+  // insert outer square
+  geometry.statement.insert.run({
+    source: 'example_source1',
+    id: 'example_id1',
+    role: 'boundary',
+    geom: OUTER.toWkb()
   })
-}
 
-module.exports.all = (tape, common) => {
-  function test (name, testFunction) {
-    return tape(`StatementRelationship: ${name}`, testFunction)
-  }
+  // insert middle square
+  geometry.statement.insert.run({
+    source: 'example_source2',
+    id: 'example_id2',
+    role: 'boundary',
+    geom: MIDDLE.toWkb()
+  })
 
-  for (var testCase in module.exports.tests) {
-    module.exports.tests[testCase](test, common)
-  }
-}
+  // insert inner square
+  geometry.statement.insert.run({
+    source: 'example_source3',
+    id: 'example_id3',
+    role: 'boundary',
+    geom: INNER.toWkb()
+  })
+
+  // ensure data written
+  t.equal(db.prepare(`SELECT * FROM geometry WHERE role = 'boundary'`).all().length, 3, 'write')
+  t.equal(db.prepare(`SELECT * FROM shard`).all().length, 3, 'write')
+
+  let query = { source: 'example_source2', id: 'example_id2', limit: 10 }
+
+  // test intersects
+  t.deepEqual(relationship.statement.intersects.all(query), [{
+    source: 'example_source1',
+    id: 'example_id1'
+  }, {
+    source: 'example_source3',
+    id: 'example_id3'
+  }], 'intersects')
+
+  // test contains
+  t.deepEqual(relationship.statement.contains.all(query), [{
+    source: 'example_source3',
+    id: 'example_id3'
+  }], 'contains')
+
+  // test within
+  t.deepEqual(relationship.statement.within.all(query), [{
+    source: 'example_source1',
+    id: 'example_id1'
+  }], 'within')
+
+  t.end()
+})
