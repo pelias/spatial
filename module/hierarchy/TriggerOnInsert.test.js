@@ -1,79 +1,76 @@
+const tap = require('tap')
+const common = require('../../test/common')
 const SqliteIntrospect = require('../../sqlite/SqliteIntrospect')
 const TableHierarchy = require('./TableHierarchy')
 const ViewInsertProxy = require('./ViewInsertProxy')
 const TriggerOnInsert = require('./TriggerOnInsert')
 const IndexUnique = require('./IndexUnique')
 
-module.exports.tests = {}
+tap.test('create & drop', (t) => {
+  let db = common.tempDatabase()
+  let introspect = new SqliteIntrospect(db)
 
-module.exports.tests.create_drop = (test, common) => {
-  test('create & drop', (t) => {
-    let db = common.tempDatabase()
-    let introspect = new SqliteIntrospect(db)
+  // create table
+  let table = new TableHierarchy()
+  table.create(db)
 
-    // create table
-    let table = new TableHierarchy()
-    table.create(db)
+  // create index
+  let idx = new IndexUnique()
+  idx.create(db)
 
-    // create index
-    let idx = new IndexUnique()
-    idx.create(db)
+  // create view
+  let view = new ViewInsertProxy()
+  view.create(db)
 
-    // create view
-    let view = new ViewInsertProxy()
-    view.create(db)
+  // trigger does not exist
+  t.false(introspect.triggers('hierarchy_insert_proxy').length, 'prior state')
 
-    // trigger does not exist
-    t.false(introspect.triggers('hierarchy_insert_proxy').length, 'prior state')
+  // create trigger
+  let trigger = new TriggerOnInsert()
+  trigger.create(db)
 
-    // create trigger
-    let trigger = new TriggerOnInsert()
-    trigger.create(db)
+  // trigger exists
+  t.true(introspect.triggers('hierarchy_insert_proxy').length, 'create')
 
-    // trigger exists
-    t.true(introspect.triggers('hierarchy_insert_proxy').length, 'create')
+  // drop trigger
+  trigger.drop(db)
 
-    // drop trigger
-    trigger.drop(db)
+  // trigger does not exist
+  t.false(introspect.triggers('hierarchy_insert_proxy').length, 'drop')
 
-    // trigger does not exist
-    t.false(introspect.triggers('hierarchy_insert_proxy').length, 'drop')
+  t.end()
+})
 
-    t.end()
-  })
-}
+tap.test('definition', (t) => {
+  let db = common.tempDatabase()
+  let introspect = new SqliteIntrospect(db)
 
-module.exports.tests.definition = (test, common) => {
-  test('definition', (t) => {
-    let db = common.tempDatabase()
-    let introspect = new SqliteIntrospect(db)
+  // create table
+  let table = new TableHierarchy()
+  table.create(db)
 
-    // create table
-    let table = new TableHierarchy()
-    table.create(db)
+  // create index
+  let idx = new IndexUnique()
+  idx.create(db)
 
-    // create index
-    let idx = new IndexUnique()
-    idx.create(db)
+  // create view
+  let view = new ViewInsertProxy()
+  view.create(db)
 
-    // create view
-    let view = new ViewInsertProxy()
-    view.create(db)
+  // create trigger
+  let trigger = new TriggerOnInsert()
+  trigger.create(db)
 
-    // create trigger
-    let trigger = new TriggerOnInsert()
-    trigger.create(db)
+  // test triggers
+  let triggers = introspect.triggers('hierarchy_insert_proxy')
 
-    // test triggers
-    let triggers = introspect.triggers('hierarchy_insert_proxy')
-
-    // hierarchy_idx_covering
-    t.deepEqual(triggers[0], {
-      type: 'trigger',
-      name: 'hierarchy_on_insert_trigger',
-      tbl_name: 'hierarchy_insert_proxy',
-      rootpage: 0,
-      sql: `
+  // hierarchy_idx_covering
+  t.deepEqual(triggers[0], {
+    type: 'trigger',
+    name: 'hierarchy_on_insert_trigger',
+    tbl_name: 'hierarchy_insert_proxy',
+    rootpage: 0,
+    sql: `
         CREATE TRIGGER IF NOT EXISTS hierarchy_on_insert_trigger
         INSTEAD OF INSERT ON main.hierarchy_insert_proxy
         BEGIN
@@ -143,20 +140,7 @@ module.exports.tests.definition = (test, common) => {
 
         END
       `.trim().replace(' IF NOT EXISTS', '')
-    }, 'hierarchy_on_insert_trigger')
+  }, 'hierarchy_on_insert_trigger')
 
-    t.end()
-  })
-}
-
-// functional test covered by StatementInsert test
-
-module.exports.all = (tape, common) => {
-  function test (name, testFunction) {
-    return tape(`TriggerOnInsert: ${name}`, testFunction)
-  }
-
-  for (var testCase in module.exports.tests) {
-    module.exports.tests[testCase](test, common)
-  }
-}
+  t.end()
+})

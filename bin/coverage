@@ -4,4 +4,4 @@
 # see https://github.com/pelias/pelias/issues/744
 set -o pipefail
 
-npx tap -J --no-cov --test-ignore='^test/'
+npx tap -J --cov --test-ignore='^test/'

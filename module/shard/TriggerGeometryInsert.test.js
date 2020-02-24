@@ -1,3 +1,5 @@
+const tap = require('tap')
+const common = require('../../test/common')
 const format = require('../../import/format')
 const SqliteIntrospect = require('../../sqlite/SqliteIntrospect')
 const TableShard = require('./TableShard')
@@ -6,70 +8,65 @@ const ShardModule = require('./ShardModule')
 const TriggerGeometryInsert = require('./TriggerGeometryInsert')
 const POLYGON = format.from('geometry', 'geojson', require('../../test/fixture/geojson.singapore'))
 
-module.exports.tests = {}
-
 const filter = function (t) { return t.name === 'shard_geometry_insert' }
 
-module.exports.tests.create_drop = (test, common) => {
-  test('create & drop', (t) => {
-    let db = common.tempSpatialDatabase()
-    let introspect = new SqliteIntrospect(db)
+tap.test('create & drop', (t) => {
+  let db = common.tempSpatialDatabase()
+  let introspect = new SqliteIntrospect(db)
 
-    // set up geometry module
-    let mod = new GeometryModule(db)
-    mod.setup()
+  // set up geometry module
+  let mod = new GeometryModule(db)
+  mod.setup()
 
-    // create table
-    let table = new TableShard()
-    table.create(db)
+  // create table
+  let table = new TableShard()
+  table.create(db)
 
-    // trigger does not exist
-    t.false(introspect.triggers('geometry').filter(filter).length, 'prior state')
+  // trigger does not exist
+  t.false(introspect.triggers('geometry').filter(filter).length, 'prior state')
 
-    // create trigger
-    let trigger = new TriggerGeometryInsert()
-    trigger.create(db)
+  // create trigger
+  let trigger = new TriggerGeometryInsert()
+  trigger.create(db)
 
-    // trigger exists
-    t.true(introspect.triggers('geometry').filter(filter).length, 'create')
+  // trigger exists
+  t.true(introspect.triggers('geometry').filter(filter).length, 'create')
 
-    // drop trigger
-    trigger.drop(db)
+  // drop trigger
+  trigger.drop(db)
 
-    // trigger does not exist
-    t.false(introspect.triggers('geometry').filter(filter).length, 'drop')
+  // trigger does not exist
+  t.false(introspect.triggers('geometry').filter(filter).length, 'drop')
 
-    t.end()
-  })
-}
+  t.end()
+})
 
-module.exports.tests.definition = (test, common) => {
-  test('definition', (t) => {
-    let db = common.tempSpatialDatabase()
-    let introspect = new SqliteIntrospect(db)
+tap.test('definition', (t) => {
+  let db = common.tempSpatialDatabase()
+  let introspect = new SqliteIntrospect(db)
 
-    // set up geometry module
-    let mod = new GeometryModule(db)
-    mod.setup()
+  // set up geometry module
+  let mod = new GeometryModule(db)
+  mod.setup()
 
-    // create table
-    let table = new TableShard()
-    table.create(db)
+  // create table
+  let table = new TableShard()
+  table.create(db)
 
-    // create trigger
-    let trigger = new TriggerGeometryInsert()
-    trigger.create(db)
+  // create trigger
+  let trigger = new TriggerGeometryInsert()
+  trigger.create(db)
 
-    // test triggers
-    let triggers = introspect.triggers('geometry').filter(filter)
+  // test triggers
+  let triggers = introspect.triggers('geometry').filter(filter)
 
-    // shard_idx_covering
-    t.deepEqual(triggers[0], {
-      type: 'trigger',
-      name: 'shard_geometry_insert',
-      tbl_name: 'geometry',
-      rootpage: 0,
-      sql: `
+  // shard_idx_covering
+  t.deepEqual(triggers[0], {
+    type: 'trigger',
+    name: 'shard_geometry_insert',
+    tbl_name: 'geometry',
+    rootpage: 0,
+    sql: `
       CREATE TRIGGER IF NOT EXISTS shard_geometry_insert
         AFTER INSERT ON main.geometry
         -- only polygon types currently supported
@@ -104,175 +101,162 @@ module.exports.tests.definition = (test, common) => {
           DELETE from sqlite_sequence WHERE name='shard_subdivide';
         END
       `.trim().replace(' IF NOT EXISTS', '')
-    }, 'shard_geometry_insert')
+  }, 'shard_geometry_insert')
 
-    t.end()
+  t.end()
+})
+
+tap.test('functional - boundary', (t) => {
+  let db = common.tempSpatialDatabase()
+
+  // set up geometry module
+  let geometry = new GeometryModule(db)
+  geometry.setup()
+
+  // set up shard module
+  let shard = new ShardModule(db)
+  shard.setup()
+
+  // create trigger
+  let trigger = new TriggerGeometryInsert({
+    shard: {
+      complexity: 100,
+      path: '01'
+    }
   })
-}
+  trigger.create(db)
 
-module.exports.tests.functional = (test, common) => {
-  test('functional - boundary', (t) => {
-    let db = common.tempSpatialDatabase()
+  // table empty
+  t.equal(db.prepare(`SELECT COUNT(*) AS cnt FROM shard`).get().cnt, 0, 'prior state')
 
-    // set up geometry module
-    let geometry = new GeometryModule(db)
-    geometry.setup()
-
-    // set up shard module
-    let shard = new ShardModule(db)
-    shard.setup()
-
-    // create trigger
-    let trigger = new TriggerGeometryInsert({
-      shard: {
-        complexity: 100,
-        path: '01'
-      }
-    })
-    trigger.create(db)
-
-    // table empty
-    t.equal(db.prepare(`SELECT COUNT(*) AS cnt FROM shard`).get().cnt, 0, 'prior state')
-
-    // insert data in to geometry column (which fires the triggeer)
-    geometry.statement.insert.run({
-      source: 'example_source',
-      id: 'example_id',
-      role: 'boundary',
-      element: 1,
-      geom: POLYGON.toWkb()
-    })
-
-    // trigger has split the geometry in half horizontally
-    t.deepEqual(db.prepare(`SELECT element FROM shard`).all(), [
-      { element: 0 },
-      { element: 1 },
-      { element: 2 },
-      { element: 3 },
-      { element: 4 },
-      { element: 5 },
-      { element: 6 },
-      { element: 7 },
-      { element: 8 },
-      { element: 9 },
-      { element: 10 },
-      { element: 11 },
-      { element: 12 },
-      { element: 13 },
-      { element: 14 },
-      { element: 15 },
-      { element: 16 },
-      { element: 17 },
-      { element: 18 },
-      { element: 19 },
-      { element: 20 },
-      { element: 21 },
-      { element: 22 },
-      { element: 23 },
-      { element: 24 },
-      { element: 25 },
-      { element: 26 },
-      { element: 27 },
-      { element: 28 },
-      { element: 29 },
-      { element: 30 },
-      { element: 31 },
-      { element: 32 },
-      { element: 33 },
-      { element: 34 },
-      { element: 35 },
-      { element: 36 },
-      { element: 37 },
-      { element: 38 }
-    ], 'split')
-
-    t.end()
+  // insert data in to geometry column (which fires the triggeer)
+  geometry.statement.insert.run({
+    source: 'example_source',
+    id: 'example_id',
+    role: 'boundary',
+    element: 1,
+    geom: POLYGON.toWkb()
   })
-  test('functional - buffer', (t) => {
-    let db = common.tempSpatialDatabase()
 
-    // set up geometry module
-    let geometry = new GeometryModule(db)
-    geometry.setup()
+  // trigger has split the geometry in half horizontally
+  t.deepEqual(db.prepare(`SELECT element FROM shard`).all(), [
+    { element: 0 },
+    { element: 1 },
+    { element: 2 },
+    { element: 3 },
+    { element: 4 },
+    { element: 5 },
+    { element: 6 },
+    { element: 7 },
+    { element: 8 },
+    { element: 9 },
+    { element: 10 },
+    { element: 11 },
+    { element: 12 },
+    { element: 13 },
+    { element: 14 },
+    { element: 15 },
+    { element: 16 },
+    { element: 17 },
+    { element: 18 },
+    { element: 19 },
+    { element: 20 },
+    { element: 21 },
+    { element: 22 },
+    { element: 23 },
+    { element: 24 },
+    { element: 25 },
+    { element: 26 },
+    { element: 27 },
+    { element: 28 },
+    { element: 29 },
+    { element: 30 },
+    { element: 31 },
+    { element: 32 },
+    { element: 33 },
+    { element: 34 },
+    { element: 35 },
+    { element: 36 },
+    { element: 37 },
+    { element: 38 }
+  ], 'split')
 
-    // set up shard module
-    let shard = new ShardModule(db)
-    shard.setup()
+  t.end()
+})
+tap.test('functional - buffer', (t) => {
+  let db = common.tempSpatialDatabase()
 
-    // create trigger
-    let trigger = new TriggerGeometryInsert({
-      shard: {
-        complexity: 100,
-        path: '01'
-      }
-    })
-    trigger.create(db)
+  // set up geometry module
+  let geometry = new GeometryModule(db)
+  geometry.setup()
 
-    // table empty
-    t.equal(db.prepare(`SELECT COUNT(*) AS cnt FROM shard`).get().cnt, 0, 'prior state')
+  // set up shard module
+  let shard = new ShardModule(db)
+  shard.setup()
 
-    // insert data in to geometry column (which fires the triggeer)
-    geometry.statement.insert.run({
-      source: 'example_source',
-      id: 'example_id',
-      role: 'buffer',
-      element: 1,
-      geom: POLYGON.toWkb()
-    })
-
-    // trigger has split the geometry in half horizontally
-    t.deepEqual(db.prepare(`SELECT element FROM shard`).all(), [
-      { element: 0 },
-      { element: 1 },
-      { element: 2 },
-      { element: 3 },
-      { element: 4 },
-      { element: 5 },
-      { element: 6 },
-      { element: 7 },
-      { element: 8 },
-      { element: 9 },
-      { element: 10 },
-      { element: 11 },
-      { element: 12 },
-      { element: 13 },
-      { element: 14 },
-      { element: 15 },
-      { element: 16 },
-      { element: 17 },
-      { element: 18 },
-      { element: 19 },
-      { element: 20 },
-      { element: 21 },
-      { element: 22 },
-      { element: 23 },
-      { element: 24 },
-      { element: 25 },
-      { element: 26 },
-      { element: 27 },
-      { element: 28 },
-      { element: 29 },
-      { element: 30 },
-      { element: 31 },
-      { element: 32 },
-      { element: 33 },
-      { element: 34 },
-      { element: 35 },
-      { element: 36 },
-      { element: 37 },
-      { element: 38 }
-    ], 'split')
-
-    t.end()
+  // create trigger
+  let trigger = new TriggerGeometryInsert({
+    shard: {
+      complexity: 100,
+      path: '01'
+    }
   })
-}
+  trigger.create(db)
 
-module.exports.all = (tape, common) => {
-  function test (name, testFunction) {
-    return tape(`TriggerGeometryInsert: ${name}`, testFunction)
-  }
+  // table empty
+  t.equal(db.prepare(`SELECT COUNT(*) AS cnt FROM shard`).get().cnt, 0, 'prior state')
 
-  for (var testCase in module.exports.tests) {
-    module.exports.tests[testCase](test, common)
-  }
-}
+  // insert data in to geometry column (which fires the triggeer)
+  geometry.statement.insert.run({
+    source: 'example_source',
+    id: 'example_id',
+    role: 'buffer',
+    element: 1,
+    geom: POLYGON.toWkb()
+  })
+
+  // trigger has split the geometry in half horizontally
+  t.deepEqual(db.prepare(`SELECT element FROM shard`).all(), [
+    { element: 0 },
+    { element: 1 },
+    { element: 2 },
+    { element: 3 },
+    { element: 4 },
+    { element: 5 },
+    { element: 6 },
+    { element: 7 },
+    { element: 8 },
+    { element: 9 },
+    { element: 10 },
+    { element: 11 },
+    { element: 12 },
+    { element: 13 },
+    { element: 14 },
+    { element: 15 },
+    { element: 16 },
+    { element: 17 },
+    { element: 18 },
+    { element: 19 },
+    { element: 20 },
+    { element: 21 },
+    { element: 22 },
+    { element: 23 },
+    { element: 24 },
+    { element: 25 },
+    { element: 26 },
+    { element: 27 },
+    { element: 28 },
+    { element: 29 },
+    { element: 30 },
+    { element: 31 },
+    { element: 32 },
+    { element: 33 },
+    { element: 34 },
+    { element: 35 },
+    { element: 36 },
+    { element: 37 },
+    { element: 38 }
+  ], 'split')
+
+  t.end()
+})

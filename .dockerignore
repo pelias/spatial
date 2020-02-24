@@ -3,6 +3,8 @@
 Dockerfile
 .dockerignore
 node_modules
+.nyc_output
+coverage
 tmp
 build/tmp
 package-lock.json

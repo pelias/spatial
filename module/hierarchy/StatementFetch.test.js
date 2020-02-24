@@ -1,3 +1,5 @@
+const tap = require('tap')
+const common = require('../../test/common')
 const TableHierarchy = require('./TableHierarchy')
 const IndexUnique = require('./IndexUnique')
 const ViewInsertProxy = require('./ViewInsertProxy')
@@ -5,86 +7,72 @@ const TriggerOnInsert = require('./TriggerOnInsert')
 const StatementInsert = require('./StatementInsert')
 const StatementFetch = require('./StatementFetch')
 
-module.exports.tests = {}
+tap.test('function', (t) => {
+  let db = common.tempDatabase()
 
-module.exports.tests.function = (test, common) => {
-  test('function', (t) => {
-    let db = common.tempDatabase()
+  // create table
+  let table = new TableHierarchy()
+  table.create(db)
 
-    // create table
-    let table = new TableHierarchy()
-    table.create(db)
+  // create index
+  let idx = new IndexUnique()
+  idx.create(db)
 
-    // create index
-    let idx = new IndexUnique()
-    idx.create(db)
+  // create view
+  let view = new ViewInsertProxy()
+  view.create(db)
 
-    // create view
-    let view = new ViewInsertProxy()
-    view.create(db)
+  // create view
+  let trigger = new TriggerOnInsert()
+  trigger.create(db)
 
-    // create view
-    let trigger = new TriggerOnInsert()
-    trigger.create(db)
+  // prepare statement
+  let insert = new StatementInsert()
+  insert.create(db)
 
-    // prepare statement
-    let insert = new StatementInsert()
-    insert.create(db)
+  // prepare statement
+  let fetch = new StatementFetch()
+  fetch.create(db)
 
-    // prepare statement
-    let fetch = new StatementFetch()
-    fetch.create(db)
+  // table empty
+  t.false(db.prepare(`SELECT * FROM hierarchy`).all().length, 'prior state')
 
-    // table empty
-    t.false(db.prepare(`SELECT * FROM hierarchy`).all().length, 'prior state')
-
-    // insert data
-    insert.run({
-      parent_source: 'example_parent_source',
-      parent_id: 'example_parent_id',
-      child_source: 'example_child_source',
-      child_id: 'example_child_id',
-      branch: 'default'
-    })
-
-    // ensure data written
-    t.equal(db.prepare(`SELECT * FROM hierarchy`).all().length, 3, 'write')
-
-    // read data
-    let rows = fetch.all({
-      source: 'example_child_source',
-      id: 'example_child_id',
-      limit: 3
-    })
-
-    // test response structure
-    t.deepEqual(rows, [{
-      parent_source: 'example_child_source',
-      parent_id: 'example_child_id',
-      child_source: 'example_child_source',
-      child_id: 'example_child_id',
-      depth: 0,
-      branch: 'default'
-    }, {
-      parent_source: 'example_parent_source',
-      parent_id: 'example_parent_id',
-      child_source: 'example_child_source',
-      child_id: 'example_child_id',
-      depth: 1,
-      branch: 'default'
-    }],
-    'read')
-
-    t.end()
+  // insert data
+  insert.run({
+    parent_source: 'example_parent_source',
+    parent_id: 'example_parent_id',
+    child_source: 'example_child_source',
+    child_id: 'example_child_id',
+    branch: 'default'
   })
-}
 
-module.exports.all = (tape, common) => {
-  function test (name, testFunction) {
-    return tape(`StatementFetch: ${name}`, testFunction)
-  }
+  // ensure data written
+  t.equal(db.prepare(`SELECT * FROM hierarchy`).all().length, 3, 'write')
 
-  for (var testCase in module.exports.tests) {
-    module.exports.tests[testCase](test, common)
-  }
-}
+  // read data
+  let rows = fetch.all({
+    source: 'example_child_source',
+    id: 'example_child_id',
+    limit: 3
+  })
+
+  // test response structure
+  t.deepEqual(rows, [{
+    parent_source: 'example_child_source',
+    parent_id: 'example_child_id',
+    child_source: 'example_child_source',
+    child_id: 'example_child_id',
+    depth: 0,
+    branch: 'default'
+  }, {
+    parent_source: 'example_parent_source',
+    parent_id: 'example_parent_id',
+    child_source: 'example_child_source',
+    child_id: 'example_child_id',
+    depth: 1,
+    branch: 'default'
+  }],
+  'read')
+
+  t.end()
+})
