@@ -6,11 +6,11 @@ docker build -t 'pelias/spatial' .
 ```
 
 ```bash
-# run environment tests
+# run environment checks
 docker run --rm -it \
   --entrypoint=npm \
   pelias/spatial \
-  test environment
+  run env_check
 ```
 
 ```bash
@@ -19,6 +19,14 @@ docker run --rm -it \
   --entrypoint=npm \
   pelias/spatial \
   test
+```
+
+```bash
+# generate code coverage report
+docker run --rm -it \
+  --entrypoint=npm \
+  pelias/spatial \
+  run coverage
 ```
 
 ```bash
@@ -88,13 +96,18 @@ npm run postinstall
 ```
 
 ```bash
-# run environment tests
-npm test environment
+# run environment checks
+npm run env_check
 ```
 
 ```bash
 # run tests
 npm test
+```
+
+```bash
+# generate code coverage report
+npm run coverage
 ```
 
 ```bash
