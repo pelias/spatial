@@ -8,7 +8,7 @@
   "main": "index.js",
   "bin": "./bin/start",
   "scripts": {
-    "postinstall": "npm i better-sqlite3@latest --sqlite3=$PWD/amalgamation/sqlite-amalgamation-3280000",
+    "postinstall": "npm i better-sqlite3@5.4.3 --sqlite3=$PWD/amalgamation/sqlite-amalgamation-3310100",
     "validate": "npm ls",
     "prune": "npm prune",
     "build": "docker build -t 'pelias/spatial' .",
@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "@turf/buffer": "^5.1.5",
-    "better-sqlite3": "^5.4.3",
+    "better-sqlite3": "5.4.3",
     "csv-parse": "^4.8.2",
     "express": "^4.17.1",
     "express-handlebars": "^3.1.0",
