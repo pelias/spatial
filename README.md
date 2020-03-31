@@ -75,6 +75,14 @@ ingress | docker run --rm -i \
 ```
 
 ```bash
+# start the HTTP server
+docker run --rm -i \
+  -v "${PWD}:/data" \
+  pelias/spatial \
+  server --db=/data/geo.docker.db
+```
+
+```bash
 # run point-in-polygon query
 docker run --rm -i \
   -v "${PWD}:/data" \
@@ -141,6 +149,11 @@ ingress() {
 }
 
 ingress | node bin/spatial.js --db=geo.local.db import osmium
+```
+
+```bash
+# start the HTTP server
+node bin/spatial.js server --db=geo.local.db
 ```
 
 ```bash
