@@ -75,9 +75,10 @@ ingress | docker run --rm -i \
 ```
 
 ```bash
-# start the HTTP server
+# start the HTTP server on port 3000
 docker run --rm -i \
   -v "${PWD}:/data" \
+  -p 3000:3000 \
   pelias/spatial \
   server --db=/data/geo.docker.db
 ```
@@ -152,7 +153,7 @@ ingress | node bin/spatial.js --db=geo.local.db import osmium
 ```
 
 ```bash
-# start the HTTP server
+# start the HTTP server on port 3000
 node bin/spatial.js server --db=geo.local.db
 ```
 
