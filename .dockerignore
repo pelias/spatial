@@ -3,6 +3,7 @@
 Dockerfile
 .dockerignore
 node_modules
+amalgamation
 .nyc_output
 coverage
 tmp

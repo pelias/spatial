@@ -27,19 +27,11 @@ FROM base
 WORKDIR /code
 
 # configure npm
-RUN npm set progress=false && npm config set depth 0
-
-# prebuild amalgamation
-COPY amalgamation /code/amalgamation
-RUN npm i -g --unsafe better-sqlite3@latest --sqlite3=$PWD/amalgamation/sqlite-amalgamation-3280000
-
-# preinstall dependencies
-COPY package.json /code
-RUN npm i --link
+RUN npm set progress=false && npm config set depth
 
 # copy source files
 COPY . /code
-RUN npm i --link
+RUN npm i --unsafe-perm
 
 # run tests
 RUN npm t
