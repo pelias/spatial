@@ -85,7 +85,33 @@ tap.test('mapper: do not map arrays', (t) => {
 tap.test('mapper: do not map objects', (t) => {
   let p = new Place()
   map(p, { 'wof:object': { key: 'value' } })
+  t.equals(p.property.length, 1)
+  t.end()
+})
+tap.test('mapper: do not map objects', (t) => {
+  let p = new Place()
+  map(p, { 'wof:object': { key: 'value' } })
 
   t.equals(p.property.length, 1)
+  t.end()
+})
+tap.test('mapper: array lang_x_spoken', (t) => {
+  let p = new Place()
+  map(p, { 'wof:lang_x_spoken': ['deu', '', null, 'eng'] })
+
+  t.equals(p.property.length, 2)
+  t.equals(p.property[0].key, 'alpha2', 'alpha2')
+  t.equals(p.property[1].key, 'wof:lang_x_spoken', 'wof:lang_x_spoken')
+  t.equals(p.property[1].value, 'deu,eng', 'wof:lang_x_spoken')
+  t.end()
+})
+tap.test('mapper: array lang_x_official', (t) => {
+  let p = new Place()
+  map(p, { 'wof:lang_x_official': ['deu', '', undefined, 'eng'] })
+
+  t.equals(p.property.length, 2)
+  t.equals(p.property[0].key, 'alpha2', 'alpha2')
+  t.equals(p.property[1].key, 'wof:lang_x_official', 'wof:lang_x_official')
+  t.equals(p.property[1].value, 'deu,eng', 'wof:lang_x_official')
   t.end()
 })
