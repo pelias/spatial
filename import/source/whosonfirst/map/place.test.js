@@ -141,3 +141,15 @@ tap.test('invalid: superseded true', t => {
   t.equal(place, null)
   t.end()
 })
+
+tap.test('altgeoms: skip alt geometries', t => {
+  let place = map({
+    id: 1,
+    properties: {
+      'wof:placetype': 'locality',
+      'src:alt_label': 'value'
+    }
+  })
+  t.equal(place, null)
+  t.end()
+})
