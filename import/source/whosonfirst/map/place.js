@@ -18,6 +18,9 @@ function mapper (doc) {
   // do not map non-current, deprecated or superseded documents
   if (!_isValid(properties)) { return null }
 
+  // do not import alt-geometries (we may wish to in the future)
+  if (_isAltGeometry(properties)) { return null }
+
   // instantiate a new place
   const place = new Place(
     new Identity('wof', _.get(doc, 'id', '').toString()),
@@ -39,6 +42,10 @@ function _isValid (properties) {
   let isSuperseded = _.isArray(_.get(properties, 'wof:superseded_by')) &&
     properties['wof:superseded_by'].length > 0
   return isCurrent && !isDeprecated && !isSuperseded
+}
+
+function _isAltGeometry (properties) {
+  return _.has(properties, 'src:alt_label')
 }
 
 module.exports = mapper
