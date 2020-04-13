@@ -7,6 +7,7 @@ const TableGeometry = require('./TableGeometry')
 const GeoColumnGeom = require('./GeoColumnGeom')
 const TriggerComputeCentroid = require('./TriggerComputeCentroid')
 const POLYGON = format.from('geometry', 'geojson', require('../../test/fixture/geojson.singapore'))
+const TOPO_ERROR = format.from('geometry', 'geojson', require('../../test/fixture/geojson.wof.1360665447'))
 
 const filter = function (t) { return t.name === 'geometry_compute_centroid' }
 
@@ -66,7 +67,10 @@ tap.test('definition', (t) => {
         AND UPPER( NEW.role ) = 'BOUNDARY'
         BEGIN
           INSERT OR IGNORE INTO geometry ( source, id, role, geom )
-          VALUES ( NEW.source, NEW.id, 'centroid', PointOnSurface( NEW.geom ) );
+          VALUES ( NEW.source, NEW.id, 'centroid', IFNULL(
+            PointOnSurface( NEW.geom ),
+            PointOnSurface( Buffer( NEW.geom, 0 ) )
+          ));
         END
       `.trim().replace(' IF NOT EXISTS', '')
   }, 'geometry_compute_centroid')
@@ -104,6 +108,49 @@ tap.test('function', (t) => {
       id: 'example_id',
       role: 'centroid',
       geom: 'POINT(103.825964 1.3653959)'
+    }
+  ], 'centroid')
+
+  t.end()
+})
+
+/**
+ * This $TOPO_ERROR geometry emits the following error:
+ * GEOS error: TopologyException: Input geom 1 is invalid: Self-intersection at or near point -122.21479833403446 38.179404883659792 at -122.21479833403446 38.179404883659792
+ *
+ * Normally this will result in a failure to produce a valid centroid.
+ * This test is to cover that scenario and ensure a valid centroid is still being produced.
+ */
+tap.test('geometry with errors', (t) => {
+  let db = common.tempSpatialDatabase()
+
+  // set up geometry module
+  let geometry = new GeometryModule(db)
+  geometry.setup()
+
+  // table empty
+  t.equal(db.prepare(`SELECT COUNT(*) AS cnt FROM geometry`).get().cnt, 0, 'prior state')
+
+  // insert data in to geomeetry column (which fires the triggeer)
+  geometry.statement.insert.run({
+    source: 'example_source',
+    id: 'example_id',
+    role: 'boundary',
+    geom: TOPO_ERROR.toWkb()
+  })
+
+  // trigger has generated a centroid geometry
+  const query = db.prepare(`
+      SELECT source, id, role, AsText(geom) as geom
+      FROM geometry
+      WHERE role = 'centroid'
+    `)
+  t.deepEqual(query.all(), [
+    {
+      source: 'example_source',
+      id: 'example_id',
+      role: 'centroid',
+      geom: 'POINT(-122.6787419 38.448015)'
     }
   ], 'centroid')
 
