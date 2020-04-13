@@ -24,13 +24,13 @@ class StatementPeliasView extends SqliteStatement {
             AND id = place.id
             AND abbr = 0
             ORDER BY (
-              CASE 
+              CASE
                 WHEN UPPER(lang) = 'ENG' THEN 1
                 WHEN UPPER(lang) = 'UND' THEN 2
                 ELSE 3
               END
             ), (
-              CASE 
+              CASE
                 WHEN UPPER(tag) = 'PREFERRED' THEN 1
                 WHEN UPPER(tag) = 'DEFAULT' THEN 2
                 ELSE 3
@@ -58,13 +58,13 @@ class StatementPeliasView extends SqliteStatement {
             AND id = place.id
             AND abbr = 1
             ORDER BY (
-              CASE 
+              CASE
                 WHEN UPPER(lang) = 'ENG' THEN 1
                 WHEN UPPER(lang) = 'UND' THEN 2
                 ELSE 3
               END
             ), (
-              CASE 
+              CASE
                 WHEN UPPER(tag) = 'PREFERRED' THEN 1
                 WHEN UPPER(tag) = 'DEFAULT' THEN 2
                 ELSE 3
@@ -101,9 +101,9 @@ class StatementPeliasView extends SqliteStatement {
         )
         AND place.class = 'admin'
         AND place.id > 0 -- do not return planet or invalid placetypes
-        AND g1.role = 'boundary'
-        AND g2.role = 'centroid'
-        AND g3.role = 'envelope'
+        AND g1.role = 'boundary' AND g1.geom != ''
+        AND g2.role = 'centroid' AND g2.geom != ''
+        AND g3.role = 'envelope' AND g3.geom != ''
         ORDER BY place.type ASC
         LIMIT @limit
       `)
