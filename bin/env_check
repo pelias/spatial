@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # run tests with pipefail to avoid false passes
 # see https://github.com/pelias/pelias/issues/744
