@@ -28,7 +28,7 @@ function setupMap (elementId, settings) {
     attribution: '<a href="https://wikimediafoundation.org/wiki/Maps_Terms_of_Use">Wikimedia maps</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
   }
 
-  let tiles = {
+  var tiles = {
     'wikimedia': L.tileLayer('https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png', provider.wikimedia),
     'toner': L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}{r}.{ext}', provider.stamen),
     'toner_nolabels': L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner-background/{z}/{x}/{y}{r}.{ext}', provider.stamen),
@@ -45,7 +45,7 @@ function setupMap (elementId, settings) {
   if (!settings) { settings = {} }
   settings.zoomControl = !!settings.zoomControl
   settings.attributionControl = !!settings.attributionControl
-  settings.layers = [tiles['wikimedia']]
+  settings.layers = [tiles['voyager']]
   settings.scrollWheelZoom = 'center'
 
   // https://github.com/Leaflet/Leaflet/issues/6298
