@@ -3,6 +3,11 @@ const _ = require('lodash')
 const util = require('./util')
 const format = require('../../import/format')
 
+const meta = {
+  keywords: ['Geographic', 'Political', 'Administrative', 'Boundary', 'Polygon'],
+  description: `Openly licensed geographic data`
+}
+
 module.exports.place = function (req, res) {
   const service = req.app.locals.service
 
@@ -42,6 +47,24 @@ module.exports.place = function (req, res) {
     place: place
   }
 
+  // HTML meta tags
+  res.locals.metaTags = {
+    title: [
+      util.preferredName(place.name),
+      'Geographic Data',
+      `place/${params.identity.source}/${params.identity.id}`
+    ].join(' - '),
+    description: `${meta.description} for ${util.preferredName(place.name)}`,
+    keywords: meta.keywords.concat([
+      _.startCase(place.class),
+      _.startCase(place.type)
+    ]).concat(
+      (place.geometry || []).map(g => _.startCase(g.role))
+    ).concat(
+      (place.name || []).map(n => n.name)
+    ).join(', ')
+  }
+
   res.render('pages/place', {
     layout: 'default',
     params: params,
@@ -51,6 +74,9 @@ module.exports.place = function (req, res) {
 
 module.exports.pip = function (req, res) {
   let params = {}
+
+  // HTML meta tags
+  res.locals.metaTags = { noindex: true }
 
   res.render('pages/pip', {
     layout: 'default',
@@ -76,6 +102,15 @@ module.exports.ontology.enumerate = function (req, res) {
     })
   })
 
+  // HTML meta tags
+  res.locals.metaTags = {
+    title: [
+      'Geographic Data',
+      'Browse Ontology'
+    ].join(' - '),
+    description: meta.description
+  }
+
   res.render('pages/ontology', {
     layout: 'default',
     params: params,
@@ -96,6 +131,21 @@ module.exports.ontology.search = function (req, res) {
 
   // search by ontology
   params.place = service.module.place.statement.ontology.all(query)
+
+  // HTML meta tags
+  res.locals.metaTags = {
+    title: [
+      'Geographic Data',
+      'Browse Ontology',
+      _.startCase(req.params.class),
+      _.startCase(req.params.type)
+    ].join(' - '),
+    description: meta.description,
+    keywords: meta.keywords.concat([
+      _.startCase(req.params.class),
+      _.startCase(req.params.type)
+    ]).join(', ')
+  }
 
   res.render('pages/ontology_search', {
     layout: 'default',
