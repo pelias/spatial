@@ -11,7 +11,7 @@ RUN echo "@edge http://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repo
 RUN apk update && \
   apk --no-cache --update upgrade musl && \
   apk add --upgrade --force-overwrite apk-tools@edge && \
-  apk add --update --force-overwrite gcc g++ musl-dev icu-dev icu-libs make sqlite python curl unzip jq nodejs npm && \
+  apk add --update --force-overwrite gcc g++ musl-dev icu-dev icu-libs make sqlite python curl unzip jq nodejs npm bash && \
   rm -rf /var/cache/apk/*
 
 RUN spatialite ':memory:' 'SELECT sqlite_version()'
