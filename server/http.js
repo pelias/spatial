@@ -77,6 +77,9 @@ const service = new QueryService({
 // store $service on app
 app.locals.service = service
 
+// warm cache for this expensive query
+service.module.place.statement.ontologyIndex.all({})
+
 // generic http headers
 if (process.env.NODE_ENV === 'production') {
   app.use((req, res, next) => {

@@ -94,15 +94,7 @@ module.exports.ontology.enumerate = function (req, res) {
   let params = { ontology: {} }
 
   // enumerate all classes
-  params.ontology = service.module.place.statement.ontology.all({ limit: 100 })
-
-  // enumerate all types per class
-  params.ontology.forEach(_class => {
-    _class.type = service.module.place.statement.ontology.all({
-      class: _class.class,
-      limit: 1000
-    })
-  })
+  params.ontology = service.module.place.statement.ontologyIndex.all({})
 
   // HTML meta tags
   res.locals.metaTags = {
