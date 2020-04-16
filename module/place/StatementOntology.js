@@ -5,6 +5,7 @@ class StatementOntology extends SqliteStatement {
   _selectStatement (query) {
     let hasClass = _.get(query, 'class', '').length > 0
     let hasType = _.get(query, 'type', '').length > 0
+    if (!_.isFinite(_.get(query, 'offset'))) { query.offset = 0 }
     if (hasClass && hasType) { return this.statements.listPlaces }
     if (hasClass) { return this.statements.enumerateTypes }
     return this.statements.enumerateClasses
@@ -21,6 +22,7 @@ class StatementOntology extends SqliteStatement {
         GROUP BY class
         ORDER BY class ASC
         LIMIT @limit
+        OFFSET @offset
       `)
 
       // enumerate types within a class
@@ -31,6 +33,7 @@ class StatementOntology extends SqliteStatement {
         GROUP BY type
         ORDER BY type ASC
         LIMIT @limit
+        OFFSET @offset
       `)
 
       // list all places matching ontology
@@ -40,6 +43,7 @@ class StatementOntology extends SqliteStatement {
         WHERE class = @class
         AND type = @type
         LIMIT @limit
+        OFFSET @offset
       `)
     } catch (e) {
       this.error('PREPARE STATEMENT', e)
