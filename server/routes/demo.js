@@ -2,6 +2,8 @@
 const _ = require('lodash')
 const util = require('./util')
 const format = require('../../import/format')
+const MIN_PAGE = 1
+const MAX_PAGE = 1000
 
 const meta = {
   keywords: ['Geographic', 'Political', 'Administrative', 'Boundary', 'Polygon'],
@@ -124,7 +126,13 @@ module.exports.ontology.search = function (req, res) {
   let query = {
     class: req.params.class,
     type: req.params.type,
-    limit: 100
+    limit: 50
+  }
+
+  // pagination
+  const page = parseInt(util.flatten(req.query.page), 10) || 1
+  if (_.isFinite(page) && _.inRange(page, MIN_PAGE, MAX_PAGE)) {
+    query.offset = (page - 1) * query.limit
   }
 
   let params = { query: query }
@@ -145,6 +153,13 @@ module.exports.ontology.search = function (req, res) {
       _.startCase(req.params.class),
       _.startCase(req.params.type)
     ]).join(', ')
+  }
+
+  // pagination
+  params.pagination = {
+    current: page,
+    prev: (page > 1) ? page - 1 : undefined,
+    next: (params.place.length >= query.limit) ? page + 1 : undefined
   }
 
   res.render('pages/ontology_search', {

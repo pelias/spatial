@@ -8,6 +8,18 @@
         </div>
       </div>{{/each}}
   </div>
+
+  <div style="margin: 30px 0;">
+    <nav class="pagination is-centered" role="navigation" aria-label="pagination">
+      {{#if params.pagination.prev }}
+        <a class="pagination-previous" href="?page={{params.pagination.prev}}">Previous Page</a>
+      {{/if}}
+      {{#if params.pagination.next }}
+        <a class="pagination-next" href="?page={{params.pagination.next}}">Next page</a>
+      {{/if}}
+    </nav>
+  </div>
+
 </div>
 
 <script>
