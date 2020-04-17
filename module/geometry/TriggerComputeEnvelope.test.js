@@ -62,7 +62,7 @@ tap.test('definition', (t) => {
         CREATE TRIGGER IF NOT EXISTS geometry_compute_envelope
         AFTER INSERT ON main.geometry
         -- only polygon types supported
-        WHEN GeometryType( NEW.geom ) LIKE '%POLYGON'
+        WHEN GeometryType( NEW.geom ) IN ('POLYGON', 'MULTIPOLYGON')
         AND UPPER( NEW.role ) = 'BOUNDARY'
         BEGIN
           INSERT OR IGNORE INTO geometry ( source, id, role, geom )
