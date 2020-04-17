@@ -70,7 +70,7 @@ tap.test('definition', (t) => {
       CREATE TRIGGER IF NOT EXISTS shard_geometry_insert
         AFTER INSERT ON main.geometry
         -- only polygon types currently supported
-        WHEN GeometryType( NEW.geom ) LIKE '%POLYGON'
+        WHEN GeometryType( NEW.geom ) IN ('POLYGON', 'MULTIPOLYGON')
         AND UPPER( NEW.role ) IN ( 'BOUNDARY', 'BUFFER' )
         BEGIN
 
