@@ -28,7 +28,14 @@ function setupMap (elementId, settings) {
     attribution: '<a href="https://wikimediafoundation.org/wiki/Maps_Terms_of_Use">Wikimedia maps</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
   }
 
+  provider.jawg = {
+    maxZoom: 22,
+    subdomains: 'abcd',
+    attribution: 'Map &copy; <a href="http://jawg.io" target="_blank" class="jawg-attrib"><b>Jawg</b>Maps</a> | Map data &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" class="osm-attrib">OpenStreetMap contributors</a>'
+  }
+
   var tiles = {
+    'jawg': L.tileLayer('//{s}.tile.jawg.io/jawg-terrain/{z}/{x}/{y}.png?access-token=t6fAKnvaPdPCucraY88YwlKjBfUHqBMvvZBIWlcp1Z9Z5FVtA02uWo6Dc9DGB2JO', provider.jawg),
     'wikimedia': L.tileLayer('https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png', provider.wikimedia),
     'toner': L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}{r}.{ext}', provider.stamen),
     'toner_nolabels': L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner-background/{z}/{x}/{y}{r}.{ext}', provider.stamen),
@@ -45,7 +52,7 @@ function setupMap (elementId, settings) {
   if (!settings) { settings = {} }
   settings.zoomControl = !!settings.zoomControl
   settings.attributionControl = !!settings.attributionControl
-  settings.layers = [tiles['voyager']]
+  settings.layers = [tiles['jawg']]
   settings.scrollWheelZoom = 'center'
 
   // https://github.com/Leaflet/Leaflet/issues/6298
