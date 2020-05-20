@@ -86,6 +86,7 @@ function setupMap (elementId, settings) {
   if (settings.hashControl === true) {
     var hash = new L.Hash(map)
     if (!location.hash) {
+      zoomToManhattan()
       // user declined popup
       map.once('locationerror', zoomToManhattan)
       map.locate({ setView: true, watch: false, maxZoom: 17 })
