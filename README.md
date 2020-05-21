@@ -76,7 +76,7 @@ ingress | docker run --rm -i \
 
 ```bash
 # start the HTTP server on port 3000
-docker run --rm -i \
+docker run --rm -it \
   -v "${PWD}:/data" \
   -p 3000:3000 \
   pelias/spatial \
