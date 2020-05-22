@@ -3,7 +3,7 @@ amalgamation
 .nyc_output
 coverage
 tmp
-build/tmp
+runtime/tmp
 package-lock.json
 *.db
 *.db-journal
