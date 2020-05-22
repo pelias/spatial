@@ -1,14 +1,20 @@
-const os = require('os')
-const path = require('path')
+const _ = require('lodash')
+const fs = require('fs')
 const Sqlite = require('../../sqlite/Sqlite')
+const runtime = _.get(process, 'env.RUNTIME', '/opt/spatial')
 
-const EXTENSION_PATHS = [
-  path.resolve(__dirname, '../../build/', os.platform() + '-' + os.arch()),
-  path.resolve(__dirname, '../../build/tmp/libspatialite/src/.libs'),
-  path.resolve(__dirname, '../../build/tmp/libspatialite-5.0.0-beta1/src/.libs'),
-  process.env.SPATIALITE_EXTENSION_PATH,
-  ''
-]
+// prepend a new path to an env var
+const prependEnvPath = (name, path, delim = ':') => {
+  const existing = _.get(process.env, name, '')
+  _.set(process.env, name, [path, existing].join(delim))
+}
+
+// detect and load runtime environment
+if (fs.existsSync(runtime)) {
+  prependEnvPath('LD_LIBRARY_PATH', `${runtime}/lib`) // set linux search paths
+  prependEnvPath('DYLD_LIBRARY_PATH', `${runtime}/lib`) // set mac search paths
+  prependEnvPath('PROJ_LIB', `${runtime}/data`) // set GEOS data path
+}
 
 const EXTENSION_INIT = [
   'mod_spatialite',
@@ -23,13 +29,11 @@ const EXTENSION_INIT = [
 // load the spatialite extension
 class InitExtension extends Sqlite {
   load (db) {
-    for (let extpath of EXTENSION_PATHS) {
-      for (let extinit of EXTENSION_INIT) {
-        try {
-          db.loadExtension(path.join(extpath, extinit))
-          return true
-        } catch (e) { }
-      }
+    for (let extinit of EXTENSION_INIT) {
+      try {
+        db.loadExtension(extinit)
+        return true
+      } catch (e) { }
     }
     return false
   }
