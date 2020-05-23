@@ -9,23 +9,25 @@ mkdir -p "${RUNTIME}"
 cd /tmp
 
 # clean up
-rm -rf geos && mkdir -p geos
+rm -rf icu && mkdir -p icu
 
 # download release and decompress it
-curl -L 'http://download.osgeo.org/geos/geos-3.8.1.tar.bz2' \
-  | tar -xj --strip-components=1 -C geos
+curl -L 'http://github.com/unicode-org/icu/releases/download/release-67-1/icu4c-67_1-src.tgz' \
+  | tar -xz --strip-components=1 -C icu
 
 # working directory
-cd geos
+cd icu/source
 
 # configure build
 ./configure \
   --prefix="${RUNTIME}" \
+  --enable-debug=no \
+  --enable-samples=no \
   --enable-static=no
 
 # compile and install in runtime directory
 make -j8
-make install-strip
+make install
 
 # clean up
-rm -rf /tmp/geos
+rm -rf /tmp/icu

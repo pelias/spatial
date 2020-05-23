@@ -9,14 +9,14 @@ mkdir -p "${RUNTIME}"
 cd /tmp
 
 # clean up
-rm -rf geos && mkdir -p geos
+rm -rf libxml2 && mkdir -p libxml2
 
 # download release and decompress it
-curl -L 'http://download.osgeo.org/geos/geos-3.8.1.tar.bz2' \
-  | tar -xj --strip-components=1 -C geos
+curl -L 'ftp://xmlsoft.org/libxml2/libxml2-2.9.10.tar.gz' \
+  | tar -xz --strip-components=1 -C libxml2
 
 # working directory
-cd geos
+cd libxml2
 
 # configure build
 ./configure \
@@ -28,4 +28,4 @@ make -j8
 make install-strip
 
 # clean up
-rm -rf /tmp/geos
+rm -rf /tmp/libxml2

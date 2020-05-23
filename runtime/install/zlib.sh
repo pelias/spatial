@@ -9,23 +9,21 @@ mkdir -p "${RUNTIME}"
 cd /tmp
 
 # clean up
-rm -rf geos && mkdir -p geos
+rm -rf zlib && mkdir -p zlib
 
 # download release and decompress it
-curl -L 'http://download.osgeo.org/geos/geos-3.8.1.tar.bz2' \
-  | tar -xj --strip-components=1 -C geos
+curl -L 'http://downloads.sourceforge.net/project/libpng/zlib/1.2.11/zlib-1.2.11.tar.gz' \
+  | tar -xz --strip-components=1 -C zlib
 
 # working directory
-cd geos
+cd zlib
 
 # configure build
-./configure \
-  --prefix="${RUNTIME}" \
-  --enable-static=no
+./configure --prefix="${RUNTIME}"
 
 # compile and install in runtime directory
 make -j8
-make install-strip
+make install
 
 # clean up
-rm -rf /tmp/geos
+rm -rf /tmp/zlib

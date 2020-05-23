@@ -1,22 +1,28 @@
 #!/bin/bash
 set -euxo pipefail
 
-INSTALL_DIR=${RUNTIME:='/opt/spatial'}
-TEMP_DIR="$(pwd)/tmp"
-mkdir -p "${INSTALL_DIR}"
-mkdir -p "${TEMP_DIR}"
+# configure runtime environment
+RUNTIME=${RUNTIME:='/opt/spatial'}
+mkdir -p "${RUNTIME}"
+
+# working directory
+cd /tmp
+
+# clean up
+rm -rf sqlite3 && mkdir -p sqlite3
 
 # download amalgamation and decompress it
-cd "${TEMP_DIR}"
-curl -O https://www.sqlite.org/2020/sqlite-amalgamation-3310100.zip
-unzip sqlite-amalgamation-3310100.zip
-rm sqlite-amalgamation-3310100.zip
-rm -rf sqlite3
-mv sqlite-amalgamation-3310100 sqlite3
+RELEASE='sqlite-amalgamation-3310100'
+curl -LO "https://www.sqlite.org/2020/${RELEASE}.zip"
+unzip "${RELEASE}.zip" && rm "${RELEASE}.zip"
+rm -rf sqlite3 && mv "${RELEASE}" sqlite3
+
+# working directory
+cd sqlite3
 
 # add our custom compile-time options to the amalgamation
 2>&1 echo 'add custom compile-time options'
-cat << EOF > sqlite3/sqlite3.patch.c
+cat << EOF > sqlite3.patch.c
 #define SQLITE_DQS 0
 #define SQLITE_THREADSAFE 0
 #define SQLITE_DEFAULT_MEMSTATUS 0
@@ -36,14 +42,13 @@ cat << EOF > sqlite3/sqlite3.patch.c
 EOF
 
 # append sqlite3.c
-cat sqlite3/sqlite3.c >> sqlite3/sqlite3.patch.c
+cat sqlite3.c >> sqlite3.patch.c
 
 # replace sqlite3.c
 2>&1 echo 'replace sqlite3.c'
-mv sqlite3/sqlite3.patch.c sqlite3/sqlite3.c
+mv sqlite3.patch.c sqlite3.c
 
-# compile steps
-cd sqlite3
+# -- compilation --
 
 ## shared libs (sqlite.o && libsqlite3.so)
 2>&1 echo 'compile sqlite shared lib'
@@ -55,22 +60,22 @@ gcc sqlite3.o -shared -o libsqlite3.so
 gcc shell.c sqlite3.c -lpthread -ldl -lm && mv a.out sqlite3
 
 ## install headers
-mkdir -p "${INSTALL_DIR}/include"
-cp *.h "${INSTALL_DIR}/include"
+mkdir -p "${RUNTIME}/include"
+cp *.h "${RUNTIME}/include"
 
-## keep source files
-mkdir -p "${INSTALL_DIR}/src"
-cp *.h "${INSTALL_DIR}/src"
-cp *.c "${INSTALL_DIR}/src"
+## install source files
+mkdir -p "${RUNTIME}/src"
+cp *.h "${RUNTIME}/src"
+cp *.c "${RUNTIME}/src"
 
 ## install libs
-mkdir -p "${INSTALL_DIR}/lib"
-cp *.o "${INSTALL_DIR}/lib"
-cp *.so "${INSTALL_DIR}/lib"
+mkdir -p "${RUNTIME}/lib"
+cp *.o "${RUNTIME}/lib"
+cp *.so "${RUNTIME}/lib"
 
 ## install binaries
-mkdir -p "${INSTALL_DIR}/bin"
-cp sqlite3 "${INSTALL_DIR}/bin"
+mkdir -p "${RUNTIME}/bin"
+cp sqlite3 "${RUNTIME}/bin"
 
 # clean up
-rm -rf "${TEMP_DIR}/sqlite3"
+rm -rf /tmp/sqlite3

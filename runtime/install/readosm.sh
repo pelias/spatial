@@ -8,36 +8,22 @@ set -euxo pipefail
 RUNTIME=${RUNTIME:='/opt/spatial'}
 mkdir -p "${RUNTIME}"
 
-# ensure sqlite was compiled using the required compiler options
-checkSqliteCompileOptions
-
 # working directory
 cd /tmp
 
-# clone latest 'libspatialite' from fossil
-gaia_clone 'libspatialite'
-cd 'libspatialite'
+# clone latest 'readosm' from fossil
+gaia_clone 'readosm'
+cd 'readosm'
 
 # build flags (link dependencies)
 export CPPFLAGS="-I${RUNTIME}/include"
 export LDFLAGS="-L${RUNTIME}/lib"
 export LIBS="-ldl"
 
-# link libxml2
-export LIBXML2_CFLAGS="-I${RUNTIME}/include/libxml2"
-export LIBXML2_LIBS="-L${RUNTIME}/lib -lxml2"
-
 # configure build
 ./configure \
   --prefix="${RUNTIME}" \
   --disable-dependency-tracking \
-  --enable-rttopo=yes \
-  --enable-proj=yes \
-  --enable-geos=yes \
-  --enable-gcp=yes \
-  --enable-libxml2=yes \
-  --disable-freexl \
-  --with-geosconfig="${RUNTIME}/bin/geos-config" \
   --enable-static=no
 
 # compile and install in runtime directory
@@ -45,4 +31,4 @@ make -j8
 make install-strip
 
 # clean up
-rm -rf /tmp/libspatialite
+rm -rf /tmp/readosm
