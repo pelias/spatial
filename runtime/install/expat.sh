@@ -9,14 +9,14 @@ mkdir -p "${RUNTIME}"
 cd /tmp
 
 # clean up
-rm -rf geos && mkdir -p geos
+rm -rf expat && mkdir -p expat
 
 # download release and decompress it
-curl -L 'http://download.osgeo.org/geos/geos-3.8.1.tar.bz2' \
-  | tar -xj --strip-components=1 -C geos
+curl -L 'https://github.com/libexpat/libexpat/releases/download/R_2_2_9/expat-2.2.9.tar.gz' \
+  | tar -xz --strip-components=1 -C expat
 
 # working directory
-cd geos
+cd expat
 
 # configure build
 ./configure \
@@ -28,4 +28,4 @@ make -j8
 make install-strip
 
 # clean up
-rm -rf /tmp/geos
+rm -rf /tmp/expat

@@ -1,22 +1,31 @@
 #!/bin/bash
 set -euxo pipefail
 
-INSTALL_DIR=${RUNTIME:='/opt/spatial'}
-TEMP_DIR="$(pwd)/tmp"
-mkdir -p "${INSTALL_DIR}"
+# configure runtime environment
+RUNTIME=${RUNTIME:='/opt/spatial'}
+mkdir -p "${RUNTIME}"
 
-DOWNLOAD_URL='http://download.osgeo.org/libtiff/tiff-4.0.10.tar.gz'
-rm -rf "${TEMP_DIR}/libtiff"
-mkdir -p "${TEMP_DIR}/libtiff"
-curl "${DOWNLOAD_URL}" | tar -xz --strip-components=1 -C "${TEMP_DIR}/libtiff"
-
-cd "${TEMP_DIR}/libtiff"
-./configure \
-  --prefix="${INSTALL_DIR}" \
-  --enable-static=no
-
-make -j8
-make install
+# working directory
+cd /tmp
 
 # clean up
-rm -rf "${TEMP_DIR}/libtiff"
+rm -rf libtiff && mkdir -p libtiff
+
+# download release and decompress it
+curl -L 'http://download.osgeo.org/libtiff/tiff-4.0.10.tar.gz' \
+  | tar -xz --strip-components=1 -C libtiff
+
+# working directory
+cd libtiff
+
+# configure build
+./configure \
+  --prefix="${RUNTIME}" \
+  --enable-static=no
+
+# compile and install in runtime directory
+make -j8
+make install-strip
+
+# clean up
+rm -rf /tmp/libtiff

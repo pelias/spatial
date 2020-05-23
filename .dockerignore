@@ -1,5 +1,7 @@
 .git
 .gitignore
+.circleci
+.travis.yml
 Dockerfile
 .dockerignore
 node_modules
