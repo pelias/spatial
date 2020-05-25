@@ -6,7 +6,7 @@
   "homepage": "https://github.com/pelias/spatial",
   "license": "MIT",
   "main": "index.js",
-  "bin": "./bin/start",
+  "bin": "./bin/spatial",
   "scripts": {
     "postinstall": "npm run compile_sqlite",
     "compile_sqlite": "npm i better-sqlite3@6.0.1 --build-from-source --sqlite3=${RUNTIME:='/opt/spatial'}/src",
@@ -16,8 +16,8 @@
     "test": "./bin/test",
     "coverage": "./bin/coverage",
     "env_check": "./bin/env_check",
-    "start": "node server/http.js",
-    "server": "node server/http.js",
+    "start": "./bin/start",
+    "server": "./bin/start",
     "format_check": "./node_modules/standard/bin/cmd.js",
     "format_fix": "./node_modules/standard/bin/cmd.js --fix",
     "lint": "jshint ."

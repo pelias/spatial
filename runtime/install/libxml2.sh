@@ -21,7 +21,8 @@ cd libxml2
 # configure build
 ./configure \
   --prefix="${RUNTIME}" \
-  --enable-static=no
+  --enable-static=no \
+  --without-python
 
 # compile and install in runtime directory
 make -j8
