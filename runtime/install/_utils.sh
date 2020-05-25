@@ -14,7 +14,6 @@ function gaia_clone(){
   REPO="$1"
   rm -rf "${REPO}" "${REPO}.fossil"*
   USER='me' fossil clone https://www.gaia-gis.it/fossil/$REPO $REPO.fossil
-  ls -lah
   mkdir -p "${REPO}"
   cd "${REPO}"
   fossil open "../${REPO}.fossil"
