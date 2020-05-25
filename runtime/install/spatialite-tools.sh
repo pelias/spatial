@@ -18,6 +18,7 @@ cd 'spatialite-tools'
 # build flags (link dependencies)
 export CPPFLAGS="-I${RUNTIME}/include"
 export LDFLAGS="-L${RUNTIME}/lib"
+export LDFLAGS="${LDFLAGS} -Wl,-rpath,${RUNTIME}/lib" # set 'rpath'
 export PKG_CONFIG_PATH="${RUNTIME}/lib/pkgconfig"
 export LIBS='-ldl ' # note: requires trailing space!
 
