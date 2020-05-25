@@ -1,9 +1,5 @@
 #!/bin/bash
 
-# run tests with pipefail to avoid false passes
-# see https://github.com/pelias/pelias/issues/744
-set -o pipefail
-
 RUNTIME="${RUNTIME:-/opt/spatial}"
 
 if [ -n "${PELIAS_SPATIAL_RUNTIME}" ] && [ -d "${PELIAS_SPATIAL_RUNTIME}" ]; then
@@ -16,4 +12,4 @@ if [ -n "${RUNTIME}" ] && [ -d "${RUNTIME}" ]; then
   export PROJ_LIB="${RUNTIME}/data:$PROJ_LIB" # set GEOS data path
 fi
 
-npx tap -J --no-cov --test-ignore='^test/'
+node bin/spatial.js $@
