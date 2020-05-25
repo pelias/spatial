@@ -55,6 +55,11 @@ mv sqlite3.patch.c sqlite3.c
 gcc -c -fPIC sqlite3.c -o sqlite3.o
 gcc sqlite3.o -shared -o libsqlite3.so
 
+## generate DYLIB shared lib on Mac
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  clang -dynamiclib -Os -Wl,-install_name,${RUNTIME}/lib/libsqlite3.dylib -current_version 308.4 -compatibility_version 9.0 -mmacosx-version-min=10.9 -o libsqlite3.dylib sqlite3.o
+fi
+
 ## executable binary (sqlite)
 2>&1 echo 'compile sqlite binary'
 gcc shell.c sqlite3.c -lpthread -ldl -lm && mv a.out sqlite3
