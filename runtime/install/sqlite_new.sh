@@ -50,18 +50,20 @@ mv sqlite3.patch.c sqlite3.c
 # -- compilation --
 
 # build flags (link dependencies)
+
 export C_INCLUDE_PATH="${RUNTIME}/include"
-export CFLAGS="-O3 $(${RUNTIME}/bin/icu-config --cflags)"
-export LDFLAGS="$(${RUNTIME}/bin/icu-config --ldflags)"
+export CFLAGS="$(${RUNTIME}/bin/icu-config --cflags)"
+export LDFLAGS="$(${RUNTIME}/bin/icu-config --ldflags-searchpath) $(${RUNTIME}/bin/icu-config --ldflags-libsonly)"
+export LDFLAGS="${LDFLAGS} $(${RUNTIME}/bin/icu-config --ldflags-libsonly)"
 export LDFLAGS="${LDFLAGS} -Wl,-rpath,${RUNTIME}/lib" # set 'rpath'
 
 # configure build
 ./configure \
   --prefix="${RUNTIME}" \
   --disable-dependency-tracking \
-  --enable-shared=yes \
-  --enable-static=no \
-  --enable-debug=no
+  --enable-shared \
+  --disable-static \
+  --disable-debug
 
 # compile and install in runtime directory
 make -j8
