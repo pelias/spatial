@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# run tests with pipefail to avoid false passes
+# see https://github.com/pelias/pelias/issues/744
+set -o pipefail
+
+# compile better-sqlite3 with the same sources
+# and compile-time options as were used when
+# installing the runtime environment.
+
+export RUNTIME="${RUNTIME:=/opt/spatial}"
+export CPPFLAGS="$(${RUNTIME}/bin/icu-config --cppflags)"
+export LDFLAGS="$(${RUNTIME}/bin/icu-config --ldflags)"
+export LDFLAGS="${LDFLAGS} -Wl,-rpath,${RUNTIME}/lib" # set 'rpath'
+
+npm install better-sqlite3@6.0.1 \
+  --build-from-source \
+  --sqlite3="${RUNTIME}/src"

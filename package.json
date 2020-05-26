@@ -8,8 +8,7 @@
   "main": "index.js",
   "bin": "./bin/spatial",
   "scripts": {
-    "postinstall": "npm run compile_sqlite",
-    "compile_sqlite": "npm i better-sqlite3@6.0.1 --build-from-source --sqlite3=${RUNTIME:='/opt/spatial'}/src",
+    "postinstall": "./bin/compile_better_sqlite3",
     "validate": "npm ls",
     "prune": "npm prune",
     "build": "docker build -t 'pelias/spatial' .",
