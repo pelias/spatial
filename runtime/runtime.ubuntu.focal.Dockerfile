@@ -19,6 +19,10 @@ WORKDIR /code/runtime/install
 # copy build utils
 COPY runtime/install/_utils.sh /code/runtime/install/
 
+# install icu
+COPY runtime/install/icu.sh /code/runtime/install/
+RUN ./icu.sh
+
 # install sqlite3
 COPY runtime/install/sqlite.sh /code/runtime/install/
 RUN ./sqlite.sh
@@ -26,10 +30,6 @@ RUN ./sqlite.sh
 # install zlib
 COPY runtime/install/zlib.sh /code/runtime/install/
 RUN ./zlib.sh
-
-# install icu
-COPY runtime/install/icu.sh /code/runtime/install/
-RUN ./icu.sh
 
 # install libtiff
 COPY runtime/install/libtiff.sh /code/runtime/install/

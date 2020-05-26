@@ -39,6 +39,7 @@ cat << EOF > sqlite3.patch.c
 #define SQLITE_ENABLE_RTREE 1
 #define SQLITE_INTROSPECTION_PRAGMAS 1
 #define SQLITE_SOUNDEX 1
+#define SQLITE_ENABLE_ICU 1
 EOF
 
 # append sqlite3.c
@@ -50,19 +51,24 @@ mv sqlite3.patch.c sqlite3.c
 
 # -- compilation --
 
+export C_INCLUDE_PATH="${RUNTIME}/include"
+export LDFLAGS="$(${RUNTIME}/bin/icu-config --ldflags)"
+export LDFLAGS="${LDFLAGS} -Wl,-rpath,${RUNTIME}/lib" # set 'rpath'
+
 ## shared libs (sqlite.o && libsqlite3.so)
 2>&1 echo 'compile sqlite shared lib'
 gcc -c -fPIC sqlite3.c -o sqlite3.o
-gcc sqlite3.o -shared -o libsqlite3.so
+gcc sqlite3.o -shared $LDFLAGS -o libsqlite3.so
 
 ## generate DYLIB shared lib on Mac
 if [[ "$OSTYPE" == "darwin"* ]]; then
-  clang -dynamiclib -Os -Wl,-install_name,${RUNTIME}/lib/libsqlite3.dylib -current_version 308.4 -compatibility_version 9.0 -mmacosx-version-min=10.9 -o libsqlite3.dylib sqlite3.o
+  clang -dynamiclib $LDFLAGS -Os -Wl,-install_name,@rpath/libsqlite3.dylib -current_version 308.4 -compatibility_version 9.0 -mmacosx-version-min=10.9 -o libsqlite3.dylib sqlite3.o
+  cp libsqlite3.dylib "${RUNTIME}/lib"
 fi
 
 ## executable binary (sqlite)
 2>&1 echo 'compile sqlite binary'
-gcc shell.c sqlite3.c -lpthread -ldl -lm && mv a.out sqlite3
+gcc $LDFLAGS shell.c sqlite3.c -lpthread -ldl -lm -o sqlite3
 
 ## install headers
 mkdir -p "${RUNTIME}/include"
@@ -81,6 +87,9 @@ cp *.so "${RUNTIME}/lib"
 ## install binaries
 mkdir -p "${RUNTIME}/bin"
 cp sqlite3 "${RUNTIME}/bin"
+
+## test binary correctly linked in empty env
+env -i "${RUNTIME}/bin/sqlite3" :memory: 'SELECT sqlite_version()'
 
 # clean up
 rm -rf /tmp/sqlite3
