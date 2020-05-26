@@ -3,7 +3,7 @@ set -euxo pipefail
 
 # install all dependencies
 ./icu.sh
-./sqlite.sh
+./sqlite_new.sh
 ./zlib.sh
 ./libtiff.sh
 ./proj7.sh
