@@ -21,6 +21,7 @@ cd 'libspatialite'
 # build flags (link dependencies)
 export CPPFLAGS="-I${RUNTIME}/include"
 export LDFLAGS="-L${RUNTIME}/lib"
+export LDFLAGS="${LDFLAGS} -Wl,-rpath,${RUNTIME}/lib" # set 'rpath'
 export LIBS='-ldl'
 
 # link libxml2
