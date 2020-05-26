@@ -32,7 +32,6 @@ export TIFF_LIBS="-L${RUNTIME}/lib -ltiff"
 # configure build
 ./configure \
   --prefix="${RUNTIME}" \
-  --datadir="${RUNTIME}/data" \
   --enable-static=no
 
 # compile and install in runtime directory
