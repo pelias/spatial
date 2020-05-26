@@ -1,15 +1,4 @@
 #!/bin/bash
-
-RUNTIME="${RUNTIME:-/opt/spatial}"
-
-if [ -n "${PELIAS_SPATIAL_RUNTIME}" ] && [ -d "${PELIAS_SPATIAL_RUNTIME}" ]; then
-  RUNTIME="${PELIAS_SPATIAL_RUNTIME}"  
-fi
-
-if [ -n "${RUNTIME}" ] && [ -d "${RUNTIME}" ]; then 
-  export LD_LIBRARY_PATH="${RUNTIME}/lib:${LD_LIBRARY_PATH}" # set linux search paths
-  export DYLD_LIBRARY_PATH="${RUNTIME}/lib:${DYLD_LIBRARY_PATH}" # set mac search paths
-  export PROJ_LIB="${RUNTIME}/data:$PROJ_LIB" # set GEOS data path
-fi
+set -o pipefail
 
 exec node server/http.js $@
