@@ -59,5 +59,8 @@ fi
 make -j8
 make install-strip
 
+## test binary correctly linked in empty env
+env -i "${RUNTIME}/bin/spatialite" :memory: 'SELECT spatialite_version()'
+
 # clean up
 rm -rf /tmp/spatialite-tools
