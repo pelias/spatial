@@ -24,9 +24,10 @@ export LDFLAGS="-Wl,-rpath,${RUNTIME}/lib"
 # configure build
 ./configure \
   --prefix="${RUNTIME}" \
-  --enable-debug=no \
-  --enable-samples=no \
-  --enable-static=no
+  --disable-debug \
+  --disable-samples \
+  --disable-tests \
+  --disable-static
 
 # compile and install in runtime directory
 make -j8
