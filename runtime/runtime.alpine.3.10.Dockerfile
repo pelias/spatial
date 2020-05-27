@@ -80,5 +80,3 @@ COPY --from=build ${RUNTIME} ${RUNTIME}
 
 # configure environment variables
 ENV PATH="${RUNTIME}/bin:${PATH}"
-ENV LD_LIBRARY_PATH="${RUNTIME}/lib:${LD_LIBRARY_PATH}"
-ENV PROJ_LIB="${RUNTIME}/data"

@@ -69,6 +69,7 @@ RUN ./spatialite-tools.sh
 
 # -----------------------------------------------------------------------
 FROM ubuntu:focal
+ENV DEBIAN_FRONTEND=noninteractive
 
 # installation directory
 ENV RUNTIME='/opt/spatial'
@@ -77,7 +78,4 @@ ENV RUNTIME='/opt/spatial'
 COPY --from=build ${RUNTIME} ${RUNTIME}
 
 # configure environment variables
-ENV DEBIAN_FRONTEND=noninteractive
 ENV PATH="${RUNTIME}/bin:${PATH}"
-ENV LD_LIBRARY_PATH="${RUNTIME}/lib:${LD_LIBRARY_PATH}"
-ENV PROJ_LIB="${RUNTIME}/data"

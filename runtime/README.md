@@ -35,6 +35,15 @@ du -sh /opt/spatial
 
 ## Docker Runtime Environments
 
+### Ubuntu Bionic (18.04) `pelias/spatial:runtime_ubuntu_bionic`
+
+```bash
+docker build \
+ -t pelias/spatial:runtime_ubuntu_bionic \
+ -f runtime/runtime.ubuntu.bionic.Dockerfile \
+ .
+```
+
 ### Alpine (3.10) `pelias/spatial:runtime_alpine_3_10`
 
 ```bash
