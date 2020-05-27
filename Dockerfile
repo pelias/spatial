@@ -1,29 +1,28 @@
-FROM pelias/spatial:runtime_alpine_3_10
+FROM pelias/spatial:runtime_ubuntu_bionic as runtime
 
-# install dependencies
-RUN apk update && \
-  apk add --update --force-overwrite bash nodejs npm curl-dev && \
-  rm -rf /var/cache/apk/*
+FROM pelias/baseimage
 
-# configure npm
-RUN npm set progress=false && npm config set depth
+# installation directory
+ENV RUNTIME='/opt/spatial'
 
-# configure directories
-RUN mkdir -p /code /data
-WORKDIR /code
+# copy libs (maintaining symlinks)
+COPY --from=runtime ${RUNTIME} ${RUNTIME}
 
 # copy source files
 COPY . /code
 
+# we require clang++ for compiling better-sqlite3
+RUN apt-get update -y && \
+  apt-get install -y clang && \
+  rm -rf /var/lib/apt/lists/*
+
 # npm install
-RUN apk update && \
-  apk add --update --force-overwrite make g++ python && \
-  npm i --unsafe-perm && \
-  apk del make g++ python && \
-  rm -rf /var/cache/apk/*
+WORKDIR /code
+RUN npm i --unsafe-perm
 
 # run tests
-RUN npm run env_check && npm t
+RUN npm run env_check
+RUN npm t
 
 # entrypoint
 ENTRYPOINT ["node", "bin/spatial.js"]
