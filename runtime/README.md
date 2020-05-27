@@ -10,7 +10,7 @@ By default the runtime directory is configured as `/opt/spatial`, it is strongly
 
 Note: on many operating systems `/opt` will be owned by root, so if you manually `sudo mkdir -p /opt/spatial` and `sudo chown $USER /opt/spatial` then you can continue the rest of the install without using `sudo`.
 
-The runtime directory may be configured by setting the `RUNTIME` env var at BOTH install time AND at runtime if you can't write to `/opt` for any reason.
+The runtime directory may be configured by setting the `RUNTIME` env var at install time if you can't write to `/opt` for any reason.
 
 ## Local Runtime Environment
 
