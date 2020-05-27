@@ -49,8 +49,8 @@ fi
 ./configure \
   --prefix="${RUNTIME}" \
   --disable-dependency-tracking \
-  --enable-rttopo=yes \
-  --enable-libxml2=yes \
+  --enable-rttopo \
+  --enable-libxml2 \
   --disable-freexl \
   --with-geosconfig="${RUNTIME}/bin/geos-config" \
   --enable-static=no
