@@ -24,8 +24,8 @@ COPY runtime/install/icu.sh /code/runtime/install/
 RUN ./icu.sh
 
 # install sqlite3
-COPY runtime/install/sqlite_new.sh /code/runtime/install/
-RUN ./sqlite_new.sh
+COPY runtime/install/sqlite.sh /code/runtime/install/
+RUN ./sqlite.sh
 
 # install zlib
 COPY runtime/install/zlib.sh /code/runtime/install/
