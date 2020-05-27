@@ -22,10 +22,15 @@ cd sqlite
 2>&1 echo 'add custom compile-time options'
 cat << EOF > sqlite3.patch.c
 #define SQLITE_DQS 0
-#define SQLITE_THREADSAFE 0
-#define SQLITE_DEFAULT_MEMSTATUS 0
-#define SQLITE_TRACE_SIZE_LIMIT 32
+#define SQLITE_LIKE_DOESNT_MATCH_BLOBS 1
+#define SQLITE_THREADSAFE 2
 #define SQLITE_USE_URI 1
+#define SQLITE_DEFAULT_MEMSTATUS 0
+#define SQLITE_OMIT_TCL_VARIABLE 1
+#define SQLITE_OMIT_SHARED_CACHE 1
+#define SQLITE_DEFAULT_CACHE_SIZE -16000
+#define SQLITE_DEFAULT_FOREIGN_KEYS 1
+#define SQLITE_DEFAULT_WAL_SYNCHRONOUS 1
 #define SQLITE_ENABLE_COLUMN_METADATA 1
 #define SQLITE_ENABLE_UPDATE_DELETE_LIMIT 1
 #define SQLITE_ENABLE_STAT4 1
@@ -35,6 +40,7 @@ cat << EOF > sqlite3.patch.c
 #define SQLITE_ENABLE_FTS5 1
 #define SQLITE_ENABLE_JSON1 1
 #define SQLITE_ENABLE_RTREE 1
+#define SQLITE_ENABLE_GEOPOLY 1
 #define SQLITE_ENABLE_ICU 1
 #define SQLITE_INTROSPECTION_PRAGMAS 1
 #define SQLITE_SOUNDEX 1
@@ -50,10 +56,9 @@ mv sqlite3.patch.c sqlite3.c
 # -- compilation --
 
 # build flags (link dependencies)
-
 export C_INCLUDE_PATH="${RUNTIME}/include"
 export CFLAGS="$(${RUNTIME}/bin/icu-config --cflags)"
-export LDFLAGS="$(${RUNTIME}/bin/icu-config --ldflags-searchpath) $(${RUNTIME}/bin/icu-config --ldflags-libsonly)"
+export LDFLAGS="$(${RUNTIME}/bin/icu-config --ldflags-searchpath)"
 export LDFLAGS="${LDFLAGS} $(${RUNTIME}/bin/icu-config --ldflags-libsonly)"
 export LDFLAGS="${LDFLAGS} -Wl,-rpath,${RUNTIME}/lib" # set 'rpath'
 
