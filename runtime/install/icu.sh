@@ -21,9 +21,11 @@ cd icu/source
 # configure build
 ./configure \
   --prefix="${RUNTIME}" \
-  --enable-debug=no \
-  --enable-samples=no \
-  --enable-static=no
+  --enable-rpath \
+  --disable-debug \
+  --disable-samples \
+  --disable-tests \
+  --disable-static
 
 # compile and install in runtime directory
 make -j8

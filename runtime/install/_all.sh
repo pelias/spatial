@@ -2,9 +2,9 @@
 set -euxo pipefail
 
 # install all dependencies
+./icu.sh
 ./sqlite.sh
 ./zlib.sh
-./icu.sh
 ./libtiff.sh
 ./proj7.sh
 ./geos.sh

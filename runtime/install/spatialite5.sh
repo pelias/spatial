@@ -21,7 +21,8 @@ cd 'libspatialite'
 # build flags (link dependencies)
 export CPPFLAGS="-I${RUNTIME}/include"
 export LDFLAGS="-L${RUNTIME}/lib"
-export LIBS="-ldl"
+export LDFLAGS="${LDFLAGS} -Wl,-rpath,${RUNTIME}/lib" # set 'rpath'
+export LIBS='-ldl'
 
 # link libxml2
 export LIBXML2_CFLAGS="-I${RUNTIME}/include/libxml2"
@@ -43,6 +44,11 @@ export LIBXML2_LIBS="-L${RUNTIME}/lib -lxml2"
 # compile and install in runtime directory
 make -j8
 make install-strip
+
+## symlink 'mod_spatialite.dylib' on Mac
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  ln -sf "${RUNTIME}/lib/mod_spatialite.so" "${RUNTIME}/lib/mod_spatialite.dylib"
+fi
 
 # clean up
 rm -rf /tmp/libspatialite

@@ -19,6 +19,16 @@ tap.test('compile_options', (t) => {
   t.end()
 })
 
+tap.test('unicode', (t) => {
+  // the ICU extension provides a buncch of goodies, we can test
+  // it's installed correctly by calling the lower with two
+  // arguments, this is not supported without the ICU extension
+  let db = common.tempDatabase()
+  let res = db.prepare(`SELECT lower('I', 'tr_tr') AS lowercase`).get()
+  t.equal(res.lowercase, 'ı', 'extension enabled') // (small dotless i)
+  t.end()
+})
+
 tap.test('dependencies', (t) => {
   let db = common.tempSpatialDatabase()
   let res, actual, expected
@@ -27,9 +37,6 @@ tap.test('dependencies', (t) => {
   t.equals(res['sqlite_version()'], '3.31.1', `sqlite_version: ${res['sqlite_version()']}`)
 
   res = db.prepare(`SELECT spatialite_version()`).get()
-  actual = semver.coerce(res['spatialite_version()'])
-  expected = semver.coerce('5.0.0')
-  t.true(semver.gte(actual, expected), `spatialite_version: ${res['spatialite_version()']}`)
   t.equal(res['spatialite_version()'], '5.0.0-beta1', 'spatialite 5 beta1 required')
 
   res = db.prepare(`SELECT spatialite_target_cpu()`).get()
@@ -43,12 +50,12 @@ tap.test('dependencies', (t) => {
 
   res = db.prepare(`SELECT proj4_version()`).get()
   actual = semver.coerce(res['proj4_version()'])
-  expected = semver.coerce('Rel. 4.9.3, 15 August 2016')
+  expected = semver.coerce('Rel. 7.0.1, May 1st, 2020')
   t.true(semver.gte(actual, expected), `proj4_version: ${res['proj4_version()']}`)
 
   res = db.prepare(`SELECT geos_version()`).get()
   actual = semver.coerce(res['geos_version()'])
-  expected = semver.coerce('3.6.2-CAPI-1.10.2 4d2925d6')
+  expected = semver.coerce('3.8.1-CAPI-1.13.3')
   t.true(semver.gte(actual, expected), `geos_version: ${res['geos_version()']}`)
 
   res = db.prepare(`SELECT rttopo_version()`).get()
@@ -56,10 +63,10 @@ tap.test('dependencies', (t) => {
   expected = semver.coerce('1.1.0')
   t.true(semver.gte(actual, expected), `rttopo_version: ${res['rttopo_version()']}`)
 
-  // res = db.prepare(`SELECT libxml2_version()`).get()
-  // actual = semver.coerce(res['libxml2_version()'])
-  // expected = semver.coerce('2.9.7')
-  // t.true(semver.gte(actual, expected), `libxml2_version: ${res['libxml2_version()']}`)
+  res = db.prepare(`SELECT libxml2_version()`).get()
+  actual = semver.coerce(res['libxml2_version()'])
+  expected = semver.coerce('2.9.10')
+  t.true(semver.gte(actual, expected), `libxml2_version: ${res['libxml2_version()']}`)
 
   t.end()
 })
@@ -119,10 +126,10 @@ tap.test('features', (t) => {
     t.equals(res['HasRtTopo()'], 1, 'HasRtTopo')
   }, 'HasRtTopo')
 
-  // t.doesNotThrow(() => {
-  //   res = db.prepare(`SELECT HasLibXML2()`).get()
-  //   t.equals(res['HasLibXML2()'], 1, 'HasLibXML2')
-  // }, 'HasLibXML2')
+  t.doesNotThrow(() => {
+    res = db.prepare(`SELECT HasLibXML2()`).get()
+    t.equals(res['HasLibXML2()'], 1, 'HasLibXML2')
+  }, 'HasLibXML2')
 
   t.doesNotThrow(() => {
     res = db.prepare(`SELECT HasEpsg()`).get()
@@ -139,15 +146,15 @@ tap.test('features', (t) => {
     t.equals(res['HasGeoPackage()'], 1, 'HasGeoPackage')
   }, 'HasGeoPackage')
 
-  // t.doesNotThrow(() => {
-  //   res = db.prepare(`SELECT HasGCP()`).get()
-  //   t.equals(res['HasGCP()'], 1, 'HasGCP')
-  // }, 'HasGCP')
+  t.doesNotThrow(() => {
+    res = db.prepare(`SELECT HasGCP()`).get()
+    t.equals(res['HasGCP()'], 1, 'HasGCP')
+  }, 'HasGCP')
 
-  // t.doesNotThrow(() => {
-  //   res = db.prepare(`SELECT HasTopology()`).get()
-  //   t.equals(res['HasTopology()'], 1, 'HasTopology')
-  // }, 'HasTopology')
+  t.doesNotThrow(() => {
+    res = db.prepare(`SELECT HasTopology()`).get()
+    t.equals(res['HasTopology()'], 1, 'HasTopology')
+  }, 'HasTopology')
 
   t.end()
 })

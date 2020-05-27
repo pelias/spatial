@@ -1,4 +1,4 @@
-FROM ubuntu:focal as build
+FROM ubuntu:bionic as build
 ENV DEBIAN_FRONTEND=noninteractive
 
 # apt dependencies
@@ -68,7 +68,7 @@ COPY runtime/install/spatialite-tools.sh /code/runtime/install/
 RUN ./spatialite-tools.sh
 
 # -----------------------------------------------------------------------
-FROM ubuntu:focal
+FROM ubuntu:bionic
 ENV DEBIAN_FRONTEND=noninteractive
 
 # installation directory

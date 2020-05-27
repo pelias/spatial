@@ -9,25 +9,28 @@ mkdir -p "${RUNTIME}"
 cd /tmp
 
 # clean up
-rm -rf sqlite3 && mkdir -p sqlite3
+rm -rf sqlite && mkdir -p sqlite
 
-# download amalgamation and decompress it
-RELEASE='sqlite-amalgamation-3310100'
-curl -LO "https://www.sqlite.org/2020/${RELEASE}.zip"
-unzip "${RELEASE}.zip" && rm "${RELEASE}.zip"
-rm -rf sqlite3 && mv "${RELEASE}" sqlite3
+# download release and decompress it
+curl -L 'https://www.sqlite.org/2020/sqlite-autoconf-3310100.tar.gz' \
+  | tar -xz --strip-components=1 -C sqlite
 
 # working directory
-cd sqlite3
+cd sqlite
 
 # add our custom compile-time options to the amalgamation
 2>&1 echo 'add custom compile-time options'
 cat << EOF > sqlite3.patch.c
 #define SQLITE_DQS 0
-#define SQLITE_THREADSAFE 0
-#define SQLITE_DEFAULT_MEMSTATUS 0
-#define SQLITE_TRACE_SIZE_LIMIT 32
+#define SQLITE_LIKE_DOESNT_MATCH_BLOBS 1
+#define SQLITE_THREADSAFE 2
 #define SQLITE_USE_URI 1
+#define SQLITE_DEFAULT_MEMSTATUS 0
+#define SQLITE_OMIT_TCL_VARIABLE 1
+#define SQLITE_OMIT_SHARED_CACHE 1
+#define SQLITE_DEFAULT_CACHE_SIZE -16000
+#define SQLITE_DEFAULT_FOREIGN_KEYS 1
+#define SQLITE_DEFAULT_WAL_SYNCHRONOUS 1
 #define SQLITE_ENABLE_COLUMN_METADATA 1
 #define SQLITE_ENABLE_UPDATE_DELETE_LIMIT 1
 #define SQLITE_ENABLE_STAT4 1
@@ -37,6 +40,8 @@ cat << EOF > sqlite3.patch.c
 #define SQLITE_ENABLE_FTS5 1
 #define SQLITE_ENABLE_JSON1 1
 #define SQLITE_ENABLE_RTREE 1
+#define SQLITE_ENABLE_GEOPOLY 1
+#define SQLITE_ENABLE_ICU 1
 #define SQLITE_INTROSPECTION_PRAGMAS 1
 #define SQLITE_SOUNDEX 1
 EOF
@@ -50,32 +55,38 @@ mv sqlite3.patch.c sqlite3.c
 
 # -- compilation --
 
-## shared libs (sqlite.o && libsqlite3.so)
-2>&1 echo 'compile sqlite shared lib'
-gcc -c -fPIC sqlite3.c -o sqlite3.o
-gcc sqlite3.o -shared -o libsqlite3.so
+# build flags (link dependencies)
+export C_INCLUDE_PATH="${RUNTIME}/include"
+export CFLAGS="$(${RUNTIME}/bin/icu-config --cflags)"
+export LDFLAGS="$(${RUNTIME}/bin/icu-config --ldflags-searchpath)"
+export LDFLAGS="${LDFLAGS} $(${RUNTIME}/bin/icu-config --ldflags-libsonly)"
+export LDFLAGS="${LDFLAGS} -Wl,-rpath,${RUNTIME}/lib" # set 'rpath'
 
-## executable binary (sqlite)
-2>&1 echo 'compile sqlite binary'
-gcc shell.c sqlite3.c -lpthread -ldl -lm && mv a.out sqlite3
+# configure build
+./configure \
+  --prefix="${RUNTIME}" \
+  --disable-dependency-tracking \
+  --enable-shared \
+  --disable-static \
+  --disable-debug
 
-## install headers
-mkdir -p "${RUNTIME}/include"
-cp *.h "${RUNTIME}/include"
+# compile and install in runtime directory
+make -j8
+make install-strip
 
-## install source files
+## generate DYLIB shared lib on Mac
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  clang -dynamiclib $LDFLAGS -Os -Wl,-install_name,@rpath/libsqlite3.dylib -current_version 308.4 -compatibility_version 9.0 -mmacosx-version-min=10.9 -o libsqlite3.dylib .libs/sqlite3.o
+  cp libsqlite3.dylib "${RUNTIME}/lib"
+fi
+
+## keep a copy of amalgamation source files
 mkdir -p "${RUNTIME}/src"
-cp *.h "${RUNTIME}/src"
-cp *.c "${RUNTIME}/src"
+cp sqlite3.h "${RUNTIME}/src"
+cp sqlite3.c "${RUNTIME}/src"
 
-## install libs
-mkdir -p "${RUNTIME}/lib"
-cp *.o "${RUNTIME}/lib"
-cp *.so "${RUNTIME}/lib"
-
-## install binaries
-mkdir -p "${RUNTIME}/bin"
-cp sqlite3 "${RUNTIME}/bin"
+## test binary correctly linked in empty env
+env -i "${RUNTIME}/bin/sqlite3" :memory: 'SELECT sqlite_version()'
 
 # clean up
 rm -rf /tmp/sqlite3

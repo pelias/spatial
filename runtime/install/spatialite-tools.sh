@@ -18,6 +18,7 @@ cd 'spatialite-tools'
 # build flags (link dependencies)
 export CPPFLAGS="-I${RUNTIME}/include"
 export LDFLAGS="-L${RUNTIME}/lib"
+export LDFLAGS="${LDFLAGS} -Wl,-rpath,${RUNTIME}/lib" # set 'rpath'
 export PKG_CONFIG_PATH="${RUNTIME}/lib/pkgconfig"
 export LIBS='-ldl ' # note: requires trailing space!
 
@@ -48,8 +49,8 @@ fi
 ./configure \
   --prefix="${RUNTIME}" \
   --disable-dependency-tracking \
-  --enable-rttopo=yes \
-  --enable-libxml2=yes \
+  --enable-rttopo \
+  --enable-libxml2 \
   --disable-freexl \
   --with-geosconfig="${RUNTIME}/bin/geos-config" \
   --enable-static=no
@@ -57,6 +58,9 @@ fi
 # compile and install in runtime directory
 make -j8
 make install-strip
+
+## test binary correctly linked in empty env
+env -i "${RUNTIME}/bin/spatialite" :memory: 'SELECT spatialite_version()'
 
 # clean up
 rm -rf /tmp/spatialite-tools

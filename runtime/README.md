@@ -4,7 +4,7 @@ This project requires linking several dynamic C/C++ libraries at run-time.
 
 Package managers on various operating systems/platforms provide inconsistent versions of these dependencies, this makes it difficult to install the correct versions in `/usr/local` without breaking other software on the system.
 
-In order to overcome this problem we instead install the dependencies outside of the main operating system dir, instead compiling and installing the dependencies in a custom directory.
+In order to overcome this problem we install the dependencies outside of the main operating system dir, instead compiling and installing the dependencies into a custom directory.
 
 By default the runtime directory is configured as `/opt/spatial`, it is strongly recommended you use this location as everything 'just works'.
 
@@ -16,6 +16,12 @@ The runtime directory may be configured by setting the `RUNTIME` env var at BOTH
 
 ### Generic installation (works on Mac/Linux)
 
+You'll need to have the normal C/C++ build tools installed.
+
+Note: one dependency is not currently bundled.
+
+You'll need to install `libcurl`, you can usually find it in your package manager called something like `curl-dev` or `libcurl4-gnutls-dev`.
+
 ```bash
 export RUNTIME='/opt/spatial'
 sudo mkdir -p $RUNTIME
@@ -26,14 +32,37 @@ cd runtime/install
 ```
 
 The install will take 5-10 minutes depending on your hardware.
-A complete runtime environment consumes about 50Mb of disk space.
+A complete runtime environment consumes about 90Mb of disk space.
 
 ```bash
 du -sh /opt/spatial
- 49M	/opt/spatial
+ 91M	/opt/spatial
+```
+
+### Install Node modules
+
+You'll need to have the `clang++` command installed.
+
+```bash
+npm install
+```
+
+### Testing the installation
+
+```bash
+npm run env_check
 ```
 
 ## Docker Runtime Environments
+
+### Ubuntu Bionic (18.04) `pelias/spatial:runtime_ubuntu_bionic`
+
+```bash
+docker build \
+ -t pelias/spatial:runtime_ubuntu_bionic \
+ -f runtime/runtime.ubuntu.bionic.Dockerfile \
+ .
+```
 
 ### Alpine (3.10) `pelias/spatial:runtime_alpine_3_10`
 

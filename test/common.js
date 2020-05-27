@@ -3,7 +3,7 @@ const path = require('path')
 const _ = require('lodash')
 const Database = require('better-sqlite3')
 const SpatialiteModule = require('../module/spatialite/SpatialiteModule')
-const DEFAULTS = { memory: true, tmpdir: os.tmpdir() }
+const DEFAULTS = { tmpdir: os.tmpdir() }
 
 module.exports = {
   randomFileName: () => `${Math.random().toString(36).substring(8)}.db`,
@@ -11,6 +11,8 @@ module.exports = {
     let options = _.extend({}, DEFAULTS, config || {})
     if (typeof options.tmpName !== 'string') { options.tmpName = module.exports.randomFileName() }
     let tmpPath = path.join(options.tmpdir, options.tmpName)
+    if (options.memory) { tmpPath = ':memory:' }
+    delete options.memory
     return new Database(tmpPath, options)
   },
   tempSpatialDatabase: (config) => {
