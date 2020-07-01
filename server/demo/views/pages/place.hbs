@@ -91,6 +91,9 @@
                   {{#is this.role compare="mapshaper_position"}}
                   <i class="fa fa-drafting-compass"></i>
                   {{/is}}
+                  {{#is this.role compare="centerline"}}
+                  <i class="fa fa-bezier-curve"></i>
+                  {{/is}}
                 </span>
                 {{#contains (lowercase this.geom.type) "point"}}
                   <span class="tag is-light tooltip" data-tooltip="{{this.geom.coordinates}}">{{this.geom.type}}</span>
