@@ -1,12 +1,12 @@
-const _ = require('lodash')
 const Name = require('../../../../model/Name')
 const language = require('../config/language.json')
+const generic = require('../config/generic')
 
 // info about 'abrv': https://github.com/whosonfirst-data/whosonfirst-data/issues/1319
 function mapper (place, properties) {
-  // generic name properties
-  place.addName(new Name('und', 'default', false, _.get(properties, 'wof:name', '').trim()))
-  place.addName(new Name('und', 'default', true, _.get(properties, 'wof:abbreviation', '').trim()))
+  // generic name/abbreviation
+  place.addName(new Name('und', 'default', false, generic.name(properties)))
+  place.addName(new Name('und', 'default', true, generic.abbreviation(properties)))
 
   for (let attr in properties) {
     if (!attr.startsWith('name:') && !attr.startsWith('abrv:')) { continue }
