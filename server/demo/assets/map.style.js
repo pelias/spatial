@@ -20,6 +20,14 @@ mapStyle.place.style = function (feature) {
       dashArray: '4',
       fillOpacity: 0
     }
+  } else if (feature.geometry.type.indexOf('LineString') !== -1) {
+    return {
+      color: '#FF851B',
+      weight: 4,
+      opacity: 1,
+      dashArray: 12,
+      fillOpacity: 1
+    }
   }
   return {
     fillColor: '#FF851B',
@@ -41,6 +49,14 @@ mapStyle.minimap.style = function (feature) {
       opacity: 0.05,
       dashArray: '5',
       fillOpacity: 0
+    }
+  } else if (feature.geometry.type.indexOf('LineString') !== -1) {
+    return {
+      color: '#FF851B',
+      weight: 4,
+      opacity: 1,
+      dashArray: 12,
+      fillOpacity: 1
     }
   }
   return {
