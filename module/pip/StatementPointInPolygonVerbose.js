@@ -11,31 +11,20 @@ class StatementPeliasView extends SqliteStatement {
           place.id,
           place.type,
           (
-            MbrMinX( g3.geom ) || ',' || MbrMinY( g3.geom ) || ',' ||
-            MbrMaxX( g3.geom ) || ',' || MbrMaxY( g3.geom )
+            MbrMinX( envelope.geom ) || ',' || MbrMinY( envelope.geom ) || ',' ||
+            MbrMaxX( envelope.geom ) || ',' || MbrMaxY( envelope.geom )
           ) AS bounds,
           (
-            X( g2.geom ) || ',' || Y( g2.geom )
+            X( centroid.geom ) || ',' || Y( centroid.geom )
           ) AS centroid,
           (
             SELECT name
             FROM name
             WHERE source = place.source
             AND id = place.id
+            AND lang = 'und'
+            AND tag = 'default'
             AND abbr = 0
-            ORDER BY (
-              CASE
-                WHEN UPPER(lang) = 'ENG' THEN 1
-                WHEN UPPER(lang) = 'UND' THEN 2
-                ELSE 3
-              END
-            ), (
-              CASE
-                WHEN UPPER(tag) = 'PREFERRED' THEN 1
-                WHEN UPPER(tag) = 'DEFAULT' THEN 2
-                ELSE 3
-              END
-            )
             LIMIT 1
           ) AS name,
           (
@@ -56,20 +45,9 @@ class StatementPeliasView extends SqliteStatement {
             FROM name
             WHERE source = place.source
             AND id = place.id
+            AND lang = 'und'
+            AND tag = 'default'
             AND abbr = 1
-            ORDER BY (
-              CASE
-                WHEN UPPER(lang) = 'ENG' THEN 1
-                WHEN UPPER(lang) = 'UND' THEN 2
-                ELSE 3
-              END
-            ), (
-              CASE
-                WHEN UPPER(tag) = 'PREFERRED' THEN 1
-                WHEN UPPER(tag) = 'DEFAULT' THEN 2
-                ELSE 3
-              END
-            )
             LIMIT 1
           ) AS abbr,
           (
@@ -87,9 +65,9 @@ class StatementPeliasView extends SqliteStatement {
           ) AS abbrs
         FROM ${dbname}.point_in_polygon AS pip
         LEFT JOIN ${dbname}.place USING (source, id)
-        LEFT JOIN ${dbname}.geometry g1 USING (source, id)
-        LEFT JOIN ${dbname}.geometry g2 USING (source, id)
-        LEFT JOIN ${dbname}.geometry g3 USING (source, id)
+        LEFT JOIN ${dbname}.geometry boundary USING (source, id)
+        LEFT JOIN ${dbname}.geometry centroid USING (source, id)
+        LEFT JOIN ${dbname}.geometry envelope USING (source, id)
         WHERE search_frame = MakePoint( @lon, @lat, 4326 )
         AND INTERSECTS( pip.geom, MakePoint( @lon, @lat, 4326 ) )
         AND (
@@ -101,9 +79,9 @@ class StatementPeliasView extends SqliteStatement {
         )
         AND place.class = 'admin'
         AND place.id > 0 -- do not return planet or invalid placetypes
-        AND g1.role = 'boundary' AND g1.geom != ''
-        AND g2.role = 'centroid' AND g2.geom != ''
-        AND g3.role = 'envelope' AND g3.geom != ''
+        AND boundary.role = 'boundary' AND boundary.geom != ''
+        AND centroid.role = 'centroid' AND centroid.geom != ''
+        AND envelope.role = 'envelope' AND envelope.geom != ''
         ORDER BY place.type ASC
         LIMIT @limit
       `)
