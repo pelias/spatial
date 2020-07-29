@@ -65,9 +65,9 @@ class StatementPeliasView extends SqliteStatement {
           ) AS abbrs
         FROM ${dbname}.point_in_polygon AS pip
         LEFT JOIN ${dbname}.place USING (source, id)
-        LEFT JOIN ${dbname}.geometry boundary USING (source, id)
-        LEFT JOIN ${dbname}.geometry centroid USING (source, id)
-        LEFT JOIN ${dbname}.geometry envelope USING (source, id)
+        LEFT JOIN ${dbname}.geometry AS boundary USING (source, id)
+        LEFT JOIN ${dbname}.geometry AS centroid USING (source, id)
+        LEFT JOIN ${dbname}.geometry AS envelope USING (source, id)
         WHERE search_frame = MakePoint( @lon, @lat, 4326 )
         AND INTERSECTS( pip.geom, MakePoint( @lon, @lat, 4326 ) )
         AND (
