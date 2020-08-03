@@ -103,9 +103,9 @@ module.exports = function (req, res) {
   const service = req.app.locals.service
 
   // perform PIPs
-  console.time('hits took')
+  // console.time('hits took')
   let hits = service.module.pip.statement.pip.all(query)
-  console.timeEnd('hits took')
+  // console.timeEnd('hits took')
 
   if (_.isEmpty(hits)) {
     // send json
@@ -116,10 +116,10 @@ module.exports = function (req, res) {
   }
 
   // get hierarchies
-  console.time('hierarchy took')
+  // console.time('hierarchy took')
   const hierarchyRows = findImmediateParentsStmt(service, hits).all()
   const hierarchy = mapHierarchies(hierarchyRows)
-  console.timeEnd('hierarchy took')
+  // console.timeEnd('hierarchy took')
 
   // find all references IDs
   let references = _.uniqWith(
@@ -134,7 +134,7 @@ module.exports = function (req, res) {
   let names = {}
 
   // find place + geom info
-  console.time('info took')
+  // console.time('info took')
   // console.error(references)
   findPlaceInfoStmt(service, references).all(query)
     .forEach(row => {
@@ -145,7 +145,7 @@ module.exports = function (req, res) {
       // _.set(places, `${iden}.geometry.centroid`, row.centroid || undefined)
       // _.set(places, `${iden}.geometry.envelope`, row.envelope || undefined)
     })
-  console.timeEnd('info took')
+  // console.timeEnd('info took')
 
   // add default names
   // console.time('names took')
@@ -163,7 +163,7 @@ module.exports = function (req, res) {
   //   })
   // console.timeEnd('names took')
 
-  console.time('names took')
+  // console.time('names took')
   const rows = findDefaultPlaceNames(service, references, langs, tags).all()
   names = _.mapValues(
     _.groupBy(rows, identity),
@@ -180,7 +180,7 @@ module.exports = function (req, res) {
       }
     )
   )
-  console.timeEnd('names took')
+  // console.timeEnd('names took')
 
   // send json
   res.status(200).json({
