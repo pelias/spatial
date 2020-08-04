@@ -4,7 +4,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 # apt dependencies
 RUN apt-get update -y && \
   apt-get install -y build-essential autoconf libtool pkg-config && \
-  apt-get install -y libcurl4-gnutls-dev && \
+  apt-get install -y libcurl4-gnutls-dev libminizip-dev && \
   apt-get install -y curl unzip && \
   apt-get install -y fossil git-core && \
   rm -rf /var/lib/apt/lists/*
