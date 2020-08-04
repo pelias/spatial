@@ -37,7 +37,7 @@ tap.test('dependencies', (t) => {
   t.equals(res['sqlite_version()'], '3.31.1', `sqlite_version: ${res['sqlite_version()']}`)
 
   res = db.prepare(`SELECT spatialite_version()`).get()
-  t.equal(res['spatialite_version()'], '5.0.0-beta1', 'spatialite 5 beta1 required')
+  t.equal(res['spatialite_version()'], '5.0.0-RC1', 'spatialite 5 RC1 required')
 
   res = db.prepare(`SELECT spatialite_target_cpu()`).get()
   t.true(res['spatialite_target_cpu()'].startsWith('x86_64'), `spatialite_target_cpu: ${res['spatialite_target_cpu()']}`)
