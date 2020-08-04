@@ -55,6 +55,8 @@ npm run env_check
 
 ## Docker Runtime Environments
 
+> Push to the `runtime` branch to have Github Actions rebuild all runtime images & push them to Docker Hub
+
 ### Ubuntu Bionic (18.04) `pelias/spatial:runtime_ubuntu_bionic`
 
 ```bash

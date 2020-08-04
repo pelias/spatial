@@ -5,8 +5,8 @@ RUN echo "@edge http://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repo
 RUN apk update && \
   apk --no-cache --update upgrade musl && \
   apk add --upgrade --force-overwrite apk-tools@edge && \
-  apk add --update --force-overwrite autoconf automake gcc g++ libtool make musl-dev && \
-  apk add --update --force-overwrite curl-dev && \
+  apk add --update --force-overwrite autoconf automake gcc g++ libtool make musl-dev@edge && \
+  apk add --update --force-overwrite curl-dev minizip-dev && \
   apk add --update --force-overwrite bash curl file unzip && \
   apk add --update --force-overwrite fossil git && \
   rm -rf /var/cache/apk/*
