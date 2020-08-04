@@ -18,10 +18,21 @@ curl -L 'http://downloads.sourceforge.net/project/libpng/zlib/1.2.11/zlib-1.2.11
 # working directory
 cd zlib
 
-# configure build
+# configure zlib build
 ./configure --prefix="${RUNTIME}"
 
-# compile and install in runtime directory
+# compile and install zlib in runtime directory
+make -j8
+make install
+
+# install minizip
+cd contrib/minizip
+
+# configure minizip build
+autoreconf -i
+./configure --prefix="${RUNTIME}"
+
+# compile and install minizip in runtime directory
 make -j8
 make install
 
