@@ -14,7 +14,7 @@ FROM pelias/baseimage as better_sqlite3
 # this adds ~400MB to the image, so we build in a
 # separate image and only copy the files we need.
 RUN apt-get update -y
-RUN apt-get install -y clang
+RUN apt-get install -y clang python3 make
 
 # copy runtime
 COPY --from=runtime /opt/spatial /opt/spatial

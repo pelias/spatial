@@ -1,0 +1,13 @@
+name: Continuous Integration
+on: push
+jobs:
+  build-docker-images:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build Docker images
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          curl "https://raw.githubusercontent.com/pelias/ci-tools/master/build-docker-images.sh" | bash -
