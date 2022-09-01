@@ -28,6 +28,16 @@ class StatementPeliasView extends SqliteStatement {
             LIMIT 1
           ) AS name,
           (
+            SELECT name
+            FROM name
+            WHERE source = place.source
+            AND id = place.id
+            AND lang = @lang
+            AND tag IN ('default', 'preferred')
+            AND abbr = 0
+            LIMIT 1
+          ) AS name_localized,
+          (
             SELECT GROUP_CONCAT(name, CHAR(30))
             FROM (
               SELECT name
