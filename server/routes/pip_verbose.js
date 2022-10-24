@@ -1,6 +1,7 @@
 const util = require('./util')
 const iso6393 = require('iso-639-3')
 const language = {}
+const RECORD_SEPARATOR = String.fromCharCode(30)
 iso6393.filter(i => !!i.iso6391 && !!i.iso6393).forEach(i => { language[i.iso6391] = i.iso6393 })
 
 /**
@@ -13,13 +14,15 @@ module.exports = function (req, res) {
   var service = req.app.locals.service
 
   const lang = util.flatten(req.query.lang)
+  const sources = util.flatten(req.query.wofonly) ? ['wof'] : util.toSources(req.query.sources)
+
   // inputs
   let query = {
     lon: parseFloat(util.flatten(req.query.lon)),
     lat: parseFloat(util.flatten(req.query.lat)),
     limit: 1000,
     aliaslimit: parseInt(util.flatten(req.query.aliaslimit), 10) || 0,
-    wofonly: util.flatten(req.query.wofonly) ? 1 : 0,
+    sources: sources.length > 0 ? RECORD_SEPARATOR + sources.join(RECORD_SEPARATOR) + RECORD_SEPARATOR : '',
     lang: language[lang] || lang || 'und'
   }
 

@@ -7,6 +7,11 @@ var namePreference = {
   tag: ['PREFERRED']
 }
 
+const sourceAlias = {
+  'whosonfirst': 'wof',
+  'openstreetmap': 'osm'
+}
+
 function scoreName (name) {
   var score = 0
   var idx = {
@@ -42,6 +47,17 @@ module.exports = {
     })
 
     return names[0].name
+  },
+  toSources (sources) {
+    if (!_.isString(sources)) {
+      return []
+    }
+    return sources
+      .split(',')
+      .map(str => _.trim(str))
+      .filter(str => !_.isEmpty(str))
+      .map(str => _.toLower(str))
+      .map(str => sourceAlias[str] || str)
   }
 }
 

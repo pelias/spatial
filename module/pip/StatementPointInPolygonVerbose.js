@@ -82,8 +82,8 @@ class StatementPeliasView extends SqliteStatement {
         AND INTERSECTS( pip.geom, MakePoint( @lon, @lat, 4326 ) )
         AND (
           CASE
-            WHEN @wofonly <> 1 THEN 1
-            WHEN place.source = 'wof' THEN 1
+            WHEN @sources = '' THEN 1
+            WHEN @sources like '%' || CHAR(30) || place.source || CHAR(30) || '%' THEN 1
             ELSE 0
           END
         )
