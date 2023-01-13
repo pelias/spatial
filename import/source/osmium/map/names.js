@@ -41,6 +41,7 @@ function mapper (place, properties) {
       if (lang.length === 2) {
         let locales = new locale.Locales(match[2])
         let best = locales.best(allLocales)
+        if (best.defaulted) { continue }
         lang = language[best.language].iso6393
       }
 
