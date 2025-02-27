@@ -22,7 +22,7 @@ cd zlib
 ./configure --prefix="${RUNTIME}"
 
 # compile and install zlib in runtime directory
-make -j8
+make -j4
 make install
 
 # install minizip
@@ -33,7 +33,7 @@ autoreconf -i
 ./configure --prefix="${RUNTIME}"
 
 # compile and install minizip in runtime directory
-make -j8
+make -j4
 make install
 
 # clean up

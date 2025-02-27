@@ -25,10 +25,12 @@ cd icu/source
   --disable-debug \
   --disable-samples \
   --disable-tests \
+  --disable-tools \
+  --disable-extras \
   --disable-static
 
 # compile and install in runtime directory
-make -j8
+make -j4
 make install
 
 # clean up

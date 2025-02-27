@@ -5,16 +5,16 @@
 # 4. Produce a minimally sized image for distribution
 
 # 1. ------------------------------------------------
-FROM pelias/spatial:runtime_ubuntu_bionic as runtime
+FROM pelias/spatial:runtime_ubuntu_bionic AS runtime
 
 # 2. ------------------------------------------------
-FROM pelias/baseimage as better_sqlite3
+FROM pelias/baseimage AS better_sqlite3
 
 # we require clang++ for compiling better-sqlite3
 # this adds ~400MB to the image, so we build in a
 # separate image and only copy the files we need.
 RUN apt-get update -y
-RUN apt-get install -y clang python3 make
+RUN apt-get install -y clang python3 build-essential
 
 # copy runtime
 COPY --from=runtime /opt/spatial /opt/spatial
@@ -27,7 +27,7 @@ WORKDIR /code
 RUN bin/compile_better_sqlite3
 
 # 3. ------------------------------------------------
-FROM pelias/baseimage as testing
+FROM pelias/baseimage AS testing
 
 # copy runtime
 COPY --from=runtime /opt/spatial /opt/spatial

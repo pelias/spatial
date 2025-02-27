@@ -1,5 +1,7 @@
 name: 'build & push: runtime_alpine_3_10'
 on:
+  schedule:
+    - cron: '0 0 1 * *'
   push:
     branches:
       - runtime
@@ -7,14 +9,34 @@ jobs:
   push_to_registry:
     name: 'build & push: runtime_alpine_3_10'
     runs-on: ubuntu-latest
+    timeout-minutes: 360
     steps:
+      - name: Free Disk Space
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: true
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
       - name: Check out the repo
-        uses: actions/checkout@v2
-      - name: runtime_alpine_3_10
-        uses: docker/build-push-action@v1
+        uses: actions/checkout@v4
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: pelias/spatial
-          dockerfile: runtime/runtime.alpine.3.10.Dockerfile
-          tags: runtime_alpine_3_10
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Build Docker Images
+        timeout-minutes: 360
+        env:
+          TAG: runtime_alpine_3_10
+          FILE: runtime/runtime.debian.buster.Dockerfile
+        run: |
+          docker buildx create --use --bootstrap --platform='linux/amd64,linux/arm64' --name 'multi-platform-builder'
+          docker buildx build --platform 'linux/amd64' -f $FILE -t pelias/spatial:$TAG .
+          docker buildx build --platform 'linux/arm64' -f $FILE -t pelias/spatial:$TAG .
+          docker buildx build --platform 'linux/arm64,linux/amd64' -f $FILE -t pelias/spatial:$TAG --push .

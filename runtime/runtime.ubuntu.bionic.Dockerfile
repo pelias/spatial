@@ -1,4 +1,4 @@
-FROM ubuntu:bionic as build
+FROM ubuntu:bionic AS build
 ENV DEBIAN_FRONTEND=noninteractive
 
 # apt dependencies

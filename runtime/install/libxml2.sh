@@ -12,7 +12,7 @@ cd /tmp
 rm -rf libxml2 && mkdir -p libxml2
 
 # download release and decompress it
-curl -L 'ftp://xmlsoft.org/libxml2/libxml2-2.9.10.tar.gz' \
+curl -L 'ftp://xmlsoft.org/libxml2/libxml2-2.9.12.tar.gz' \
   | tar -xz --strip-components=1 -C libxml2
 
 # working directory
@@ -25,7 +25,7 @@ cd libxml2
   --without-python
 
 # compile and install in runtime directory
-make -j8
+make -j4
 make install-strip
 
 # clean up

@@ -22,11 +22,10 @@ cd 'libspatialite'
 export CPPFLAGS="-I${RUNTIME}/include"
 export LDFLAGS="-L${RUNTIME}/lib"
 export LDFLAGS="${LDFLAGS} -Wl,-rpath,${RUNTIME}/lib" # set 'rpath'
-export LIBS='-ldl'
+export PKG_CONFIG_PATH="${RUNTIME}/lib/pkgconfig"
 
-# link libxml2
-export LIBXML2_CFLAGS="-I${RUNTIME}/include/libxml2"
-export LIBXML2_LIBS="-L${RUNTIME}/lib -lxml2"
+# generate config.guess
+autoreconf -fi
 
 # configure build
 ./configure \
@@ -35,6 +34,9 @@ export LIBXML2_LIBS="-L${RUNTIME}/lib -lxml2"
   --enable-rttopo=yes \
   --enable-proj=yes \
   --enable-geos=yes \
+  --disable-geos390 \
+  --disable-geos3100 \
+  --disable-geos3110 \
   --enable-gcp=yes \
   --enable-libxml2=yes \
   --disable-freexl \
@@ -42,7 +44,7 @@ export LIBXML2_LIBS="-L${RUNTIME}/lib -lxml2"
   --enable-static=no
 
 # compile and install in runtime directory
-make -j8
+make -j4
 make install-strip
 
 ## symlink 'mod_spatialite.dylib' on Mac

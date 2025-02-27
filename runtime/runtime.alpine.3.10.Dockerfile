@@ -1,11 +1,10 @@
-FROM alpine:3.10 as build
+FROM alpine:3.10 AS build
 
 # apk dependencies
-RUN echo "@edge http://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories
 RUN apk update && \
   apk --no-cache --update upgrade musl && \
-  apk add --upgrade --force-overwrite apk-tools@edge && \
-  apk add --update --force-overwrite autoconf automake gcc g++ libtool make musl-dev@edge && \
+  apk add --upgrade --force-overwrite apk-tools && \
+  apk add --update --force-overwrite autoconf automake gcc g++ libtool make musl-dev cmake && \
   apk add --update --force-overwrite curl-dev && \
   apk add --update --force-overwrite bash curl file unzip && \
   apk add --update --force-overwrite fossil git && \
