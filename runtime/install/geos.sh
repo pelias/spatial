@@ -24,7 +24,7 @@ cd geos
   --enable-static=no
 
 # compile and install in runtime directory
-make -j8
+make -j4
 make install-strip
 
 # clean up

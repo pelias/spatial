@@ -20,6 +20,9 @@ export CPPFLAGS="-I${RUNTIME}/include"
 export LDFLAGS="-L${RUNTIME}/lib"
 export LIBS="-ldl"
 
+# generate config.guess
+autoreconf -fi
+
 # configure build
 ./configure \
   --prefix="${RUNTIME}" \
@@ -27,7 +30,7 @@ export LIBS="-ldl"
   --enable-static=no
 
 # compile and install in runtime directory
-make -j8
+make -j4
 make install-strip
 
 # clean up

@@ -12,7 +12,7 @@ cd /tmp
 rm -rf proj7 && mkdir -p proj7
 
 # download release and decompress it
-curl -L 'https://download.osgeo.org/proj/proj-7.0.1.tar.gz' \
+curl -L 'https://download.osgeo.org/proj/proj-7.2.1.tar.gz' \
   | tar -xz --strip-components=1 -C proj7
 
 # working directory
@@ -35,7 +35,7 @@ export TIFF_LIBS="-L${RUNTIME}/lib -ltiff"
   --enable-static=no
 
 # compile and install in runtime directory
-make -j8
+make -j4
 make install-strip
 
 # clean up

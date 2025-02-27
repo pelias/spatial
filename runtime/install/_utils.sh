@@ -13,10 +13,10 @@ function gaia_download(){
 function gaia_clone(){
   REPO="$1"
   rm -rf "${REPO}" "${REPO}.fossil"*
-  USER='me' fossil clone https://www.gaia-gis.it/fossil/$REPO $REPO.fossil
+  USER='me' fossil clone https://www.gaia-gis.it/fossil/$REPO $REPO.fossil | wc -l
   mkdir -p "${REPO}"
   cd "${REPO}"
-  fossil open "../${REPO}.fossil"
+  fossil open "../${REPO}.fossil" | wc -l
   cd -
   rm -rf "${REPO}.fossil"*
 }

@@ -71,7 +71,7 @@ export LDFLAGS="${LDFLAGS} -Wl,-rpath,${RUNTIME}/lib" # set 'rpath'
   --disable-debug
 
 # compile and install in runtime directory
-make -j8
+make -j4
 make install-strip
 
 ## generate DYLIB shared lib on Mac

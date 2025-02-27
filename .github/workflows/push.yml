@@ -1,5 +1,10 @@
 name: Continuous Integration
-on: push
+on:
+  schedule:
+    - cron: '0 0 2 * *'
+  push:
+    branches-ignore:
+      - runtime
 jobs:
   build-docker-images:
     runs-on: ubuntu-latest
