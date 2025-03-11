@@ -12,7 +12,7 @@ cd /tmp
 rm -rf sqlite && mkdir -p sqlite
 
 # download release and decompress it
-curl -L 'https://www.sqlite.org/2020/sqlite-autoconf-3310100.tar.gz' \
+curl -L 'https://www.sqlite.org/2025/sqlite-autoconf-3480000.tar.gz' \
   | tar -xz --strip-components=1 -C sqlite
 
 # working directory
@@ -44,6 +44,18 @@ cat << EOF > sqlite3.patch.c
 #define SQLITE_ENABLE_ICU 1
 #define SQLITE_INTROSPECTION_PRAGMAS 1
 #define SQLITE_SOUNDEX 1
+#define HAVE_INT16_T 1
+#define HAVE_INT32_T 1
+#define HAVE_INT8_T 1
+#define HAVE_STDINT_H 1
+#define HAVE_UINT16_T 1
+#define HAVE_UINT32_T 1
+#define HAVE_UINT8_T 1
+#define HAVE_USLEEP 1
+#define SQLITE_ENABLE_DBSTAT_VTAB 1
+#define SQLITE_ENABLE_DESERIALIZE 1
+#define SQLITE_ENABLE_MATH_FUNCTIONS 1
+#define SQLITE_TRACE_SIZE_LIMIT 32
 EOF
 
 # append sqlite3.c

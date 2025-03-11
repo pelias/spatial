@@ -1,4 +1,4 @@
 #!/bin/bash
 set -o pipefail
 
-npx tap --no-cov --reporter=specy test/environment.js
+npx tap --no-cov --reporter=classic test/environment.js

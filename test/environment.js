@@ -1,3 +1,4 @@
+const os = require('os')
 const tap = require('tap')
 const common = require('./common')
 const semver = require('semver')
@@ -14,8 +15,6 @@ tap.test('compile_options', (t) => {
   t.notEqual(pragmas.ENABLE_RTREE, '0', 'ENABLE_RTREE != 0')
   t.true(pragmas.hasOwnProperty('ENABLE_COLUMN_METADATA'), 'ENABLE_COLUMN_METADATA')
   t.notEqual(pragmas.ENABLE_COLUMN_METADATA, '0', 'ENABLE_COLUMN_METADATA != 0')
-  t.true(pragmas.hasOwnProperty('ENABLE_JSON1'), 'ENABLE_JSON1')
-  t.notEqual(pragmas.ENABLE_JSON1, '0', 'ENABLE_JSON1 != 0')
   t.end()
 })
 
@@ -34,13 +33,13 @@ tap.test('dependencies', (t) => {
   let res, actual, expected
 
   res = db.prepare(`SELECT sqlite_version()`).get()
-  t.equals(res['sqlite_version()'], '3.31.1', `sqlite_version: ${res['sqlite_version()']}`)
+  t.equals(res['sqlite_version()'], '3.48.0', `sqlite_version: ${res['sqlite_version()']}`)
 
   res = db.prepare(`SELECT spatialite_version()`).get()
-  t.equal(res['spatialite_version()'], '5.0.0-RC1', 'spatialite 5 RC1 required')
+  t.equal(res['spatialite_version()'], '5.1.1-rc0', 'spatialite 5 RC1 required')
 
   res = db.prepare(`SELECT spatialite_target_cpu()`).get()
-  t.true(res['spatialite_target_cpu()'].startsWith('x86_64'), `spatialite_target_cpu: ${res['spatialite_target_cpu()']}`)
+  t.true(res['spatialite_target_cpu()'].startsWith(os.arch()), `spatialite_target_cpu: ${res['spatialite_target_cpu()']}`)
 
   // res = db.prepare(`SELECT freexl_version()`).get()
   // console.error(res)
@@ -55,7 +54,7 @@ tap.test('dependencies', (t) => {
 
   res = db.prepare(`SELECT geos_version()`).get()
   actual = semver.coerce(res['geos_version()'])
-  expected = semver.coerce('3.8.1-CAPI-1.13.3')
+  expected = semver.coerce('3.13.1')
   t.true(semver.gte(actual, expected), `geos_version: ${res['geos_version()']}`)
 
   res = db.prepare(`SELECT rttopo_version()`).get()

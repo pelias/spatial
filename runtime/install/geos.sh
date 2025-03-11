@@ -12,20 +12,23 @@ cd /tmp
 rm -rf geos && mkdir -p geos
 
 # download release and decompress it
-curl -L 'http://download.osgeo.org/geos/geos-3.8.1.tar.bz2' \
+curl -L 'http://download.osgeo.org/geos/geos-3.13.1.tar.bz2' \
   | tar -xj --strip-components=1 -C geos
 
 # working directory
-cd geos
+mkdir geos/build
+cd geos/build
 
 # configure build
-./configure \
-  --prefix="${RUNTIME}" \
-  --enable-static=no
+cmake \
+  -DCMAKE_INSTALL_PREFIX="${RUNTIME}" \
+  -DBUILD_BENCHMARKS=OFF \
+  -DBUILD_TESTING=OFF \
+  ..
 
 # compile and install in runtime directory
 make -j4
-make install-strip
+make install
 
 # clean up
 rm -rf /tmp/geos

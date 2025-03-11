@@ -1,4 +1,4 @@
 #!/bin/bash
 set -o pipefail
 
-npx tap -J --no-cov --test-ignore='^test/'
+npx tap -J --no-cov --reporter=classic --test-ignore='^test/'
