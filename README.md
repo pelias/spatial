@@ -93,8 +93,6 @@ docker run --rm -i \
 
 # Local Development
 
-Set up your local [runtime environment](https://github.com/pelias/spatial/tree/master/runtime).
-
 ```bash
 # run environment checks
 npm run env_check

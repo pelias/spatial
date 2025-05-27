@@ -8,7 +8,6 @@
   "main": "index.js",
   "bin": "./bin/spatial",
   "scripts": {
-    "postinstall": "./bin/compile_better_sqlite3",
     "validate": "npm ls",
     "prune": "npm prune",
     "build": "docker build -t 'pelias/spatial' .",
@@ -34,7 +33,7 @@
   "dependencies": {
     "@mapbox/polyline": "^1.1.1",
     "@turf/buffer": "^5.1.5",
-    "better-sqlite3": "^7.0.1",
+    "better-sqlite3": "^11.10.0",
     "bindings": "^1.5.0",
     "csv-parse": "^4.8.2",
     "express": "^4.17.1",
