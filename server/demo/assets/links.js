@@ -42,15 +42,18 @@ function decorateLink (el) {
 }
 
 // updates via AJAX
-$(document).on('DOMNodeInserted', function (e) {
-  var el = $(e.target)
-  if (el.prop('tagName') === 'A') {
-    decorateLink(el)
-  }
-  el.find('a').each(function (e) {
-    decorateLink($(this))
+const observer = new MutationObserver(mutationList => {
+  mutationList.filter(m => m.type === 'childList').forEach(e => {
+    var el = $(e.target)
+    if (el.prop('tagName') === 'A') {
+      decorateLink(el)
+    }
+    el.find('a').each(function (e) {
+      decorateLink($(this))
+    })
   })
 })
+observer.observe(document, {childList: true, subtree: true})
 
 // initial load
 $(document).on('DOMContentLoaded', function (e) {
