@@ -4,8 +4,8 @@ const spec = require('./whosonfirst-spec')
 // exports
 tap.test('exports', (t) => {
   t.equal(typeof spec.spec, 'object')
-  t.true(spec.ids instanceof Map)
-  t.true(spec.names instanceof Map)
+  t.ok(spec.ids instanceof Map)
+  t.ok(spec.names instanceof Map)
   t.equal(typeof spec.parents, 'function')
   t.end()
 })
@@ -38,7 +38,7 @@ tap.test('getters', (t) => {
 
 // rank
 tap.test('rank', (t) => {
-  t.true(Array.from(spec.ids.values()).every(pt => pt.hasOwnProperty('rank')))
+  t.ok(Array.from(spec.ids.values()).every(pt => pt.hasOwnProperty('rank')))
   t.equal(spec.names.get('planet').rank, 0)
   t.equal(spec.names.get('country').rank, 3)
   t.equal(spec.names.get('locality').rank, 10)

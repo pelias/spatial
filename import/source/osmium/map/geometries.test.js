@@ -8,7 +8,7 @@ tap.test('mapper: geometry empty', (t) => {
   let p = new Place()
   map(p, {})
 
-  t.equals(p.geometry.length, 0)
+  t.equal(p.geometry.length, 0)
   t.end()
 })
 tap.test('mapper: maps polygon', (t) => {
@@ -38,8 +38,8 @@ tap.test('mapper: maps polygon', (t) => {
       ]
     }
   })
-  t.equals(p.geometry.length, 1)
-  t.true(p.geometry[0] instanceof Geometry)
+  t.equal(p.geometry.length, 1)
+  t.ok(p.geometry[0] instanceof Geometry)
   t.equal(p.geometry[0].geometry.constructor.name.toUpperCase(), 'POLYGON')
   t.equal(p.geometry[0].role, 'boundary')
   t.end()
@@ -55,11 +55,11 @@ tap.test('mapper: maps point', (t) => {
       ]
     }
   })
-  t.equals(p.geometry.length, 2)
-  t.true(p.geometry[0] instanceof Geometry)
+  t.equal(p.geometry.length, 2)
+  t.ok(p.geometry[0] instanceof Geometry)
   t.equal(p.geometry[0].geometry.constructor.name.toUpperCase(), 'POINT')
   t.equal(p.geometry[0].role, 'centroid')
-  t.true(p.geometry[1] instanceof Geometry)
+  t.ok(p.geometry[1] instanceof Geometry)
   t.equal(p.geometry[1].geometry.constructor.name.toUpperCase(), 'POLYGON')
   t.equal(p.geometry[1].role, 'buffer')
   t.end()

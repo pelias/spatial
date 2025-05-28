@@ -22,7 +22,7 @@ tap.test('function', (t) => {
   stmt.create(db)
 
   // table empty
-  t.false(db.prepare(`SELECT * FROM shard`).all().length, 'prior state')
+  t.notOk(db.prepare(`SELECT * FROM shard`).all().length, 'prior state')
 
   // insert data
   let info = stmt.run({

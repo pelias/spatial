@@ -35,7 +35,7 @@ tap.test('function', (t) => {
   fetch.create(db)
 
   // table empty
-  t.false(db.prepare(`SELECT * FROM hierarchy`).all().length, 'prior state')
+  t.notOk(db.prepare(`SELECT * FROM hierarchy`).all().length, 'prior state')
 
   // insert data
   insert.run({

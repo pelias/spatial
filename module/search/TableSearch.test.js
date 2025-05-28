@@ -9,7 +9,7 @@ tap.test('create & drop', (t) => {
   let introspect = new SqliteIntrospect(db)
 
   // table does not exist
-  t.false(introspect.tables().includes('search'), 'prior state')
+  t.notOk(introspect.tables().includes('search'), 'prior state')
 
   // set up name module
   let name = new NameModule(db)
@@ -20,13 +20,13 @@ tap.test('create & drop', (t) => {
   search.setup()
 
   // table exists
-  t.true(introspect.tables().includes('search'), 'create')
+  t.ok(introspect.tables().includes('search'), 'create')
 
   // drop table
   search.table.search.drop(db)
 
   // table does not exist
-  t.false(introspect.tables().includes('search'), 'drop')
+  t.notOk(introspect.tables().includes('search'), 'drop')
 
   t.end()
 })

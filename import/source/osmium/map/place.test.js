@@ -16,7 +16,7 @@ tap.test('mapper: maps identity & ontology', (t) => {
       'place': 'village'
     }
   })
-  t.true(place instanceof Place)
+  t.ok(place instanceof Place)
   t.equal(place.identity.source, 'osm')
   t.equal(place.identity.id, 'relation:100')
   t.equal(place.ontology.class, 'admin')
@@ -31,7 +31,7 @@ tap.test('mapper: ontology type - trim & lowercase', (t) => {
       'place': ' \tViLLage\n'
     }
   })
-  t.true(place instanceof Place)
+  t.ok(place instanceof Place)
   t.equal(place.identity.source, 'osm')
   t.equal(place.identity.id, 'relation:100')
   t.equal(place.ontology.class, 'admin')
@@ -46,7 +46,7 @@ tap.test('mapper: ontology type - replace spaces with underscores', (t) => {
       'place': ' ViLLage  SquAre '
     }
   })
-  t.true(place instanceof Place)
+  t.ok(place instanceof Place)
   t.equal(place.identity.source, 'osm')
   t.equal(place.identity.id, 'relation:100')
   t.equal(place.ontology.class, 'admin')
@@ -61,7 +61,7 @@ tap.test('mapper: ontology type - multivalue', (t) => {
       'place': 'village; square'
     }
   })
-  t.true(place instanceof Place)
+  t.ok(place instanceof Place)
   t.equal(place.identity.source, 'osm')
   t.equal(place.identity.id, 'relation:100')
   t.equal(place.ontology.class, 'admin')
@@ -75,7 +75,7 @@ tap.test('mapper: maps identity & unknown ontology', (t) => {
       '@id': '100'
     }
   })
-  t.true(place instanceof Place)
+  t.ok(place instanceof Place)
   t.equal(place.identity.source, 'osm')
   t.equal(place.identity.id, 'relation:100')
   t.equal(place.ontology.class, 'admin')
@@ -90,7 +90,7 @@ tap.test('mapper: derive ontology type from "landuse" tag', (t) => {
       'landuse': 'example_landuse_tag'
     }
   })
-  t.true(place instanceof Place)
+  t.ok(place instanceof Place)
   t.equal(place.identity.source, 'osm')
   t.equal(place.identity.id, 'relation:100')
   t.equal(place.ontology.class, 'admin')
@@ -105,7 +105,7 @@ tap.test('mapper: derive ontology type from "landuse" tag - multivalue', (t) => 
       'landuse': 'example_landuse_tag; example_landuse_tag2'
     }
   })
-  t.true(place instanceof Place)
+  t.ok(place instanceof Place)
   t.equal(place.identity.source, 'osm')
   t.equal(place.identity.id, 'relation:100')
   t.equal(place.ontology.class, 'admin')
@@ -120,7 +120,7 @@ tap.test('mapper: derive ontology type from "boundary" tag', (t) => {
       'boundary': 'example_boundary_tag'
     }
   })
-  t.true(place instanceof Place)
+  t.ok(place instanceof Place)
   t.equal(place.identity.source, 'osm')
   t.equal(place.identity.id, 'relation:100')
   t.equal(place.ontology.class, 'admin')
@@ -135,7 +135,7 @@ tap.test('mapper: derive ontology type from "boundary" tag - multivalue', (t) =>
       'boundary': 'example_boundary_tag; example_boundary_tag2'
     }
   })
-  t.true(place instanceof Place)
+  t.ok(place instanceof Place)
   t.equal(place.identity.source, 'osm')
   t.equal(place.identity.id, 'relation:100')
   t.equal(place.ontology.class, 'admin')
@@ -152,7 +152,7 @@ tap.test('mapper: prefer "place" over other tags', (t) => {
       'boundary': 'example_boundary_tag'
     }
   })
-  t.true(place instanceof Place)
+  t.ok(place instanceof Place)
   t.equal(place.identity.source, 'osm')
   t.equal(place.identity.id, 'relation:100')
   t.equal(place.ontology.class, 'admin')
@@ -168,7 +168,7 @@ tap.test('mapper: prefer "landuse" over "boundary"', (t) => {
       'boundary': 'example_boundary_tag'
     }
   })
-  t.true(place instanceof Place)
+  t.ok(place instanceof Place)
   t.equal(place.identity.source, 'osm')
   t.equal(place.identity.id, 'relation:100')
   t.equal(place.ontology.class, 'admin')
@@ -184,7 +184,7 @@ tap.test('mapper: maps geometry', (t) => {
     },
     geometry: require('../../../../test/fixture/geojson.triangle')
   })
-  t.true(place instanceof Place)
+  t.ok(place instanceof Place)
   t.equal(place.geometry.length, 1)
   t.equal(place.geometry[0].geometry.constructor.name.toUpperCase(), 'POLYGON')
   t.equal(place.geometry[0].role, 'boundary')

@@ -8,7 +8,7 @@ tap.test('mapper: geometry empty', (t) => {
   let p = new Place()
   map(p, {})
 
-  t.equals(p.geometry.length, 0)
+  t.equal(p.geometry.length, 0)
   t.end()
 })
 tap.test('mapper: maps linestring', (t) => {
@@ -32,8 +32,8 @@ tap.test('mapper: maps linestring', (t) => {
       ]
     }
   })
-  t.equals(p.geometry.length, 1)
-  t.true(p.geometry[0] instanceof Geometry)
+  t.equal(p.geometry.length, 1)
+  t.ok(p.geometry[0] instanceof Geometry)
   t.equal(p.geometry[0].geometry.constructor.name.toUpperCase(), 'LINESTRING')
   t.equal(p.geometry[0].role, 'centerline')
   t.end()

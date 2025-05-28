@@ -15,7 +15,7 @@ tap.test('create & drop', (t) => {
   stmt.create(db)
 
   // table empty
-  t.false(db.prepare(`SELECT * FROM property`).all().length, 'prior state')
+  t.notOk(db.prepare(`SELECT * FROM property`).all().length, 'prior state')
 
   // insert data
   let info = stmt.run({

@@ -8,20 +8,20 @@ tap.test('create & drop', (t) => {
   let introspect = new SqliteIntrospect(db)
 
   // table does not exist
-  t.false(introspect.tables().includes('place'), 'prior state')
+  t.notOk(introspect.tables().includes('place'), 'prior state')
 
   // setup module
   let mod = new PlaceModule(db)
   mod.setup()
 
   // table exists
-  t.true(introspect.tables().includes('place'), 'create')
+  t.ok(introspect.tables().includes('place'), 'create')
 
   // drop table
   mod.table.place.drop(db)
 
   // table does not exist
-  t.false(introspect.tables().includes('place'), 'drop')
+  t.notOk(introspect.tables().includes('place'), 'drop')
 
   t.end()
 })

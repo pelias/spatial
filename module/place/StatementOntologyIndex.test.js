@@ -19,7 +19,7 @@ tap.test('functional - create nested index of whole ontology', (t) => {
   ontologyIndex.create(db)
 
   // table empty
-  t.false(db.prepare(`SELECT * FROM place`).all().length, 'prior state')
+  t.notOk(db.prepare(`SELECT * FROM place`).all().length, 'prior state')
 
   // insert data
   insert.run({

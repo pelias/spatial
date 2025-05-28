@@ -20,7 +20,7 @@ tap.test('mapper: default ontology type', (t) => {
       'names': ['exampleName']
     }
   })
-  t.true(place instanceof Place)
+  t.ok(place instanceof Place)
   t.equal(place.identity.source, '0sv')
   t.equal(place.identity.id, 'exampleID')
   t.equal(place.ontology.class, 'street')
@@ -35,7 +35,7 @@ tap.test('mapper: maps identity & ontology', (t) => {
       'names': ['exampleName']
     }
   })
-  t.true(place instanceof Place)
+  t.ok(place instanceof Place)
   t.equal(place.identity.source, '0sv')
   t.equal(place.identity.id, 'exampleID')
   t.equal(place.ontology.class, 'street')

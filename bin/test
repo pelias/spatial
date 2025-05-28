@@ -1,4 +1,0 @@
-#!/bin/bash
-set -o pipefail
-
-npx tap -J --no-cov --test-ignore='^test/'

@@ -11,9 +11,9 @@
     "validate": "npm ls",
     "prune": "npm prune",
     "build": "docker build -t 'pelias/spatial' .",
-    "test": "./bin/test",
+    "test": "tap --disable-coverage test",
     "coverage": "./bin/coverage",
-    "env_check": "./bin/env_check",
+    "env_check": "tap --disable-coverage test/environment.js",
     "start": "./bin/start",
     "server": "./bin/start",
     "format_check": "./node_modules/standard/bin/cmd.js",
@@ -56,7 +56,7 @@
     "precommit-hook": "^3.0.0",
     "semver": "^6.3.0",
     "standard": "^12.0.1",
-    "tap": "^14.10.6"
+    "tap": "^21.1.0"
   },
   "standard": {
     "ignore": [

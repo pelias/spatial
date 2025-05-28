@@ -13,20 +13,20 @@ tap.test('create & drop', (t) => {
   table.create(db)
 
   // column does not exist
-  t.false(introspect.views('hierarchy_insert_proxy').length, 'prior state')
+  t.notOk(introspect.views('hierarchy_insert_proxy').length, 'prior state')
 
   // create index
   let index = new ViewInsertProxy()
   index.create(db)
 
   // column exists
-  t.true(introspect.views('hierarchy_insert_proxy').length, 'create')
+  t.ok(introspect.views('hierarchy_insert_proxy').length, 'create')
 
   // drop index
   index.drop(db)
 
   // column does not exist
-  t.false(introspect.views('hierarchy_insert_proxy').length, 'drop')
+  t.notOk(introspect.views('hierarchy_insert_proxy').length, 'drop')
 
   t.end()
 })

@@ -23,20 +23,20 @@ tap.test('create & drop', (t) => {
   view.create(db)
 
   // trigger does not exist
-  t.false(introspect.triggers('hierarchy_insert_proxy').length, 'prior state')
+  t.notOk(introspect.triggers('hierarchy_insert_proxy').length, 'prior state')
 
   // create trigger
   let trigger = new TriggerOnInsert()
   trigger.create(db)
 
   // trigger exists
-  t.true(introspect.triggers('hierarchy_insert_proxy').length, 'create')
+  t.ok(introspect.triggers('hierarchy_insert_proxy').length, 'create')
 
   // drop trigger
   trigger.drop(db)
 
   // trigger does not exist
-  t.false(introspect.triggers('hierarchy_insert_proxy').length, 'drop')
+  t.notOk(introspect.triggers('hierarchy_insert_proxy').length, 'drop')
 
   t.end()
 })

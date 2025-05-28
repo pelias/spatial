@@ -9,7 +9,7 @@ tap.test('create & drop', (t) => {
   let introspect = new SqliteIntrospect(db)
 
   // table does not exist
-  t.false(introspect.tables().includes('shard'), 'prior state')
+  t.notOk(introspect.tables().includes('shard'), 'prior state')
 
   // set up geometry module
   let geometry = new GeometryModule(db)
@@ -20,13 +20,13 @@ tap.test('create & drop', (t) => {
   shard.setup()
 
   // table exists
-  t.true(introspect.tables().includes('shard'), 'create')
+  t.ok(introspect.tables().includes('shard'), 'create')
 
   // drop table
   shard.table.shard.drop(db)
 
   // table does not exist
-  t.false(introspect.tables().includes('shard'), 'drop')
+  t.notOk(introspect.tables().includes('shard'), 'drop')
 
   t.end()
 })
