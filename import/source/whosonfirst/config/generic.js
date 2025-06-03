@@ -1,4 +1,5 @@
 const _ = require('lodash')
+const iso3166 = require('iso3166-1')
 
 /**
  * This file provides some convenience functions for finding the 'generic name'
@@ -38,6 +39,13 @@ function getName (properties) {
   if (name) { return name.trim() }
 }
 
+function toIso3Abbreviation (abbr, placetype) {
+  if ((placetype === 'country' || placetype === 'dependency') && iso3166.is2(abbr)) {
+    return iso3166.to3(abbr)
+  }
+  return abbr
+}
+
 // convenience function to find a generic abbreviation for the place
 function getAbbreviation (properties) {
   const placeType = _.get(properties, 'wof:placetype')
@@ -48,18 +56,18 @@ function getAbbreviation (properties) {
 
   // use the 3 letter country code for 'country' placetypes
   if (placeType === 'country' && countryCode) {
-    return countryCode.trim()
+    return toIso3Abbreviation(countryCode.trim(), placeType)
   }
 
   // use shortcode
-  if (shortCode) { return shortCode.trim() }
+  if (shortCode) { return toIso3Abbreviation(shortCode.trim(), placeType) }
 
   // use abbreviation
-  if (abbreviation) { return abbreviation.trim() }
+  if (abbreviation) { return toIso3Abbreviation(abbreviation.trim(), placeType) }
 
   // support the deprecated 'wof:country' field
   if (placeType === 'dependency' && country) {
-    return country.trim()
+    return toIso3Abbreviation(country.trim(), placeType)
   }
 }
 
