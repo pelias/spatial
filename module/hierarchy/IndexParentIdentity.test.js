@@ -13,20 +13,20 @@ tap.test('create & drop', (t) => {
   table.create(db)
 
   // index does not exist
-  t.false(introspect.indices('hierarchy').length, 'prior state')
+  t.notOk(introspect.indices('hierarchy').length, 'prior state')
 
   // create index
   let index = new IndexParentIdentity()
   index.create(db)
 
   // index exists
-  t.true(introspect.indices('hierarchy').length, 'create')
+  t.ok(introspect.indices('hierarchy').length, 'create')
 
   // drop index
   index.drop(db)
 
   // index does not exist
-  t.false(introspect.indices('hierarchy').length, 'drop')
+  t.notOk(introspect.indices('hierarchy').length, 'drop')
 
   t.end()
 })

@@ -16,20 +16,20 @@ tap.test('create & drop', (t) => {
   name.setup()
 
   // trigger does not exist
-  t.false(introspect.triggers('name').filter(filter).length, 'prior state')
+  t.notOk(introspect.triggers('name').filter(filter).length, 'prior state')
 
   // create trigger
   let trigger = new TriggerSearchSync()
   trigger.create(db)
 
   // trigger exists
-  t.equals(introspect.triggers('name').filter(filter).length, 3, 'create')
+  t.equal(introspect.triggers('name').filter(filter).length, 3, 'create')
 
   // drop trigger
   trigger.drop(db)
 
   // trigger does not exist
-  t.false(introspect.triggers('name').filter(filter).length, 'drop')
+  t.notOk(introspect.triggers('name').filter(filter).length, 'drop')
 
   t.end()
 })

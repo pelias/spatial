@@ -15,7 +15,7 @@ tap.test('function', (t) => {
   search.setup()
 
   // table empty
-  t.false(db.prepare(`SELECT * FROM name`).all().length, 'prior state')
+  t.notOk(db.prepare(`SELECT * FROM name`).all().length, 'prior state')
 
   // insert data
   name.statement.insert.run({

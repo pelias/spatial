@@ -20,14 +20,14 @@ tap.test('mapper: properties empty', (t) => {
   let p = new Place(fixture.locality.identity, fixture.locality.ontology)
   map(p, {})
 
-  t.equals(p.hierarchy.length, 0)
+  t.equal(p.hierarchy.length, 0)
   t.end()
 })
 tap.test('mapper: hierarchies array empty', (t) => {
   let p = new Place(fixture.locality.identity, fixture.locality.ontology)
   map(p, { 'wof:hierarchy': [] })
 
-  t.equals(p.hierarchy.length, 0)
+  t.equal(p.hierarchy.length, 0)
   t.end()
 })
 tap.test('mapper: single hierarchy', (t) => {
@@ -42,11 +42,11 @@ tap.test('mapper: single hierarchy', (t) => {
     }
   ] })
 
-  t.equals(p.hierarchy.length, 1)
-  t.equals(p.hierarchy[0].child, fixture.locality.identity)
-  t.equals(p.hierarchy[0].parent.source, fixture.locality.identity.source)
-  t.equals(p.hierarchy[0].parent.id, '102062861')
-  t.equals(p.hierarchy[0].branch, 'wof:0')
+  t.equal(p.hierarchy.length, 1)
+  t.equal(p.hierarchy[0].child, fixture.locality.identity)
+  t.equal(p.hierarchy[0].parent.source, fixture.locality.identity.source)
+  t.equal(p.hierarchy[0].parent.id, '102062861')
+  t.equal(p.hierarchy[0].branch, 'wof:0')
   t.end()
 })
 tap.test('mapper: multiple hierarchies', (t) => {
@@ -69,17 +69,17 @@ tap.test('mapper: multiple hierarchies', (t) => {
     ]
   })
 
-  t.equals(p.hierarchy.length, 2)
+  t.equal(p.hierarchy.length, 2)
 
-  t.equals(p.hierarchy[0].child, fixture.region.identity)
-  t.equals(p.hierarchy[0].parent.source, fixture.region.identity.source)
-  t.equals(p.hierarchy[0].parent.id, '85632685')
-  t.equals(p.hierarchy[0].branch, 'wof:0')
+  t.equal(p.hierarchy[0].child, fixture.region.identity)
+  t.equal(p.hierarchy[0].parent.source, fixture.region.identity.source)
+  t.equal(p.hierarchy[0].parent.id, '85632685')
+  t.equal(p.hierarchy[0].branch, 'wof:0')
 
-  t.equals(p.hierarchy[1].child, fixture.region.identity)
-  t.equals(p.hierarchy[1].parent.source, fixture.region.identity.source)
-  t.equals(p.hierarchy[1].parent.id, '85633805')
-  t.equals(p.hierarchy[1].branch, 'wof:1')
+  t.equal(p.hierarchy[1].child, fixture.region.identity)
+  t.equal(p.hierarchy[1].parent.source, fixture.region.identity.source)
+  t.equal(p.hierarchy[1].parent.id, '85633805')
+  t.equal(p.hierarchy[1].branch, 'wof:1')
 
   t.end()
 })

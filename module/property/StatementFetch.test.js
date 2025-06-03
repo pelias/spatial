@@ -19,7 +19,7 @@ tap.test('function', (t) => {
   fetch.create(db)
 
   // table empty
-  t.false(db.prepare(`SELECT * FROM property`).all().length, 'prior state')
+  t.notOk(db.prepare(`SELECT * FROM property`).all().length, 'prior state')
 
   // insert data
   insert.run({

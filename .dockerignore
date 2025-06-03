@@ -9,12 +9,10 @@ amalgamation
 .nyc_output
 coverage
 tmp
-runtime/tmp
-runtime/*.md
-runtime/*.Dockerfile
 package-lock.json
 *.md
 *.db
 *.db-journal
 *.geojson
 *.gz
+.tap

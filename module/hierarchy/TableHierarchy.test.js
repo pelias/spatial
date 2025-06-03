@@ -8,20 +8,20 @@ tap.test('create & drop', (t) => {
   let introspect = new SqliteIntrospect(db)
 
   // table does not exist
-  t.false(introspect.tables().includes('hierarchy'), 'prior state')
+  t.notOk(introspect.tables().includes('hierarchy'), 'prior state')
 
   // setup module
   let mod = new HierarchyModule(db)
   mod.setup()
 
   // table exists
-  t.true(introspect.tables().includes('hierarchy'), 'create')
+  t.ok(introspect.tables().includes('hierarchy'), 'create')
 
   // drop table
   mod.table.hierarchy.drop(db)
 
   // table does not exist
-  t.false(introspect.tables().includes('hierarchy'), 'drop')
+  t.notOk(introspect.tables().includes('hierarchy'), 'drop')
 
   t.end()
 })

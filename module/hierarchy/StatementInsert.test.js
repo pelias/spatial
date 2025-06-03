@@ -30,7 +30,7 @@ tap.test('single insert', (t) => {
   stmt.create(db)
 
   // table empty
-  t.false(db.prepare(`SELECT * FROM hierarchy`).all().length, 'prior state')
+  t.notOk(db.prepare(`SELECT * FROM hierarchy`).all().length, 'prior state')
 
   // insert data
   let info = stmt.run({
@@ -96,7 +96,7 @@ tap.test('add parent', (t) => {
   stmt.create(db)
 
   // table empty
-  t.false(db.prepare(`SELECT * FROM hierarchy`).all().length, 'prior state')
+  t.notOk(db.prepare(`SELECT * FROM hierarchy`).all().length, 'prior state')
 
   // insert data
   stmt.run({
@@ -186,7 +186,7 @@ tap.test('add child', (t) => {
   stmt.create(db)
 
   // table empty
-  t.false(db.prepare(`SELECT * FROM hierarchy`).all().length, 'prior state')
+  t.notOk(db.prepare(`SELECT * FROM hierarchy`).all().length, 'prior state')
 
   // insert data
   stmt.run({

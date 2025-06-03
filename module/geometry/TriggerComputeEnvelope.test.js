@@ -23,20 +23,20 @@ tap.test('create & drop', (t) => {
   column.create(db)
 
   // trigger does not exist
-  t.false(introspect.triggers('geometry').filter(filter).length, 'prior state')
+  t.notOk(introspect.triggers('geometry').filter(filter).length, 'prior state')
 
   // create trigger
   let trigger = new TriggerComputeEnvelope()
   trigger.create(db)
 
   // trigger exists
-  t.true(introspect.triggers('geometry').filter(filter).length, 'create')
+  t.ok(introspect.triggers('geometry').filter(filter).length, 'create')
 
   // drop trigger
   trigger.drop(db)
 
   // trigger does not exist
-  t.false(introspect.triggers('geometry').filter(filter).length, 'drop')
+  t.notOk(introspect.triggers('geometry').filter(filter).length, 'drop')
 
   t.end()
 })

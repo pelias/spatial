@@ -13,20 +13,20 @@ tap.test('create & drop', (t) => {
   table.create(db)
 
   // index does not exist
-  t.false(introspect.indices('place').length, 'prior state')
+  t.notOk(introspect.indices('place').length, 'prior state')
 
   // create index
   let index = new IndexIdentityUnique()
   index.create(db)
 
   // index exists
-  t.true(introspect.indices('place').length, 'create')
+  t.ok(introspect.indices('place').length, 'create')
 
   // drop index
   index.drop(db)
 
   // index does not exist
-  t.false(introspect.indices('place').length, 'drop')
+  t.notOk(introspect.indices('place').length, 'drop')
 
   t.end()
 })

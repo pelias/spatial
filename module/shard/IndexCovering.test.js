@@ -13,20 +13,20 @@ tap.test('create & drop', (t) => {
   table.create(db)
 
   // index does not exist
-  t.false(introspect.indices('shard').length, 'prior state')
+  t.notOk(introspect.indices('shard').length, 'prior state')
 
   // create index
   let index = new IndexCovering()
   index.create(db)
 
   // index exists
-  t.true(introspect.indices('shard').length, 'create')
+  t.ok(introspect.indices('shard').length, 'create')
 
   // drop index
   index.drop(db)
 
   // index does not exist
-  t.false(introspect.indices('shard').length, 'drop')
+  t.notOk(introspect.indices('shard').length, 'drop')
 
   t.end()
 })

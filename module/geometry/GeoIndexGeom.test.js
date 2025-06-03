@@ -20,7 +20,7 @@ tap.test('create & drop', (t) => {
   }
 
   // column does not exist
-  t.false(introspectIndex().length, 'prior state')
+  t.notOk(introspectIndex().length, 'prior state')
 
   // create column
   let column = new GeoColumnGeom()
@@ -31,7 +31,7 @@ tap.test('create & drop', (t) => {
   index.create(db)
 
   // column exists
-  t.true(introspectIndex().length, 'create')
+  t.ok(introspectIndex().length, 'create')
 
   // drop index
   index.drop(db)

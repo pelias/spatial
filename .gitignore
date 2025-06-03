@@ -3,9 +3,9 @@ amalgamation
 .nyc_output
 coverage
 tmp
-runtime/tmp
 package-lock.json
 *.db
 *.db-journal
 *.geojson
 *.gz
+.tap

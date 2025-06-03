@@ -93,7 +93,17 @@ docker run --rm -i \
 
 # Local Development
 
-Set up your local [runtime environment](https://github.com/pelias/spatial/tree/master/runtime).
+Install dependencies from homebrew (macos):
+
+```bash
+# install a modern version of nodejs
+brew install node@23
+brew link --overwrite node@23
+brew postinstall node
+
+# install sqlite3 and libspatialite
+brew install sqlite3 libspatialite
+```
 
 ```bash
 # run environment checks

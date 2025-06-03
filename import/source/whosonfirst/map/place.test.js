@@ -16,7 +16,7 @@ tap.test('mapper: maps identity & ontology', t => {
       'wof:placetype': 'locality'
     }
   })
-  t.true(place instanceof Place)
+  t.ok(place instanceof Place)
   t.equal(place.identity.source, 'wof')
   t.equal(place.identity.id, '1')
   t.equal(place.ontology.class, 'admin')
@@ -31,7 +31,7 @@ tap.test('mapper: ontology type - trim & lowercase', t => {
       'wof:placetype': ' \tLocaLity\n'
     }
   })
-  t.true(place instanceof Place)
+  t.ok(place instanceof Place)
   t.equal(place.identity.source, 'wof')
   t.equal(place.identity.id, '1')
   t.equal(place.ontology.class, 'admin')
@@ -46,7 +46,7 @@ tap.test('mapper: ontology type - replace spaces with underscores', t => {
       'wof:placetype': ' \tLocaLity  SquAre\n'
     }
   })
-  t.true(place instanceof Place)
+  t.ok(place instanceof Place)
   t.equal(place.identity.source, 'wof')
   t.equal(place.identity.id, '1')
   t.equal(place.ontology.class, 'admin')
@@ -62,7 +62,7 @@ tap.test('mapper: maps geometry', t => {
     },
     geometry: require('../../../../test/fixture/geojson.triangle')
   })
-  t.true(place instanceof Place)
+  t.ok(place instanceof Place)
   t.equal(place.geometry.length, 1)
   t.equal(place.geometry[0].geometry.constructor.name.toUpperCase(), 'POLYGON')
   t.equal(place.geometry[0].role, 'boundary')
@@ -78,7 +78,7 @@ tap.test('invalid: current true', t => {
       'mz:is_current': 1
     }
   })
-  t.true(place instanceof Place)
+  t.ok(place instanceof Place)
   t.end()
 })
 
@@ -102,7 +102,7 @@ tap.test('invalid: deprecated false', t => {
       'edtf:deprecated': ''
     }
   })
-  t.true(place instanceof Place)
+  t.ok(place instanceof Place)
   t.end()
 })
 
@@ -126,7 +126,7 @@ tap.test('invalid: superseded false', t => {
       'wof:superseded_by': []
     }
   })
-  t.true(place instanceof Place)
+  t.ok(place instanceof Place)
   t.end()
 })
 

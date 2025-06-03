@@ -18,23 +18,23 @@ tap.test('create & drop', (t) => {
   column.create(db)
 
   // column does not exist
-  t.false(introspect.views('point_in_polygon').length, 'prior state')
-  t.false(db.prepare(`SELECT COUNT(*) AS cnt FROM views_geometry_columns`).get().cnt, 'prior state')
+  t.notOk(introspect.views('point_in_polygon').length, 'prior state')
+  t.notOk(db.prepare(`SELECT COUNT(*) AS cnt FROM views_geometry_columns`).get().cnt, 'prior state')
 
   // create index
   let index = new GeoViewPointInPolygon()
   index.create(db)
 
   // column exists
-  t.true(introspect.views('point_in_polygon').length, 'create')
-  t.true(db.prepare(`SELECT COUNT(*) AS cnt FROM views_geometry_columns`).get().cnt, 'create')
+  t.ok(introspect.views('point_in_polygon').length, 'create')
+  t.ok(db.prepare(`SELECT COUNT(*) AS cnt FROM views_geometry_columns`).get().cnt, 'create')
 
   // drop index
   index.drop(db)
 
   // column does not exist
-  t.false(introspect.views('point_in_polygon').length, 'drop')
-  t.false(db.prepare(`SELECT COUNT(*) AS cnt FROM views_geometry_columns`).get().cnt, 'drop')
+  t.notOk(introspect.views('point_in_polygon').length, 'drop')
+  t.notOk(db.prepare(`SELECT COUNT(*) AS cnt FROM views_geometry_columns`).get().cnt, 'drop')
 
   t.end()
 })
