@@ -3,6 +3,7 @@ const TableHierarchy = require('./TableHierarchy')
 const IndexUnique = require('./IndexUnique')
 const IndexChildIdentity = require('./IndexChildIdentity')
 const IndexParentIdentity = require('./IndexParentIdentity')
+const IndexPipPerformance = require('./IndexPipPerformance')
 const StatementInsert = require('./StatementInsert')
 const StatementFetch = require('./StatementFetch')
 const ViewInsertProxy = require('./ViewInsertProxy')
@@ -17,7 +18,8 @@ class HierarchyModule extends Module {
     this.index = {
       unique: new IndexUnique(),
       identityChild: new IndexChildIdentity(),
-      identityParent: new IndexParentIdentity()
+      identityParent: new IndexParentIdentity(),
+      pipPerformance: new IndexPipPerformance()
     }
     this.statement = {
       insert: new StatementInsert(),
