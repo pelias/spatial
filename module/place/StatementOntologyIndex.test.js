@@ -48,7 +48,7 @@ tap.test('functional - create nested index of whole ontology', (t) => {
   let ontology = ontologyIndex.all({})
 
   // test response structure
-  t.deepEqual(ontology, [{
+  t.same(ontology, [{
     class: 'example_class_1',
     total: 2,
     type: [

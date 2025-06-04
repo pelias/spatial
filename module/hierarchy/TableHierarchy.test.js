@@ -109,7 +109,7 @@ tap.test('definition', (t) => {
   let columns = introspect.columns('hierarchy')
 
   // parent_source
-  t.deepEqual(columns[0], {
+  t.same(columns[0], {
     cid: 0,
     name: 'parent_source',
     type: 'TEXT',
@@ -119,7 +119,7 @@ tap.test('definition', (t) => {
   }, 'parent_source')
 
   // parent_id
-  t.deepEqual(columns[1], {
+  t.same(columns[1], {
     cid: 1,
     name: 'parent_id',
     type: 'TEXT',
@@ -129,7 +129,7 @@ tap.test('definition', (t) => {
   }, 'parent_id')
 
   // child_source
-  t.deepEqual(columns[2], {
+  t.same(columns[2], {
     cid: 2,
     name: 'child_source',
     type: 'TEXT',
@@ -139,7 +139,7 @@ tap.test('definition', (t) => {
   }, 'child_source')
 
   // child_id
-  t.deepEqual(columns[3], {
+  t.same(columns[3], {
     cid: 3,
     name: 'child_id',
     type: 'TEXT',
@@ -149,7 +149,7 @@ tap.test('definition', (t) => {
   }, 'child_id')
 
   // depth
-  t.deepEqual(columns[4], {
+  t.same(columns[4], {
     cid: 4,
     name: 'depth',
     type: 'INTEGER',
@@ -159,7 +159,7 @@ tap.test('definition', (t) => {
   }, 'depth')
 
   // branch
-  t.deepEqual(columns[5], {
+  t.same(columns[5], {
     cid: 5,
     name: 'branch',
     type: 'TEXT',

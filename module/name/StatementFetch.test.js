@@ -58,7 +58,7 @@ tap.test('function', (t) => {
   })
 
   // test response structure
-  t.deepEqual(rows, [{
+  t.same(rows, [{
     lang: 'example_lang1',
     tag: 'example_tag1',
     abbr: false,

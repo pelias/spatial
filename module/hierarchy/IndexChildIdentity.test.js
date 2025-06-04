@@ -47,7 +47,7 @@ tap.test('definition', (t) => {
   let indices = introspect.indices('hierarchy')
 
   // hierarchy_idx_child_identity
-  t.deepEqual(indices[0], {
+  t.same(indices[0], {
     seq: 0,
     name: 'hierarchy_idx_child_identity',
     unique: 0,

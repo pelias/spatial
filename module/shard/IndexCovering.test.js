@@ -47,7 +47,7 @@ tap.test('definition', (t) => {
   let indices = introspect.indices('shard')
 
   // shard_idx_covering
-  t.deepEqual(indices[0], {
+  t.same(indices[0], {
     seq: 0,
     name: 'shard_idx_covering',
     unique: 1,

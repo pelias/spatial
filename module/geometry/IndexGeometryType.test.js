@@ -56,7 +56,7 @@ tap.test('definition', (t) => {
   let indices = introspect.indices('geometry')
 
   // geometry_idx_geom_type
-  t.deepEqual(indices[0], {
+  t.same(indices[0], {
     seq: 0,
     name: 'geometry_idx_geom_type',
     unique: 0,

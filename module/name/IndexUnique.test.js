@@ -47,7 +47,7 @@ tap.test('definition', (t) => {
   let indices = introspect.indices('name')
 
   // name_idx_unique
-  t.deepEqual(indices[0], {
+  t.same(indices[0], {
     seq: 0,
     name: 'name_idx_unique',
     unique: 1,

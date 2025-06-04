@@ -47,7 +47,7 @@ tap.test('definition', (t) => {
   let columns = introspect.columns('search_vocab')
 
   // term
-  t.deepEqual(columns[0], {
+  t.same(columns[0], {
     cid: 0,
     name: 'term',
     type: '',
@@ -57,7 +57,7 @@ tap.test('definition', (t) => {
   }, 'term')
 
   // doc
-  t.deepEqual(columns[1], {
+  t.same(columns[1], {
     cid: 1,
     name: 'doc',
     type: '',
@@ -67,7 +67,7 @@ tap.test('definition', (t) => {
   }, 'doc')
 
   // col
-  t.deepEqual(columns[2], {
+  t.same(columns[2], {
     cid: 2,
     name: 'col',
     type: '',
@@ -77,7 +77,7 @@ tap.test('definition', (t) => {
   }, 'col')
 
   // offset
-  t.deepEqual(columns[3], {
+  t.same(columns[3], {
     cid: 3,
     name: 'offset',
     type: '',

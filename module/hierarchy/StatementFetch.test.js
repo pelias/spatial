@@ -57,7 +57,7 @@ tap.test('function', (t) => {
   })
 
   // test response structure
-  t.deepEqual(rows, [{
+  t.same(rows, [{
     parent_source: 'example_child_source',
     parent_id: 'example_child_id',
     child_source: 'example_child_source',

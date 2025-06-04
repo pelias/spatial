@@ -12,14 +12,14 @@ tap.test('exports', (t) => {
 
 // spec
 tap.test('spec', (t) => {
-  t.deepEqual(Array.from(spec.ids.keys()), [
+  t.same(Array.from(spec.ids.keys()), [
     102312307, 102312309, 102312311, 102312313, 102312317, 102312319, 102312321,
     102312323, 102312325, 102312327, 102312329, 102312331, 102312335, 102312341,
     102320821, 102322043, 102371933, 136057795, 404221409, 404221411, 404221413,
     404528653, 404528655, 421205763, 470996387, 1108746739, 1108906905, 1159162571,
     1159162573, 1159162575, 1159268867, 1159268869, 1360666019
   ])
-  t.deepEqual(Array.from(spec.names.keys()), [
+  t.same(Array.from(spec.names.keys()), [
     'country', 'continent', 'region', 'county', 'locality', 'neighbourhood',
     'microhood', 'macrohood', 'venue', 'building', 'address', 'campus', 'empire',
     'planet', 'dependency', 'disputed', 'metroarea', 'timezone', 'localadmin',
@@ -31,8 +31,8 @@ tap.test('spec', (t) => {
 })
 
 tap.test('getters', (t) => {
-  t.deepEqual(spec.ids.get(102312307), spec.spec['102312307'])
-  t.deepEqual(spec.names.get('country'), spec.spec['102312307'])
+  t.same(spec.ids.get(102312307), spec.spec['102312307'])
+  t.same(spec.names.get('country'), spec.spec['102312307'])
   t.end()
 })
 
@@ -56,7 +56,7 @@ tap.test('rank', (t) => {
 //   for (let rank in seen) {
 //     t.equal(seen[rank].length, 1, `rank ${rank}`)
 //     if (seen[rank].length > 1) {
-//       t.deepEqual(seen[rank].map(pt => pt.name), [], `rank ${rank}`)
+//       t.same(seen[rank].map(pt => pt.name), [], `rank ${rank}`)
 //     }
 //   }
 //   t.end()
@@ -64,8 +64,8 @@ tap.test('rank', (t) => {
 
 // sortParents
 tap.test('sortParents', (t) => {
-  t.deepEqual(spec.names.get('planet').parent, [])
-  t.deepEqual(spec.names.get('locality').parent, [404221409, 102312313, 102312311])
-  t.deepEqual(spec.names.get('region').parent, [404221411, 102320821, 102322043, 102312307])
+  t.same(spec.names.get('planet').parent, [])
+  t.same(spec.names.get('locality').parent, [404221409, 102312313, 102312311])
+  t.same(spec.names.get('region').parent, [404221411, 102320821, 102322043, 102312307])
   t.end()
 })
