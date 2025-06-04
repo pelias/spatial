@@ -61,7 +61,7 @@ tap.test('definition', (t) => {
   let triggers = introspect.triggers('geometry').filter(filter)
 
   // shard_idx_covering
-  t.deepEqual(triggers[0], {
+  t.same(triggers[0], {
     type: 'trigger',
     name: 'shard_geometry_insert',
     tbl_name: 'geometry',
@@ -139,7 +139,7 @@ tap.test('functional - boundary', (t) => {
   })
 
   // trigger has split the geometry in half horizontally
-  t.deepEqual(db.prepare(`SELECT element FROM shard`).all(), [
+  t.same(db.prepare(`SELECT element FROM shard`).all(), [
     { element: 0 },
     { element: 1 },
     { element: 2 },
@@ -216,7 +216,7 @@ tap.test('functional - buffer', (t) => {
   })
 
   // trigger has split the geometry in half horizontally
-  t.deepEqual(db.prepare(`SELECT element FROM shard`).all(), [
+  t.same(db.prepare(`SELECT element FROM shard`).all(), [
     { element: 0 },
     { element: 1 },
     { element: 2 },

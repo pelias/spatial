@@ -49,7 +49,7 @@ tap.test('definition', (t) => {
   let geom = introspect.columns('shard_subdivide').filter(c => c.name === 'geom')
 
   // geom
-  t.deepEqual(geom[0], {
+  t.same(geom[0], {
     cid: 1,
     name: 'geom',
     type: 'GEOMETRY',

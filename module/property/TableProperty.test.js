@@ -103,7 +103,7 @@ tap.test('definition', (t) => {
   let columns = introspect.columns('property')
 
   // source
-  t.deepEqual(columns[0], {
+  t.same(columns[0], {
     cid: 0,
     name: 'source',
     type: 'TEXT',
@@ -113,7 +113,7 @@ tap.test('definition', (t) => {
   }, 'source')
 
   // id
-  t.deepEqual(columns[1], {
+  t.same(columns[1], {
     cid: 1,
     name: 'id',
     type: 'TEXT',
@@ -123,7 +123,7 @@ tap.test('definition', (t) => {
   }, 'id')
 
   // key
-  t.deepEqual(columns[2], {
+  t.same(columns[2], {
     cid: 2,
     name: 'key',
     type: 'TEXT',
@@ -133,7 +133,7 @@ tap.test('definition', (t) => {
   }, 'key')
 
   // value
-  t.deepEqual(columns[3], {
+  t.same(columns[3], {
     cid: 3,
     name: 'value',
     type: 'TEXT',

@@ -38,7 +38,7 @@ tap.test('create & drop', (t) => {
 
   // index should not exist
   // @todo: why is spatial_index_enabled still set to 1?
-  // t.deepEqual(introspectIndex(), [], 'drop')
+  // t.same(introspectIndex(), [], 'drop')
 
   t.end()
 })

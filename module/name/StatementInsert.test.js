@@ -28,10 +28,10 @@ tap.test('create & drop', (t) => {
   })
 
   // insert info
-  t.deepEqual(info, { changes: 1, lastInsertRowid: 1 }, 'write')
+  t.same(info, { changes: 1, lastInsertRowid: 1 }, 'write')
 
   // read data
-  t.deepEqual(db.prepare(`SELECT * FROM name`).all(), [{
+  t.same(db.prepare(`SELECT * FROM name`).all(), [{
     source: 'example_source',
     id: 'example_id',
     lang: 'example_lang',

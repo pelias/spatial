@@ -52,7 +52,7 @@ tap.test('function', (t) => {
   })
 
   // test response structure
-  t.deepEqual(rows, {
+  t.same(rows, {
     example_key_1: 'example_value_1',
     example_key_2: 'example_value_2'
   }, 'read')

@@ -49,7 +49,7 @@ tap.test('definition', (t) => {
   let geom = introspect.columns('geometry').filter(c => c.name === 'geom')
 
   // geometry_idx_complexity
-  t.deepEqual(geom[0], {
+  t.same(geom[0], {
     cid: 3,
     name: 'geom',
     type: 'GEOMETRY',

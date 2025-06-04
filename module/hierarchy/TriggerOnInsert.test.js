@@ -65,7 +65,7 @@ tap.test('definition', (t) => {
   let triggers = introspect.triggers('hierarchy_insert_proxy')
 
   // hierarchy_idx_covering
-  t.deepEqual(triggers[0], {
+  t.same(triggers[0], {
     type: 'trigger',
     name: 'hierarchy_on_insert_trigger',
     tbl_name: 'hierarchy_insert_proxy',

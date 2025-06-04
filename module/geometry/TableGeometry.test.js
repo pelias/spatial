@@ -88,7 +88,7 @@ tap.test('definition', (t) => {
   let columns = introspect.columns('geometry')
 
   // source
-  t.deepEqual(columns[0], {
+  t.same(columns[0], {
     cid: 0,
     name: 'source',
     type: 'TEXT',
@@ -98,7 +98,7 @@ tap.test('definition', (t) => {
   }, 'source')
 
   // id
-  t.deepEqual(columns[1], {
+  t.same(columns[1], {
     cid: 1,
     name: 'id',
     type: 'TEXT',
@@ -108,7 +108,7 @@ tap.test('definition', (t) => {
   }, 'id')
 
   // role
-  t.deepEqual(columns[2], {
+  t.same(columns[2], {
     cid: 2,
     name: 'role',
     type: 'TEXT',

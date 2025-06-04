@@ -49,7 +49,7 @@ tap.test('definition', (t) => {
   // nullfield
   // @todo: can we simply remove this column?
   // it seems sqlite doesn't support columnless tables..
-  t.deepEqual(columns[0], {
+  t.same(columns[0], {
     cid: 0,
     name: 'nullfield',
     type: 'INTEGER',

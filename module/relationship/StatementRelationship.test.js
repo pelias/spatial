@@ -66,7 +66,7 @@ tap.test('function', (t) => {
   let query = { source: 'example_source2', id: 'example_id2', limit: 10 }
 
   // test intersects
-  t.deepEqual(relationship.statement.intersects.all(query), [{
+  t.same(relationship.statement.intersects.all(query), [{
     source: 'example_source1',
     id: 'example_id1'
   }, {
@@ -75,13 +75,13 @@ tap.test('function', (t) => {
   }], 'intersects')
 
   // test contains
-  t.deepEqual(relationship.statement.contains.all(query), [{
+  t.same(relationship.statement.contains.all(query), [{
     source: 'example_source3',
     id: 'example_id3'
   }], 'contains')
 
   // test within
-  t.deepEqual(relationship.statement.within.all(query), [{
+  t.same(relationship.statement.within.all(query), [{
     source: 'example_source1',
     id: 'example_id1'
   }], 'within')

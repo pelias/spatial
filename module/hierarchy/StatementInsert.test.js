@@ -43,10 +43,10 @@ tap.test('single insert', (t) => {
 
   // insert info
   // note: info is not available due to using INSTEAD OF INSERT
-  t.deepEqual(info, { changes: 0, lastInsertRowid: 0 }, 'write')
+  t.same(info, { changes: 0, lastInsertRowid: 0 }, 'write')
 
   // read data
-  t.deepEqual(db.prepare(`SELECT * FROM hierarchy`).all(), [{
+  t.same(db.prepare(`SELECT * FROM hierarchy`).all(), [{
     parent_source: 'example_parent_source',
     parent_id: 'example_parent_id',
     child_source: 'example_parent_source',
@@ -115,7 +115,7 @@ tap.test('add parent', (t) => {
   })
 
   // read data
-  t.deepEqual(db.prepare(`SELECT * FROM hierarchy`).all(), [{
+  t.same(db.prepare(`SELECT * FROM hierarchy`).all(), [{
     parent_source: 'example_parent_source',
     parent_id: 'example_parent_id',
     child_source: 'example_parent_source',
@@ -205,7 +205,7 @@ tap.test('add child', (t) => {
   })
 
   // read data
-  t.deepEqual(db.prepare(`SELECT * FROM hierarchy`).all(), [{
+  t.same(db.prepare(`SELECT * FROM hierarchy`).all(), [{
     parent_source: 'example_parent_source',
     parent_id: 'example_parent_id',
     child_source: 'example_parent_source',

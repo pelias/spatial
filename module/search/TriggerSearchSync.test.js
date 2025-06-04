@@ -50,7 +50,7 @@ tap.test('definition', (t) => {
   let triggers = introspect.triggers('name').filter(filter)
 
   // search_sync_insert
-  t.deepEqual(triggers[0], {
+  t.same(triggers[0], {
     type: 'trigger',
     name: 'search_sync_insert',
     tbl_name: 'name',
@@ -65,7 +65,7 @@ tap.test('definition', (t) => {
   }, 'search_sync_insert')
 
   // search_sync_delete
-  t.deepEqual(triggers[1], {
+  t.same(triggers[1], {
     type: 'trigger',
     name: 'search_sync_delete',
     tbl_name: 'name',
@@ -80,7 +80,7 @@ tap.test('definition', (t) => {
   }, 'search_sync_delete')
 
   // search_sync_update
-  t.deepEqual(triggers[2], {
+  t.same(triggers[2], {
     type: 'trigger',
     name: 'search_sync_update',
     tbl_name: 'name',
@@ -125,7 +125,7 @@ tap.test('function', (t) => {
   })
 
   // trigger has populated the search index
-  t.deepEqual(db.prepare(`SELECT source, id, name FROM search`).all(), [
+  t.same(db.prepare(`SELECT source, id, name FROM search`).all(), [
     {
       source: 'example_source',
       id: 'example_id',
@@ -137,7 +137,7 @@ tap.test('function', (t) => {
   db.prepare(`UPDATE name SET name = 'example_name2'`).run()
 
   // trigger has updated the search index
-  t.deepEqual(db.prepare(`SELECT source, id, name FROM search`).all(), [
+  t.same(db.prepare(`SELECT source, id, name FROM search`).all(), [
     {
       source: 'example_source',
       id: 'example_id',
@@ -149,7 +149,7 @@ tap.test('function', (t) => {
   db.prepare(`DELETE FROM name WHERE name = 'example_name2'`).run()
 
   // trigger removed the entry from search index
-  t.deepEqual(db.prepare(`SELECT source, id, name FROM search`).all(), [], 'delete')
+  t.same(db.prepare(`SELECT source, id, name FROM search`).all(), [], 'delete')
 
   t.end()
 })

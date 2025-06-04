@@ -54,7 +54,7 @@ tap.test('definition', (t) => {
   let triggers = introspect.triggers('geometry').filter(filter)
 
   // geometry_compute_centroid
-  t.deepEqual(triggers[0], {
+  t.same(triggers[0], {
     type: 'trigger',
     name: 'geometry_compute_centroid',
     tbl_name: 'geometry',
@@ -102,7 +102,7 @@ tap.test('function', (t) => {
       FROM geometry
       WHERE role = 'centroid'
     `)
-  t.deepEqual(query.all(), [
+  t.same(query.all(), [
     {
       source: 'example_source',
       id: 'example_id',
@@ -145,7 +145,7 @@ tap.test('geometry with errors', (t) => {
       FROM geometry
       WHERE role = 'centroid'
     `)
-  t.deepEqual(query.all(), [
+  t.same(query.all(), [
     {
       source: 'example_source',
       id: 'example_id',
