@@ -19,7 +19,7 @@ class StatementPeliasView extends SqliteStatement {
           ) AS centroid,
           (
             SELECT name
-            FROM name
+            FROM ${dbname}.name
             WHERE source = place.source
             AND id = place.id
             AND lang = 'und'
@@ -29,7 +29,7 @@ class StatementPeliasView extends SqliteStatement {
           ) AS name,
           (
             SELECT name
-            FROM name
+            FROM ${dbname}.name
             WHERE source = place.source
             AND id = place.id
             AND lang = @lang
@@ -41,7 +41,7 @@ class StatementPeliasView extends SqliteStatement {
             SELECT GROUP_CONCAT(name, CHAR(30))
             FROM (
               SELECT name
-              FROM name
+              FROM ${dbname}.name
               WHERE source = place.source
               AND id = place.id
               AND abbr = 0
@@ -52,7 +52,7 @@ class StatementPeliasView extends SqliteStatement {
           ) AS names,
           (
             SELECT name
-            FROM name
+            FROM ${dbname}.name
             WHERE source = place.source
             AND id = place.id
             AND lang = 'und'
@@ -64,7 +64,7 @@ class StatementPeliasView extends SqliteStatement {
             SELECT GROUP_CONCAT(name, CHAR(30))
             FROM (
               SELECT name
-              FROM name
+              FROM ${dbname}.name
               WHERE source = place.source
               AND id = place.id
               AND abbr = 1
@@ -72,7 +72,68 @@ class StatementPeliasView extends SqliteStatement {
               LIMIT (@aliaslimit + 1)
             )
             WHERE @aliaslimit > 0
-          ) AS abbrs
+          ) AS abbrs,
+          CASE
+            WHEN @hierarchy != 1 THEN json_object()
+            ELSE (
+              SELECT json_group_object(parent_type, json(parent_obj))
+              FROM (
+                SELECT
+                  parent.type AS parent_type,
+                  json_insert(
+                    json_object(),
+                    '$.id', parent.id,
+                    '$.name', (
+                      SELECT name
+                      FROM ${dbname}.name
+                      WHERE source = parent.source
+                      AND id = parent.id
+                      AND lang = 'und'
+                      AND tag = 'default'
+                      AND abbr = 0
+                      LIMIT 1
+                    ),
+                    '$.abbr', (
+                      SELECT name
+                      FROM ${dbname}.name
+                      WHERE source = parent.source
+                      AND id = parent.id
+                      AND lang = 'und'
+                      AND tag = 'default'
+                      AND abbr = 1
+                      LIMIT 1
+                    ),
+                    '$.centroid', (
+                      SELECT X( geom ) || ',' || Y( geom )
+                      FROM ${dbname}.geometry
+                      WHERE source = parent.source
+                      AND id = parent.id
+                      AND role = 'centroid'
+                      AND geom != ''
+                      LIMIT 1
+                    ),
+                    '$.bounds', (
+                      SELECT
+                        MbrMinX( geom ) || ',' || MbrMinY( geom ) || ',' ||
+                        MbrMaxX( geom ) || ',' || MbrMaxY( geom )
+                      FROM ${dbname}.geometry
+                      WHERE source = parent.source
+                      AND id = parent.id
+                      AND role = 'envelope'
+                      AND geom != ''
+                    )
+                  ) AS parent_obj
+                FROM ${dbname}.hierarchy
+                INNER JOIN ${dbname}.place AS parent ON (
+                  parent.id = parent_id AND
+                  parent.source = parent_source
+                )
+                WHERE child_id = place.id
+                AND parent_id != child_id
+                AND branch = 'wof:0'
+              )
+            )
+          END AS hierarchy
         FROM ${dbname}.point_in_polygon AS pip
         LEFT JOIN ${dbname}.place USING (source, id)
         LEFT JOIN ${dbname}.geometry AS boundary USING (source, id)
