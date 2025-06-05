@@ -111,3 +111,24 @@ tap.test('mapper: key ordering', (t) => {
   ])
   t.end()
 })
+tap.test('mapper: sort hierarchy - unknown placetype', (t) => {
+  const p = new Place(new Identity('wof', '1729339019'), new Ontology('admin', 'locality'))
+  map(p, {
+    'wof:hierarchy': [
+      {
+        region_id: 85687233,
+        unknown_id: 1
+      }
+    ]
+  })
+
+  t.equal(p.hierarchy.length, 1)
+  t.same(p.hierarchy, [
+    new Hierarchy(
+      new Identity('wof', '1729339019'),
+      new Identity('wof', '85687233'),
+      'wof:0'
+    )
+  ])
+  t.end()
+})
