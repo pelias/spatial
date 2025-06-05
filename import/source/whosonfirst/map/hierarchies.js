@@ -7,7 +7,10 @@ const Hierarchy = require('../../../../model/Hierarchy')
 function sortHierarchy (hierarchy) {
   return _(hierarchy)
     .toPairs()
-    .sortBy(([k]) => spec.names.get(k.replace('_id', '')).rank || 0)
+    .sortBy(([k]) => {
+      const placetype = spec.names.get(k.replace('_id', ''))
+      return placetype ? placetype.rank : 0
+    })
     .reverse()
     .fromPairs()
     .value()
