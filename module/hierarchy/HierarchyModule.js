@@ -4,10 +4,10 @@ const IndexUnique = require('./IndexUnique')
 const IndexChildIdentity = require('./IndexChildIdentity')
 const IndexParentIdentity = require('./IndexParentIdentity')
 const IndexPipPerformance = require('./IndexPipPerformance')
-const StatementInsert = require('./StatementInsert')
+const StatementInsertParent = require('./StatementInsertParent')
 const StatementFetch = require('./StatementFetch')
-const ViewInsertProxy = require('./ViewInsertProxy')
-const TriggerOnInsert = require('./TriggerOnInsert')
+const ViewInsertParent = require('./ViewInsertParent')
+const TriggerOnInsertParent = require('./TriggerOnInsertParent')
 
 class HierarchyModule extends Module {
   constructor (db) {
@@ -22,21 +22,21 @@ class HierarchyModule extends Module {
       pipPerformance: new IndexPipPerformance()
     }
     this.statement = {
-      insert: new StatementInsert(),
+      insertParent: new StatementInsertParent(),
       fetch: new StatementFetch()
     }
     this.trigger = {
-      onInsert: new TriggerOnInsert()
+      onInsertParent: new TriggerOnInsertParent()
     }
     this.view = {
-      insertProxy: new ViewInsertProxy()
+      insertParent: new ViewInsertParent()
     }
   }
   insert (place) {
     let info = { changes: 0, lastInsertRowid: 0 }
     place.hierarchy.forEach(hierarchy => {
       // insert hierarchy
-      let _info = this.statement.insert.run({
+      let _info = this.statement.insertParent.run({
         child_source: hierarchy.child.source,
         child_id: hierarchy.child.id,
         parent_source: hierarchy.parent.source,

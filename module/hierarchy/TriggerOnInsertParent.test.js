@@ -2,8 +2,8 @@ const tap = require('tap')
 const common = require('../../test/common')
 const SqliteIntrospect = require('../../sqlite/SqliteIntrospect')
 const TableHierarchy = require('./TableHierarchy')
-const ViewInsertProxy = require('./ViewInsertProxy')
-const TriggerOnInsert = require('./TriggerOnInsert')
+const ViewInsertParent = require('./ViewInsertParent')
+const TriggerOnInsertParent = require('./TriggerOnInsertParent')
 const IndexUnique = require('./IndexUnique')
 
 tap.test('create & drop', (t) => {
@@ -19,24 +19,24 @@ tap.test('create & drop', (t) => {
   idx.create(db)
 
   // create view
-  let view = new ViewInsertProxy()
+  let view = new ViewInsertParent()
   view.create(db)
 
   // trigger does not exist
-  t.notOk(introspect.triggers('hierarchy_insert_proxy').length, 'prior state')
+  t.notOk(introspect.triggers('hierarchy_insert_parent').length, 'prior state')
 
   // create trigger
-  let trigger = new TriggerOnInsert()
+  let trigger = new TriggerOnInsertParent()
   trigger.create(db)
 
   // trigger exists
-  t.ok(introspect.triggers('hierarchy_insert_proxy').length, 'create')
+  t.ok(introspect.triggers('hierarchy_insert_parent').length, 'create')
 
   // drop trigger
   trigger.drop(db)
 
   // trigger does not exist
-  t.notOk(introspect.triggers('hierarchy_insert_proxy').length, 'drop')
+  t.notOk(introspect.triggers('hierarchy_insert_parent').length, 'drop')
 
   t.end()
 })
@@ -54,25 +54,25 @@ tap.test('definition', (t) => {
   idx.create(db)
 
   // create view
-  let view = new ViewInsertProxy()
+  let view = new ViewInsertParent()
   view.create(db)
 
   // create trigger
-  let trigger = new TriggerOnInsert()
+  let trigger = new TriggerOnInsertParent()
   trigger.create(db)
 
   // test triggers
-  let triggers = introspect.triggers('hierarchy_insert_proxy')
+  let triggers = introspect.triggers('hierarchy_insert_parent')
 
   // hierarchy_idx_covering
   t.same(triggers[0], {
     type: 'trigger',
     name: 'hierarchy_on_insert_trigger',
-    tbl_name: 'hierarchy_insert_proxy',
+    tbl_name: 'hierarchy_insert_parent',
     rootpage: 0,
     sql: `
         CREATE TRIGGER IF NOT EXISTS hierarchy_on_insert_trigger
-        INSTEAD OF INSERT ON main.hierarchy_insert_proxy
+        INSTEAD OF INSERT ON main.hierarchy_insert_parent
         BEGIN
 
           /* insert self-reference for parent at depth 0 */

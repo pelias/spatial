@@ -1,13 +1,32 @@
 const _ = require('lodash')
 const SqliteStatement = require('../../sqlite/SqliteStatement')
 
-class TriggerOnInsert extends SqliteStatement {
+/**
+ * This trigger (and the associated view) are a convenience method of
+ * generating a full hierarchy by only inserting the *immediate parent*
+ * of each record.
+ *
+ * The trigger will ensure that *as parent records are added* that the full
+ * hierarchy is generated automatically.
+ *
+ * Caveat emptor: In an ideal world this method would suffice, however if
+ * the hierarchy can't be represented cleanely as a tree, then inserting
+ * every parent manually is the preferred method, as manual insertion will
+ * allow for the tree to become a graph, with more flexibility in branching.
+ *
+ * Also worth noting that the triggers use `INSERT OR IGNORE` so the order
+ * of insertion will affect the final graph, in a 'perfect tree' scenario
+ * this is not an issue, but becomes one when the graph exhibits branching
+ * and grafting behaviour.
+ */
+
+class TriggerOnInsertParent extends SqliteStatement {
   create (db, config) {
     try {
       let dbname = _.get(config, 'database', 'main')
       db.prepare(`
         CREATE TRIGGER IF NOT EXISTS hierarchy_on_insert_trigger
-        INSTEAD OF INSERT ON ${dbname}.hierarchy_insert_proxy
+        INSTEAD OF INSERT ON ${dbname}.hierarchy_insert_parent
         BEGIN
 
           /* insert self-reference for parent at depth 0 */
@@ -91,4 +110,4 @@ class TriggerOnInsert extends SqliteStatement {
   }
 }
 
-module.exports = TriggerOnInsert
+module.exports = TriggerOnInsertParent
