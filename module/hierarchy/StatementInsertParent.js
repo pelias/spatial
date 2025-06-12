@@ -1,12 +1,12 @@
 const _ = require('lodash')
 const SqliteStatement = require('../../sqlite/SqliteStatement')
 
-class StatementInsert extends SqliteStatement {
+class StatementInsertParent extends SqliteStatement {
   create (db, config) {
     try {
       let dbname = _.get(config, 'database', 'main')
       this.statement = db.prepare(`
-        INSERT OR IGNORE INTO ${dbname}.hierarchy_insert_proxy (
+        INSERT OR IGNORE INTO ${dbname}.hierarchy_insert_parent (
           parent_source,
           parent_id,
           child_source,
@@ -26,4 +26,4 @@ class StatementInsert extends SqliteStatement {
   }
 }
 
-module.exports = StatementInsert
+module.exports = StatementInsertParent

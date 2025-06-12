@@ -1,9 +1,9 @@
 const tap = require('tap')
 const common = require('../../test/common')
 const TableHierarchy = require('./TableHierarchy')
-const ViewInsertProxy = require('./ViewInsertProxy')
-const TriggerOnInsert = require('./TriggerOnInsert')
-const StatementInsert = require('./StatementInsert')
+const ViewInsertParent = require('./ViewInsertParent')
+const TriggerOnInsertParent = require('./TriggerOnInsertParent')
+const StatementInsertParent = require('./StatementInsertParent')
 const IndexUnique = require('./IndexUnique')
 
 tap.test('single insert', (t) => {
@@ -18,15 +18,15 @@ tap.test('single insert', (t) => {
   idx.create(db)
 
   // create view
-  let view = new ViewInsertProxy()
+  let view = new ViewInsertParent()
   view.create(db)
 
   // create trigger
-  let trigger = new TriggerOnInsert()
+  let trigger = new TriggerOnInsertParent()
   trigger.create(db)
 
   // prepare statement
-  let stmt = new StatementInsert()
+  let stmt = new StatementInsertParent()
   stmt.create(db)
 
   // table empty
@@ -84,15 +84,15 @@ tap.test('add parent', (t) => {
   idx.create(db)
 
   // create view
-  let view = new ViewInsertProxy()
+  let view = new ViewInsertParent()
   view.create(db)
 
   // create trigger
-  let trigger = new TriggerOnInsert()
+  let trigger = new TriggerOnInsertParent()
   trigger.create(db)
 
   // prepare statement
-  let stmt = new StatementInsert()
+  let stmt = new StatementInsertParent()
   stmt.create(db)
 
   // table empty
@@ -174,15 +174,15 @@ tap.test('add child', (t) => {
   idx.create(db)
 
   // create view
-  let view = new ViewInsertProxy()
+  let view = new ViewInsertParent()
   view.create(db)
 
   // create view
-  let trigger = new TriggerOnInsert()
+  let trigger = new TriggerOnInsertParent()
   trigger.create(db)
 
   // prepare statement
-  let stmt = new StatementInsert()
+  let stmt = new StatementInsertParent()
   stmt.create(db)
 
   // table empty
