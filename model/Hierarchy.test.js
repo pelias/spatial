@@ -13,6 +13,7 @@ tap.test('constructor: empty', (t) => {
   t.equal(h.child, undefined)
   t.equal(h.parent, undefined)
   t.equal(h.branch, undefined)
+  t.equal(h.depth, Hierarchy.UNKNOWN_DEPTH)
   t.end()
 })
 tap.test('constructor: child only', (t) => {
@@ -20,6 +21,7 @@ tap.test('constructor: child only', (t) => {
   t.equal(h.child, fixture.child)
   t.equal(h.parent, undefined)
   t.equal(h.branch, undefined)
+  t.equal(h.depth, Hierarchy.UNKNOWN_DEPTH)
   t.end()
 })
 tap.test('constructor: parent only', (t) => {
@@ -27,6 +29,7 @@ tap.test('constructor: parent only', (t) => {
   t.equal(h.child, undefined)
   t.equal(h.parent, fixture.parent)
   t.equal(h.branch, undefined)
+  t.equal(h.depth, Hierarchy.UNKNOWN_DEPTH)
   t.end()
 })
 tap.test('constructor: branch only', (t) => {
@@ -34,6 +37,7 @@ tap.test('constructor: branch only', (t) => {
   t.equal(h.child, undefined)
   t.equal(h.parent, undefined)
   t.equal(h.branch, 'example')
+  t.equal(h.depth, Hierarchy.UNKNOWN_DEPTH)
   t.end()
 })
 tap.test('constructor: child, parent & branch', (t) => {
@@ -41,6 +45,15 @@ tap.test('constructor: child, parent & branch', (t) => {
   t.equal(h.child, fixture.child)
   t.equal(h.parent, fixture.parent)
   t.equal(h.branch, 'example')
+  t.equal(h.depth, Hierarchy.UNKNOWN_DEPTH)
+  t.end()
+})
+tap.test('constructor: child, parent, branch & depth', (t) => {
+  let h = new Hierarchy(fixture.child, fixture.parent, 'example', 0)
+  t.equal(h.child, fixture.child)
+  t.equal(h.parent, fixture.parent)
+  t.equal(h.branch, 'example')
+  t.equal(h.depth, 0)
   t.end()
 })
 
@@ -189,6 +202,11 @@ tap.test('isValid: empty parent', (t) => {
 })
 tap.test('isValid: empty branch', (t) => {
   let h = new Hierarchy(fixture.child, fixture.parent, undefined)
+  t.notOk(h._isValid())
+  t.end()
+})
+tap.test('isValid: invalid depth', (t) => {
+  let h = new Hierarchy(fixture.child, fixture.parent, 'example', 'stringvalue')
   t.notOk(h._isValid())
   t.end()
 })
