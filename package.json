@@ -12,6 +12,7 @@
     "prune": "npm prune",
     "build": "docker build -t 'pelias/spatial' .",
     "test": "tap --disable-coverage --exclude='test/common.js'",
+    "test_one": "tap --disable-coverage $@",
     "coverage": "./bin/coverage",
     "env_check": "tap --disable-coverage test/environment.js",
     "start": "./bin/start",
