@@ -23,6 +23,15 @@ function scoreName (name) {
   return score
 }
 
+function commaSeparatedArrayOfStrings (val) {
+  if (!_.isString(val)) { return [] }
+  return val
+    .split(',')
+    .map(str => _.trim(str))
+    .filter(str => !_.isEmpty(str))
+    .map(str => _.toLower(str))
+}
+
 module.exports = {
   flatten: (val) => {
     let v = Array.isArray(val) ? val[0] : val
@@ -49,16 +58,10 @@ module.exports = {
     return names[0].name
   },
   toSources (sources) {
-    if (!_.isString(sources)) {
-      return []
-    }
-    return sources
-      .split(',')
-      .map(str => _.trim(str))
-      .filter(str => !_.isEmpty(str))
-      .map(str => _.toLower(str))
+    return commaSeparatedArrayOfStrings(sources)
       .map(str => sourceAlias[str] || str)
-  }
+  },
+  commaSeparatedArrayOfStrings
 }
 
 module.exports.floatPrecision7 = module.exports.floatPrecision.bind(null, 1e7)

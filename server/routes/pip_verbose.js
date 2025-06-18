@@ -73,7 +73,7 @@ module.exports = function (req, res) {
 
   // allow other views to utilize this view
   if (typeof this.remap === 'function') {
-    resp = this.remap(resp)
+    resp = this.remap(resp, req, res)
   }
 
   // send json

@@ -1,4 +1,5 @@
 const _ = require('lodash')
+const util = require('./util')
 const verbose = require('./pip_verbose')
 const untrustedLayers = new Set(['neighbourhood'])
 
@@ -26,13 +27,18 @@ const defaultLayers = new Set([
 // a custom 'view' which emulates the legacy pelias PIP format (with some additions!)
 // see: https://github.com/pelias/wof-admin-lookup
 module.exports = function (req, res) {
+  // configurable layers via query param
+  const queryLayers = new Set(util.commaSeparatedArrayOfStrings(req.query.layers))
+  const searchLayers = queryLayers.size ? new Set(_.intersection([...defaultLayers], [...queryLayers])) : defaultLayers
+
   // inputs
   req.query = {
     lon: req.params.lon,
     lat: req.params.lat,
     aliaslimit: 0,
     wofonly: 1,
-    hierarchy: true
+    hierarchy: true,
+    searchLayers
   }
 
   verbose.bind({ remap: remapFromHierarchy })(req, res)
@@ -41,12 +47,12 @@ module.exports = function (req, res) {
 // rewite the verbose view to match the expected format
 // using the 'lowest' matching placetype as the base and adopting
 // the hierarchy from that record for the parents.
-function remapFromHierarchy (resp) {
+function remapFromHierarchy (resp, req) {
   const mapped = {}
   let chosen = [] // the chosen 'lowest layer' to use for the hierarchy
 
   // iterate through compatible layers
-  for (const layer of defaultLayers) {
+  for (const layer of req.query.searchLayers) {
     if (!_.has(resp, layer)) { continue }
     chosen = _.get(resp, layer)
 
@@ -70,13 +76,6 @@ function remapFromHierarchy (resp) {
 
   // dedupe and clean results
   for (const placetype of Object.keys(mapped)) {
-    // remove any placetypes not in the compatibility list
-    // note: we may elect to remove this filter in the future
-    if (!defaultLayers.has(placetype)) {
-      delete mapped[placetype]
-      continue
-    }
-
     mapped[placetype] = _.uniqBy(mapped[placetype], 'id')
   }
 

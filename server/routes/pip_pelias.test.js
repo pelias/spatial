@@ -296,3 +296,48 @@ tap.test('remapFromHierarchy - Untrusted Layers - Multi Match', (t) => {
   })
   t.end()
 })
+
+// The 'lowest' layer must belong to the specified layers, parentage can be from any layer
+tap.test('pelias - layer filter', (t) => {
+  let res = mock.createResponse()
+  let req = mock.createRequest({
+    params: { lon: 170.96879300000001, lat: -45.098982 },
+    query: { layers: 'country, region,' },
+    app: proxy((query) => {
+      t.same(query, {
+        lon: 170.96879300000001,
+        lat: -45.098982,
+        limit: 1000,
+        aliaslimit: 0,
+        sources: '\u001ewof\u001e',
+        lang: 'und',
+        hierarchy: 1
+      })
+      return require('./fixtures/oamaru_verbose.rows.json')
+    })
+  })
+
+  pelias(req, res)
+  t.equal(200, res.statusCode)
+  t.same(res._getJSONData(), {
+    country: [
+      {
+        id: 85633345,
+        name: 'New Zealand',
+        abbr: 'NZL',
+        centroid: { lat: -43.586223, lon: 171.2117928 },
+        bounding_box: '-176.893092,-47.289993,178.577174,-33.958498'
+      }
+    ],
+    region: [
+      {
+        id: 85687201,
+        name: 'Otago Region',
+        abbr: 'OT',
+        centroid: { lat: -45.3973235, lon: 170.1778035 },
+        bounding_box: '168.116395,-46.839379,171.406801,-43.955411'
+      }
+    ]
+  })
+  t.end()
+})
