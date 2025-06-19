@@ -46,8 +46,8 @@ function getAbbreviation (properties) {
   const abbreviation = _.get(properties, 'wof:abbreviation')
   const country = _.get(properties, 'wof:country')
 
-  // use the 3 letter country code for 'country' placetypes
-  if (placeType === 'country' && countryCode) {
+  // use the 3 letter country code for 'country' and 'dependency' placetypes
+  if (['country', 'dependency'].includes(placeType) && countryCode) {
     return countryCode.trim()
   }
 
