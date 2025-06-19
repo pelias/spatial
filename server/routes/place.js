@@ -10,9 +10,9 @@ module.exports = function (req, res) {
   }
 
   // perform query
-  console.time('took')
+  // console.time('took')
   let rows = service.module.place.statement.fetch.get(query)
-  console.timeEnd('took')
+  // console.timeEnd('took')
 
   // send json
   res.status(200).json(rows)

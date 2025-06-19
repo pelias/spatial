@@ -24,9 +24,9 @@ module.exports.all = function (req, res) {
   }
 
   // perform query
-  console.time('took')
+  // console.time('took')
   let rows = service.module.geometry.statement.fetch.all(query)
-  console.timeEnd('took')
+  // console.timeEnd('took')
 
   // shift format
   rows = rows.map(row => {
@@ -62,9 +62,9 @@ module.exports.one = function (req, res) {
   }
 
   // perform query
-  console.time('took')
+  // console.time('took')
   let row = service.module.geometry.statement.fetch.get(query)
-  console.timeEnd('took')
+  // console.timeEnd('took')
 
   // shift format
   if (row && row.geom) {

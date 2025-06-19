@@ -12,9 +12,9 @@ module.exports = function (req, res) {
   }
 
   // perform query
-  console.time('took')
+  // console.time('took')
   let rows = service.module.pip.statement.pip.all(query)
-  console.timeEnd('took')
+  // console.timeEnd('took')
 
   // send json
   res.status(200).json(rows)

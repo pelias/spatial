@@ -27,9 +27,9 @@ module.exports = function (req, res) {
   }
 
   // perform query
-  console.time('took')
+  // console.time('took')
   let rows = service.module.pip.statement.verbose.all(query)
-  console.timeEnd('took')
+  // console.timeEnd('took')
 
   // rewrite response to emulate 'wof-admin-lookup' format
   let resp = {}
