@@ -15,9 +15,9 @@ module.exports.intersects = function (req, res) {
   }
 
   // perform query
-  console.time('took')
+  // console.time('took')
   let row = service.module.relationship.statement.intersects.all(query)
-  console.timeEnd('took')
+  // console.timeEnd('took')
 
   // send json
   res.status(200).json(row)
@@ -38,9 +38,9 @@ module.exports.contains = function (req, res) {
   }
 
   // perform query
-  console.time('took')
+  // console.time('took')
   let row = service.module.relationship.statement.contains.all(query)
-  console.timeEnd('took')
+  // console.timeEnd('took')
 
   // send json
   res.status(200).json(row)
@@ -61,9 +61,9 @@ module.exports.within = function (req, res) {
   }
 
   // perform query
-  console.time('took')
+  // console.time('took')
   let row = service.module.relationship.statement.within.all(query)
-  console.timeEnd('took')
+  // console.timeEnd('took')
 
   // send json
   res.status(200).json(row)
