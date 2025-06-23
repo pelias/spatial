@@ -89,6 +89,29 @@ tap.test('mapper: multiple hierarchies', (t) => {
 
   t.end()
 })
+tap.test('mapper: skip -1 ids', (t) => {
+  const p = new Place(fixture.region.identity, fixture.region.ontology)
+  map(p, {
+    'wof:hierarchy': [
+      {
+        continent_id: 102191581,
+        country_id: -1,
+        disputed_id: 1159339547,
+        empire_id: 874393555,
+        region_id: 85688855
+      }
+    ]
+  })
+
+  t.same([
+    new Hierarchy(p.identity, p.identity, 'wof:0', 0),
+    new Hierarchy(p.identity, new Identity('wof', '1159339547'), 'wof:0', 1),
+    new Hierarchy(p.identity, new Identity('wof', '874393555'), 'wof:0', 2),
+    new Hierarchy(p.identity, new Identity('wof', '102191581'), 'wof:0', 3)
+  ], p.hierarchy)
+
+  t.end()
+})
 tap.test('mapper: key ordering', (t) => {
   const p = new Place(new Identity('wof', '1729339019'), new Ontology('admin', 'locality'))
   map(p, {

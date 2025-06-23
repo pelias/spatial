@@ -27,12 +27,15 @@ function mapper (place, properties) {
 
     let depth = 0
     for (const key in sorted) {
+      const parentId = sorted[key].toString()
+      if (parentId === '-1') { continue }
+
       place.addHierarchy(
         new Hierarchy(
           place.identity,
           new Identity(
             place.identity.source,
-            sorted[key].toString()
+            parentId
           ),
           `wof:${o}`,
           depth++
