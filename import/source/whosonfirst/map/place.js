@@ -21,6 +21,9 @@ function mapper (doc) {
   // do not import alt-geometries (we may wish to in the future)
   if (_isAltGeometry(properties)) { return null }
 
+  // skip neighbourhoods with invalid hierarchies
+  if (_isNeighbourhoodWithInvalidHierarchy(properties)) { return null }
+
   // instantiate a new place
   const place = new Place(
     new Identity('wof', _.get(doc, 'id', '').toString()),
@@ -42,6 +45,22 @@ function _isValid (properties) {
   let isSuperseded = _.isArray(_.get(properties, 'wof:superseded_by')) &&
     properties['wof:superseded_by'].length > 0
   return isCurrent && !isDeprecated && !isSuperseded
+}
+
+// This functionality was inherited from 'wof-admin-lookup'.
+// We need to revisit this at some point as looking through the data revealed a bunch of
+// issues with hierarchies including `locality_id = -1`, `locality_id = neighbourhood_id` &
+// `locality_id = <deprecated/superseded>`.
+function _isNeighbourhoodWithInvalidHierarchy (properties) {
+  let placetype = _.get(properties, 'wof:placetype', 'unknown')
+  if (placetype !== 'neighbourhood') { return false }
+
+  // https://github.com/pelias/wof-admin-lookup/blob/master/src/pip/components/filterOutCitylessNeighbourhoods.js
+  let hierarchy = _.get(properties, 'wof:hierarchy', 'unknown')
+  if (!_.has(hierarchy, '[0].locality_id') && !_.has(hierarchy, '[0].localadmin_id')) { return true }
+
+  // https://github.com/pelias/wof-admin-lookup/blob/master/src/pip/components/filterOutHierarchylessNeighbourhoods.js
+  return _.isEmpty(hierarchy)
 }
 
 function _isAltGeometry (properties) {

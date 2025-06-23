@@ -153,3 +153,48 @@ tap.test('altgeoms: skip alt geometries', t => {
   t.equal(place, null)
   t.end()
 })
+
+tap.test('mapper: filter neighbourhoods with empty hierarchy', t => {
+  let place = map({
+    id: 1,
+    properties: {
+      'wof:placetype': 'neighbourhood',
+      'wof:hierarchy': []
+    }
+  })
+  t.equal(place, null)
+  t.end()
+})
+
+tap.test('mapper: filter neighbourhoods with no locality or localadmin parent', t => {
+  let place = map({
+    id: 1,
+    properties: {
+      'wof:placetype': 'neighbourhood',
+      'wof:hierarchy': [{
+        'region_id': 1
+      }]
+    }
+  })
+  t.equal(place, null)
+  t.end()
+})
+
+tap.test('mapper: maps neighbourhoods with balid parentage', t => {
+  let place = map({
+    id: 1,
+    properties: {
+      'wof:placetype': 'neighbourhood',
+      'wof:hierarchy': [{
+        'region_id': 1,
+        'locality_id': 2
+      }]
+    }
+  })
+  t.ok(place instanceof Place)
+  t.equal(place.identity.source, 'wof')
+  t.equal(place.identity.id, '1')
+  t.equal(place.ontology.class, 'admin')
+  t.equal(place.ontology.type, 'neighbourhood')
+  t.end()
+})
