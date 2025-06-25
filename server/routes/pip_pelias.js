@@ -4,9 +4,13 @@ const verbose = require('./pip_verbose')
 const untrustedLayers = new Set(['neighbourhood'])
 
 /**
- * @todo: only search layers provided in query
+ * @todo: only search layers provided in query, currently all
+ * layers in the db are searched. There *may* be a performance
+ * benefit from excluding some layers; or not?
  */
 
+// default layers to target for the 'lowest layer' match.
+// note: a subset may be targeted using the querystring param '?layers'.
 const defaultLayers = new Set([
   'neighbourhood',
   'borough',
@@ -14,11 +18,17 @@ const defaultLayers = new Set([
   'localadmin',
   'county',
   'macrocounty',
-  'macroregion',
   'region',
+  'macroregion',
   'dependency',
-  'country',
-  'empire',
+  'country'
+])
+
+// layers supported in the GeoJSON output
+// note: some layers such as 'empire', 'disputed', 'venue' etc. are excluded
+const displayLayers = new Set([
+  ...defaultLayers,
+  'postalcode',
   'continent',
   'marinearea',
   'ocean'
@@ -29,7 +39,7 @@ const defaultLayers = new Set([
 module.exports = function (req, res) {
   // configurable layers via query param
   const queryLayers = new Set(util.commaSeparatedArrayOfStrings(req.query.layers))
-  const searchLayers = queryLayers.size ? new Set(_.intersection([...defaultLayers], [...queryLayers])) : defaultLayers
+  const searchLayers = queryLayers.size ? new Set(_.intersection([...displayLayers], [...queryLayers])) : defaultLayers
 
   // inputs
   req.query = {
@@ -68,6 +78,7 @@ function remapFromHierarchy (resp, req) {
   // and adopt the hierarchy from each.
   chosen.forEach(place => {
     for (const [placetype, parent] of Object.entries(place.hierarchy)) {
+      if (!displayLayers.has(placetype)) { continue }
       const norm = normalize(parent)
       if (!Array.isArray(mapped[placetype])) { mapped[placetype] = [] }
       mapped[placetype].push(norm)
