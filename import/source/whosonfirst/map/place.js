@@ -21,6 +21,9 @@ function mapper (doc) {
   // do not import alt-geometries (we may wish to in the future)
   if (_isAltGeometry(properties)) { return null }
 
+  // ensure all required fields are present
+  if (!_hasRequiredFields(properties)) { return null }
+
   // skip neighbourhoods with invalid hierarchies
   if (_isNeighbourhoodWithInvalidHierarchy(properties)) { return null }
 
@@ -45,6 +48,10 @@ function _isValid (properties) {
   let isSuperseded = _.isArray(_.get(properties, 'wof:superseded_by')) &&
     properties['wof:superseded_by'].length > 0
   return isCurrent && !isDeprecated && !isSuperseded
+}
+
+function _hasRequiredFields (properties) {
+  return !_.isEmpty(_.get(properties, 'wof:name', '').trim())
 }
 
 // This functionality was inherited from 'wof-admin-lookup'.
