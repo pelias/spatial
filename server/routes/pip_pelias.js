@@ -9,9 +9,9 @@ const untrustedLayers = new Set(['neighbourhood'])
  * benefit from excluding some layers; or not?
  */
 
-// default layers to target for the 'lowest layer' match.
-// note: a subset may be targeted using the querystring param '?layers'.
-const defaultLayers = new Set([
+// layers supported in the GeoJSON output
+// note: some layers such as 'empire', 'disputed', 'venue' etc. are excluded
+const displayLayers = new Set([
   'neighbourhood',
   'borough',
   'locality',
@@ -21,17 +21,11 @@ const defaultLayers = new Set([
   'region',
   'macroregion',
   'dependency',
-  'country'
-])
-
-// layers supported in the GeoJSON output
-// note: some layers such as 'empire', 'disputed', 'venue' etc. are excluded
-const displayLayers = new Set([
-  ...defaultLayers,
-  'postalcode',
+  'country',
   'continent',
   'marinearea',
-  'ocean'
+  'ocean',
+  'postalcode'
 ])
 
 // a custom 'view' which emulates the legacy pelias PIP format (with some additions!)
@@ -39,7 +33,7 @@ const displayLayers = new Set([
 module.exports = function (req, res) {
   // configurable layers via query param
   const queryLayers = new Set(util.commaSeparatedArrayOfStrings(req.query.layers))
-  const searchLayers = queryLayers.size ? new Set(_.intersection([...displayLayers], [...queryLayers])) : defaultLayers
+  const searchLayers = queryLayers.size ? new Set(_.intersection([...displayLayers], [...queryLayers])) : displayLayers
 
   // inputs
   req.query = {
