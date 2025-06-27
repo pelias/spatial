@@ -63,7 +63,8 @@ tap.test('remapFromHierarchy - Martinborough', (t) => {
             },
             bounding_box: '174.388038,-41.815112,176.56406,-40.628591'
           }
-        }
+        },
+        distance: 0
       }
     ],
     county: [
@@ -95,7 +96,8 @@ tap.test('remapFromHierarchy - Martinborough', (t) => {
             },
             bounding_box: '174.388038,-41.815112,176.56406,-40.628591'
           }
-        }
+        },
+        distance: 0
       }
     ],
     country: [
@@ -106,7 +108,8 @@ tap.test('remapFromHierarchy - Martinborough', (t) => {
         abbr: 'NZL',
         centroid: { lat: -43.586223, lon: 171.2117928 },
         bounding_box: '-176.893092,-47.289993,178.577174,-33.958498',
-        hierarchy: {}
+        hierarchy: {},
+        distance: 0
       }
     ],
     region: [
@@ -128,7 +131,8 @@ tap.test('remapFromHierarchy - Martinborough', (t) => {
             },
             bounding_box: '-176.893092,-47.289993,178.577174,-33.958498'
           }
-        }
+        },
+        distance: 0
       }
     ]
   })
@@ -207,7 +211,8 @@ tap.test('remapFromHierarchy - Oamaru', (t) => {
             },
             bounding_box: '168.116395,-46.839379,171.406801,-43.955411'
           }
-        }
+        },
+        distance: 0
       }
     ],
     county: [
@@ -239,7 +244,8 @@ tap.test('remapFromHierarchy - Oamaru', (t) => {
             },
             bounding_box: '169.542498,-45.080929,174.264103,-41.907383'
           }
-        }
+        },
+        distance: 0
       }
     ],
     country: [
@@ -250,7 +256,8 @@ tap.test('remapFromHierarchy - Oamaru', (t) => {
         abbr: 'NZL',
         centroid: { lat: -43.586223, lon: 171.2117928 },
         bounding_box: '-176.893092,-47.289993,178.577174,-33.958498',
-        hierarchy: {}
+        hierarchy: {},
+        distance: 0
       }
     ],
     localadmin: [
@@ -294,7 +301,8 @@ tap.test('remapFromHierarchy - Oamaru', (t) => {
             },
             bounding_box: '168.116395,-46.839379,171.406801,-43.955411'
           }
-        }
+        },
+        distance: 0
       }
     ],
     region: [
@@ -316,7 +324,8 @@ tap.test('remapFromHierarchy - Oamaru', (t) => {
             },
             bounding_box: '-176.893092,-47.289993,178.577174,-33.958498'
           }
-        }
+        },
+        distance: 0
       }
     ]
   })

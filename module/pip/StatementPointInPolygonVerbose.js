@@ -1,6 +1,23 @@
 const _ = require('lodash')
 const SqliteStatement = require('../../sqlite/SqliteStatement')
 
+/**
+ * Fuzzy distance allows PIP to return matches where the point is
+ * not contained completely within the target polygon but is within
+ * this threshold of the boundary.
+ *
+ * This is intended to assist in improved matching of points near
+ * marine boundaries and may also help to provide matching adjacent
+ * polygons to index as alternative parents for search.
+ *
+ * note: Interior matches are favoured as results are returned in
+ * distance order ascending.
+ *
+ * The default value 0.001 degrees corresponds to ~111.32m longitude
+ * at the equator, ~78.66m at 45°, ~55.66m at 60° and ~28.83m at 75°.
+ */
+const fuzzyDistanceThreshold = 0.001
+
 class StatementPeliasView extends SqliteStatement {
   create (db, config) {
     try {
@@ -133,14 +150,15 @@ class StatementPeliasView extends SqliteStatement {
                 AND branch = 'wof:0'
               )
             )
-          END AS hierarchy
+          END AS hierarchy,
+        ST_Distance(pip.geom, MakePoint( @lon, @lat, 4326 )) as distance
         FROM ${dbname}.point_in_polygon AS pip
         LEFT JOIN ${dbname}.place USING (source, id)
         LEFT JOIN ${dbname}.geometry AS boundary USING (source, id)
         LEFT JOIN ${dbname}.geometry AS centroid USING (source, id)
         LEFT JOIN ${dbname}.geometry AS envelope USING (source, id)
         WHERE search_frame = MakePoint( @lon, @lat, 4326 )
-        AND INTERSECTS( pip.geom, MakePoint( @lon, @lat, 4326 ) )
+        AND distance <= ${fuzzyDistanceThreshold}
         AND (
           CASE
             WHEN @sources = '' THEN 1
@@ -153,7 +171,8 @@ class StatementPeliasView extends SqliteStatement {
         AND boundary.role = 'boundary' AND boundary.geom != ''
         AND centroid.role = 'centroid' AND centroid.geom != ''
         AND envelope.role = 'envelope' AND envelope.geom != ''
-        ORDER BY place.type ASC
+        GROUP BY place.source, place.id
+        ORDER BY place.type ASC, distance ASC
         LIMIT @limit
       `)
     } catch (e) {

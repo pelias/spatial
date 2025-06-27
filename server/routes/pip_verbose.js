@@ -67,7 +67,8 @@ module.exports = function (req, res) {
       abbr: row.abbr || undefined,
       abbr_alias: abbrAlias,
       ...boundsAndCentroid(row),
-      hierarchy
+      hierarchy,
+      distance: util.floatPrecision7(row.distance)
     })
   })
 

@@ -14,6 +14,7 @@ const untrustedLayers = new Set(['neighbourhood'])
 const displayLayers = new Set([
   'neighbourhood',
   'borough',
+  'postalcode',
   'locality',
   'localadmin',
   'county',
@@ -24,8 +25,7 @@ const displayLayers = new Set([
   'country',
   'continent',
   'marinearea',
-  'ocean',
-  'postalcode'
+  'ocean'
 ])
 
 // a custom 'view' which emulates the legacy pelias PIP format (with some additions!)
