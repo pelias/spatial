@@ -1,1 +1,5 @@
 https://www.census.gov/cgi-bin/geo/shapefiles/index.php
+
+ogr2ogr tl_2024_us_zcta520.geojsonl /vsizip/tl_2024_us_zcta520.zip
+
+cat tl_2024_us_zcta520.geojsonl | node bin/spatial.js --db=zcta.spatial.db import zcta
