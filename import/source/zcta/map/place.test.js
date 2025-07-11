@@ -11,7 +11,7 @@ tap.test('mapper: properties empty', (t) => {
 tap.test('mapper: maps identity & ontology', (t) => {
   let place = map({
     properties: {
-      'ZCTA5CE10': '90210'
+      'ZCTA5CE20': '90210'
     }
   })
   t.ok(place instanceof Place)
@@ -24,7 +24,7 @@ tap.test('mapper: maps identity & ontology', (t) => {
 tap.test('mapper: maps geometry', (t) => {
   let place = map({
     properties: {
-      'ZCTA5CE10': '90210'
+      'ZCTA5CE20': '90210'
     },
     geometry: require('../../../../test/fixture/geojson.triangle')
   })
