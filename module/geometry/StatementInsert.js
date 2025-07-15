@@ -11,8 +11,8 @@ class StatementInsert extends SqliteStatement {
           INSERT OR REPLACE INTO ${dbname}.geometry (
             source,
             id,
-            geom,
             role,
+            geom,
           ) VALUES (
             @source,
             @id,
