@@ -3,7 +3,7 @@ FROM ubuntu:noble
 # apt dependencies
 RUN apt-get update -y && \
   apt-get install -y curl && \
-  curl -fsSL https://deb.nodesource.com/setup_23.x -o nodesource_setup.sh && \
+  curl -fsSL https://deb.nodesource.com/setup_24.x -o nodesource_setup.sh && \
   bash nodesource_setup.sh && \
   apt-get install -y nodejs libsqlite3-mod-spatialite && \
   rm -rf /var/lib/apt/lists/*
