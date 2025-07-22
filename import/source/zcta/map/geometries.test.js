@@ -88,8 +88,8 @@ tap.test('mapper: internal point', (t) => {
       ]
     },
     properties: {
-      'INTPTLON10': 1.1,
-      'INTPTLAT10': 2.2
+      'INTPTLON20': 1.1,
+      'INTPTLAT20': 2.2
     }
   })
   t.equal(p.geometry.length, 2)

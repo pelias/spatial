@@ -19,8 +19,8 @@ function mapper (place, doc) {
   if (!isPolygon) { return }
 
   // 'internal point'
-  let lon = parseFloat(_.get(properties, 'INTPTLON10'))
-  let lat = parseFloat(_.get(properties, 'INTPTLAT10'))
+  let lon = parseFloat(_.get(properties, 'INTPTLON20'))
+  let lat = parseFloat(_.get(properties, 'INTPTLAT20'))
   if (!isNaN(lat) && !isNaN(lon)) {
     place.addGeometry(new Geometry(
       wkx.Geometry.parse(`POINT(${lon} ${lat})`),

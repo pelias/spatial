@@ -13,16 +13,16 @@ tap.test('mapper: properties empty', (t) => {
 tap.test('mapper: uscensus-specific properties', (t) => {
   let p = new Place()
   map(p, {
-    'CLASSFP10': 'B5',
-    'MTFCC10': 'G6350',
-    'INTPTLON10': 1.1,
-    'INTPTLAT10': 2.2
+    'CLASSFP20': 'B5',
+    'MTFCC20': 'G6350',
+    'INTPTLON20': 1.1,
+    'INTPTLAT20': 2.2
   })
 
   t.equal(p.property.length, 2)
-  t.equal(p.property[0].key, 'uscensus:CLASSFP10', 'CLASSFP10')
-  t.equal(p.property[0].value, 'B5', 'CLASSFP10')
-  t.equal(p.property[1].key, 'uscensus:MTFCC10', 'MTFCC10')
-  t.equal(p.property[1].value, 'G6350', 'MTFCC10')
+  t.equal(p.property[0].key, 'uscensus:CLASSFP20', 'CLASSFP20')
+  t.equal(p.property[0].value, 'B5', 'CLASSFP20')
+  t.equal(p.property[1].key, 'uscensus:MTFCC20', 'MTFCC20')
+  t.equal(p.property[1].value, 'G6350', 'MTFCC20')
   t.end()
 })

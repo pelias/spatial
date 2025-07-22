@@ -17,7 +17,7 @@ function mapper (doc) {
 
   // instantiate a new place
   const place = new Place(
-    new Identity('uscensus', 'zcta' + DELIM + _.get(properties, 'ZCTA5CE10', '').trim()),
+    new Identity('uscensus', 'zcta' + DELIM + _.get(properties, 'ZCTA5CE20', '').trim()),
     new Ontology('admin', 'postalcode')
   )
 

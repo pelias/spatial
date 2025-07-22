@@ -12,7 +12,7 @@ tap.test('mapper: properties empty', (t) => {
 })
 tap.test('mapper: name', (t) => {
   let p = new Place()
-  map(p, { 'ZCTA5CE10': ' example1 ' })
+  map(p, { 'ZCTA5CE20': ' example1 ' })
 
   t.equal(p.name.length, 1)
   t.equal(p.name[0].lang, 'und')
