@@ -45,7 +45,10 @@ module.exports = function (req, res) {
     searchLayers
   }
 
-  verbose.bind({ remap: remapFromHierarchy })(req, res)
+  // remap verbose view using custom formatter
+  req.remap = remapFromHierarchy
+
+  return verbose(req, res)
 }
 
 // rewite the verbose view to match the expected format
