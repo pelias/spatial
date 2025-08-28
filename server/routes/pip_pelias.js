@@ -10,7 +10,7 @@ const untrustedLayers = new Set(['neighbourhood'])
  */
 
 // layers supported in the GeoJSON output
-// note: some layers such as 'empire', 'disputed', 'venue' etc. are excluded
+// note: some layers such as 'disputed', 'venue' etc. are excluded
 const displayLayers = new Set([
   'neighbourhood',
   'borough',
@@ -23,6 +23,7 @@ const displayLayers = new Set([
   'macroregion',
   'dependency',
   'country',
+  'empire',
   'continent',
   'marinearea',
   'ocean'
