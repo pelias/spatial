@@ -57,7 +57,7 @@ module.exports = {
     })
     yargs.option('tweak_module_shard_complexity', {
       type: 'number',
-      default: 200,
+      default: 500,
       coerce: parseFloat,
       describe: 'max polygon complexity for shard module'
     })
