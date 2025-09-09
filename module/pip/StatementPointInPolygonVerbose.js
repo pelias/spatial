@@ -18,7 +18,7 @@ const SqliteStatement = require('../../sqlite/SqliteStatement')
  */
 const fuzzyDistanceThreshold = 0.001
 
-class StatementPeliasView extends SqliteStatement {
+class StatementPeliasVerbose extends SqliteStatement {
   create (db, config) {
     try {
       let dbname = _.get(config, 'database', 'main')
@@ -181,4 +181,4 @@ class StatementPeliasView extends SqliteStatement {
   }
 }
 
-module.exports = StatementPeliasView
+module.exports = StatementPeliasVerbose

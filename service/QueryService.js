@@ -50,6 +50,11 @@ class QueryService {
       this.module[name].setup(this.config)
     }
   }
+  close () {
+    for (let name in this.module) {
+      this.module[name].close(this.config)
+    }
+  }
 }
 
 module.exports = QueryService
