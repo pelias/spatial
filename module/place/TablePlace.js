@@ -1,7 +1,7 @@
 const _ = require('lodash')
 const SqliteTable = require('../../sqlite/SqliteTable')
 
-class TableDocument extends SqliteTable {
+class TablePlace extends SqliteTable {
   create (db, config) {
     try {
       let dbname = _.get(config, 'database', 'main')
@@ -39,4 +39,4 @@ class TableDocument extends SqliteTable {
   }
 }
 
-module.exports = TableDocument
+module.exports = TablePlace

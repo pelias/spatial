@@ -46,6 +46,11 @@ class Module {
       }
     }
   }
+  close (config) {
+    [this.init, this.table, this.index, this.statement]
+      .map(p => Object.values(p).filter(m => typeof m.close === 'function'))
+      .flat().forEach(m => m.close(this.db, config))
+  }
 }
 
 module.exports = Module

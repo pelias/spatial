@@ -101,5 +101,6 @@ module.exports = {
     stream
       .pipe(service.createImportStream())
       .on('finish', ticker.stop.bind(ticker))
+      .on('finish', service.close.bind(service))
   }
 }
