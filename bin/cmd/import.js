@@ -45,13 +45,13 @@ module.exports = {
     // tweaks
     yargs.option('tweak_module_geometry_simplify', {
       type: 'number',
-      default: 0.0001,
+      default: 0.00003,
       coerce: parseFloat,
       describe: 'simplification tolerance for geometry module'
     })
     yargs.option('tweak_module_shard_simplify', {
       type: 'number',
-      default: 0.0001,
+      default: 0.00003,
       coerce: parseFloat,
       describe: 'simplification tolerance for shard module'
     })
