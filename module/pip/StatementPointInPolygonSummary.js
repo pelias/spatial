@@ -47,8 +47,8 @@ class StatementPointInPolygonSummary extends SqliteStatement {
                     'centroid', parent.centroid,
                     'bounds', parent.bounds
                   ) AS parent_obj
-                FROM main.hierarchy
-                INNER JOIN main.summary AS parent ON (
+                FROM ${dbname}.hierarchy
+                INNER JOIN ${dbname}.summary AS parent ON (
                   hierarchy.parent_source = parent.source AND
                   hierarchy.parent_id = parent.id
                 )
