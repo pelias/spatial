@@ -66,6 +66,13 @@ class StatementPointInPolygonSummary extends SqliteStatement {
         AND distance <= ${fuzzyDistanceThreshold}
         AND (
           CASE
+            WHEN @roles = '' THEN 1
+            WHEN @roles like '%' || CHAR(30) || pip.role || CHAR(30) || '%' THEN 1
+            ELSE 0
+          END
+        )
+        AND (
+          CASE
             WHEN @sources = '' THEN 1
             WHEN @sources like '%' || CHAR(30) || summary.source || CHAR(30) || '%' THEN 1
             ELSE 0
