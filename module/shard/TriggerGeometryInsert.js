@@ -5,7 +5,7 @@ class TriggerGeometryInsert extends SqliteStatement {
   create (db, config) {
     try {
       let dbname = _.get(config, 'database', 'main')
-      let complexity = _.clamp(_.get(config, 'module.shard.complexity', 200), 5, 1000000)
+      let complexity = _.clamp(_.get(config, 'module.shard.complexity', 500), 5, 1000000)
       let simplify = _.get(config, 'module.shard.simplify', 0.0001)
       db.prepare(`
         CREATE TRIGGER IF NOT EXISTS shard_geometry_insert
