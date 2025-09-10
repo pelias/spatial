@@ -19,7 +19,8 @@
     "server": "./bin/start",
     "format_check": "./node_modules/standard/bin/cmd.js",
     "format_fix": "./node_modules/standard/bin/cmd.js --fix",
-    "lint": "jshint ."
+    "lint": "jshint .",
+    "ci": "npm run env_check && npm test"
   },
   "repository": {
     "type": "git",
