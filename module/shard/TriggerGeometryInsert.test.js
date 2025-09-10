@@ -81,7 +81,7 @@ tap.test('definition', (t) => {
 
           -- insert collection into tmp table
           INSERT INTO shard_subdivide (geom)
-          SELECT ST_Subdivide(NEW.geom, 200)
+          SELECT ST_Subdivide(ST_SimplifyPreserveTopology(NEW.geom, 0.0001), 200)
           WHERE NEW.geom IS NOT NULL;
 
           -- insert shards in to shard table

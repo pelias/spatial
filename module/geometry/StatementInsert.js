@@ -12,7 +12,7 @@ class StatementInsert extends SqliteStatement {
             source,
             id,
             role,
-            geom,
+            geom
           ) VALUES (
             @source,
             @id,

@@ -45,7 +45,7 @@ module.exports = {
     // tweaks
     yargs.option('tweak_module_geometry_simplify', {
       type: 'number',
-      default: 0.0,
+      default: 0.0001,
       coerce: parseFloat,
       describe: 'simplification tolerance for geometry module'
     })
@@ -81,12 +81,12 @@ module.exports = {
       verbose: argv.verbose,
       module: {
         geometry: {
-          simplify: argv.tweak_module_geometry_simplify || undefined
+          simplify: argv.tweak_module_geometry_simplify
         },
         shard: {
-          simplify: argv.tweak_module_shard_simplify || undefined,
-          complexity: argv.tweak_module_shard_complexity || undefined,
-          depth: argv.tweak_module_shard_depth || undefined
+          simplify: argv.tweak_module_shard_simplify,
+          complexity: argv.tweak_module_shard_complexity,
+          depth: argv.tweak_module_shard_depth
         }
       }
     })
