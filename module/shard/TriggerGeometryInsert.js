@@ -6,6 +6,7 @@ class TriggerGeometryInsert extends SqliteStatement {
     try {
       let dbname = _.get(config, 'database', 'main')
       let complexity = _.clamp(_.get(config, 'module.shard.complexity', 200), 5, 1000000)
+      let simplify = _.get(config, 'module.shard.simplify', 0.0001)
       db.prepare(`
         CREATE TRIGGER IF NOT EXISTS shard_geometry_insert
         AFTER INSERT ON ${dbname}.geometry
@@ -21,7 +22,7 @@ class TriggerGeometryInsert extends SqliteStatement {
 
           -- insert collection into tmp table
           INSERT INTO shard_subdivide (geom)
-          SELECT ST_Subdivide(NEW.geom, ${complexity})
+          SELECT ST_Subdivide(ST_SimplifyPreserveTopology(NEW.geom, ${simplify}), ${complexity})
           WHERE NEW.geom IS NOT NULL;
 
           -- insert shards in to shard table
