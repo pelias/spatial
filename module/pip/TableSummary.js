@@ -102,6 +102,7 @@ class TableSummary extends SqliteTable {
         FROM place
         WHERE centroid IS NOT NULL
         AND bounds IS NOT NULL
+        AND name IS NOT NULL
       `).run()
     } catch (e) {
       this.error('POPULATE TABLE', e)
