@@ -1,7 +1,7 @@
 const _ = require('lodash')
 const util = require('./util')
-const verbose = require('./pip_verbose')
 const untrustedLayers = new Set(['neighbourhood'])
+const RECORD_SEPARATOR = String.fromCharCode(30)
 
 /**
  * @todo: only search layers provided in query, currently all
@@ -36,31 +36,57 @@ module.exports = function (req, res) {
   const queryLayers = new Set(util.commaSeparatedArrayOfStrings(req.query.layers))
   const searchLayers = queryLayers.size ? new Set(_.intersection([...displayLayers], [...queryLayers])) : displayLayers
 
-  // inputs
-  req.query = {
-    lon: req.params.lon,
-    lat: req.params.lat,
-    aliaslimit: 0,
-    wofonly: 1,
-    hierarchy: true,
-    searchLayers
+  const query = {
+    lon: parseFloat(util.flatten(req.params.lon)),
+    lat: parseFloat(util.flatten(req.params.lat)),
+    roles: `${RECORD_SEPARATOR}boundary${RECORD_SEPARATOR}`,
+    sources: `${RECORD_SEPARATOR}wof${RECORD_SEPARATOR}`,
+    hierarchy: 1,
+    limit: 1000
   }
 
-  // remap verbose view using custom formatter
-  req.remap = remapFromHierarchy
+  // perform query
+  // console.time('took')
+  const service = req.app.locals.service
+  const rows = service.module.pip.statement.summary.all(query)
+  // console.timeEnd('took')
 
-  return verbose(req, res)
+  const resp = remapFromHierarchy(parseRows(rows), searchLayers)
+
+  // send json
+  res.status(200).json(resp)
+}
+
+function parseRows (rows) {
+  let resp = {}
+  rows.forEach(row => {
+    if (!Array.isArray(resp[row.type])) { resp[row.type] = [] }
+    resp[row.type].push({
+      ...row,
+      ...boundsAndCentroid(row),
+      hierarchy: _.mapValues(
+        JSON.parse(row.hierarchy || '{}'),
+        (parent) => {
+          _.assign(parent, boundsAndCentroid(parent))
+          delete parent.bounds
+          return parent
+        }
+      ),
+      distance: util.floatPrecision7(row.distance)
+    })
+  })
+  return resp
 }
 
 // rewite the verbose view to match the expected format
 // using the 'lowest' matching placetype as the base and adopting
 // the hierarchy from that record for the parents.
-function remapFromHierarchy (resp, req) {
+function remapFromHierarchy (resp, searchLayers) {
   const mapped = {}
   let chosen = [] // the chosen 'lowest layer' to use for the hierarchy
 
   // iterate through compatible layers
-  for (const layer of req.query.searchLayers) {
+  for (const layer of searchLayers) {
     if (!_.has(resp, layer)) { continue }
     chosen = _.get(resp, layer)
 
@@ -96,4 +122,16 @@ function normalize (place) {
   res.id = parseInt(res.id, 10) // for compatibility (wof IDs are always numeric)
   if (!res.abbr) { delete res.abbr }
   return res
+}
+
+function boundsAndCentroid (row) {
+  const centroidString = (row.centroid ? row.centroid : '0,0')
+  const c = centroidString.split(',').map(util.floatPrecision7)
+
+  return {
+    centroid: { lat: c[1], lon: c[0] },
+    bounding_box: (
+      row.bounds ? row.bounds.split(',') : [c[0], c[1], c[0], c[1]]
+    ).map(util.floatPrecision7).join(',')
+  }
 }
