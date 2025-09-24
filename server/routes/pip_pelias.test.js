@@ -1,6 +1,6 @@
 const _ = require('lodash')
 const tap = require('tap')
-const pelias = require('./pip_pelias')
+const pelias = require('./pip_pelias').controller
 const mock = require('node-mocks-http')
 const proxy = (fn) => _.set({}, 'locals.service.module.pip.statement.summary.all', fn)
 
@@ -11,11 +11,7 @@ tap.test('remapFromHierarchy - Martinborough', (t) => {
     app: proxy((query) => {
       t.same(query, {
         lon: 175.4166635,
-        lat: -41.221498,
-        limit: 1000,
-        roles: '\u001eboundary\u001e',
-        sources: '\u001ewof\u001e',
-        hierarchy: 1
+        lat: -41.221498
       })
       return require('./fixtures/martinborough_summary.rows.json')
     })
@@ -76,11 +72,7 @@ tap.test('remapFromHierarchy - Oamaru', (t) => {
     app: proxy((query) => {
       t.same(query, {
         lon: 170.96879300000001,
-        lat: -45.098982,
-        limit: 1000,
-        roles: '\u001eboundary\u001e',
-        sources: '\u001ewof\u001e',
-        hierarchy: 1
+        lat: -45.098982
       })
       return require('./fixtures/oamaru_summary.rows.json')
     })
@@ -145,11 +137,7 @@ tap.test('remapFromHierarchy - Untrusted Layers - Single Match', (t) => {
     app: proxy((query) => {
       t.same(query, {
         lon: 1,
-        lat: 1,
-        limit: 1000,
-        roles: '\u001eboundary\u001e',
-        sources: '\u001ewof\u001e',
-        hierarchy: 1
+        lat: 1
       })
       return [
         {
@@ -209,11 +197,7 @@ tap.test('remapFromHierarchy - Untrusted Layers - Multi Match', (t) => {
     app: proxy((query) => {
       t.same(query, {
         lon: 1,
-        lat: 1,
-        limit: 1000,
-        roles: '\u001eboundary\u001e',
-        sources: '\u001ewof\u001e',
-        hierarchy: 1
+        lat: 1
       })
       return [
         {
@@ -305,11 +289,7 @@ tap.test('pelias - layer filter', (t) => {
     app: proxy((query) => {
       t.same(query, {
         lon: 170.96879300000001,
-        lat: -45.098982,
-        limit: 1000,
-        roles: '\u001eboundary\u001e',
-        sources: '\u001ewof\u001e',
-        hierarchy: 1
+        lat: -45.098982
       })
       return require('./fixtures/oamaru_summary.rows.json')
     })

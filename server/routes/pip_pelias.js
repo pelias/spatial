@@ -1,7 +1,6 @@
 const _ = require('lodash')
 const util = require('./util')
 const untrustedLayers = new Set(['neighbourhood'])
-const RECORD_SEPARATOR = String.fromCharCode(30)
 
 /**
  * @todo: only search layers provided in query, currently all
@@ -31,50 +30,54 @@ const displayLayers = new Set([
 
 // a custom 'view' which emulates the legacy pelias PIP format (with some additions!)
 // see: https://github.com/pelias/wof-admin-lookup
-module.exports = function (req, res) {
+function controller (req, res) {
   // configurable layers via query param
   const queryLayers = new Set(util.commaSeparatedArrayOfStrings(req.query.layers))
-  const searchLayers = queryLayers.size ? new Set(_.intersection([...displayLayers], [...queryLayers])) : displayLayers
 
-  const query = {
+  const params = {
     lon: parseFloat(util.flatten(req.params.lon)),
-    lat: parseFloat(util.flatten(req.params.lat)),
-    roles: `${RECORD_SEPARATOR}boundary${RECORD_SEPARATOR}`,
-    sources: `${RECORD_SEPARATOR}wof${RECORD_SEPARATOR}`,
-    hierarchy: 1,
-    limit: 1000
+    lat: parseFloat(util.flatten(req.params.lat))
   }
 
-  // perform query
-  // console.time('took')
-  const service = req.app.locals.service
-  const rows = service.module.pip.statement.summary.all(query)
-  // console.timeEnd('took')
-
-  const resp = remapFromHierarchy(parseRows(rows), searchLayers)
-
   // send json
-  res.status(200).json(resp)
+  res.status(200)
+    .json(query(req.app.locals.service, params, queryLayers))
+}
+
+// perform query
+function query (service, params, queryLayers) {
+  const rows = service.module.pip.statement.summary.all({
+    lat: params.lat,
+    lon: params.lon
+  })
+
+  const searchLayers = (queryLayers && queryLayers.size) ? new Set(_.intersection([...displayLayers], [...queryLayers])) : displayLayers
+  return remapFromHierarchy(parseRows(rows), searchLayers)
+}
+
+function parseHierarchy (hierarchyStr) {
+  return _.mapValues(
+    JSON.parse(hierarchyStr || '{}'),
+    (parent) => {
+      Object.assign(parent, boundsAndCentroid(parent))
+      parent.bounds = undefined
+      return parent
+    }
+  )
 }
 
 function parseRows (rows) {
   let resp = {}
-  rows.forEach(row => {
-    if (!Array.isArray(resp[row.type])) { resp[row.type] = [] }
+  for (let i = 0; i < rows.length; i++) {
+    const row = rows[i]
+    if (!resp[row.type]) { resp[row.type] = [] }
     resp[row.type].push({
       ...row,
       ...boundsAndCentroid(row),
-      hierarchy: _.mapValues(
-        JSON.parse(row.hierarchy || '{}'),
-        (parent) => {
-          _.assign(parent, boundsAndCentroid(parent))
-          delete parent.bounds
-          return parent
-        }
-      ),
+      hierarchy: parseHierarchy(row.hierarchy),
       distance: util.floatPrecision7(row.distance)
     })
-  })
+  }
   return resp
 }
 
@@ -120,18 +123,32 @@ function remapFromHierarchy (resp, searchLayers) {
 function normalize (place) {
   const res = _.pick(place, ['id', 'name', 'abbr', 'centroid', 'bounding_box'])
   res.id = parseInt(res.id, 10) // for compatibility (wof IDs are always numeric)
-  if (!res.abbr) { delete res.abbr }
+  if (!res.abbr) { res.abbr = undefined }
   return res
 }
 
 function boundsAndCentroid (row) {
-  const centroidString = (row.centroid ? row.centroid : '0,0')
-  const c = centroidString.split(',').map(util.floatPrecision7)
+  const centroid = { lat: 0, lon: 0 }
+  let bounds = [centroid.lon, centroid.lat, centroid.lon, centroid.lat]
 
-  return {
-    centroid: { lat: c[1], lon: c[0] },
-    bounding_box: (
-      row.bounds ? row.bounds.split(',') : [c[0], c[1], c[0], c[1]]
-    ).map(util.floatPrecision7).join(',')
+  if (row.centroid) {
+    const commaIndex = row.centroid.indexOf(',')
+    centroid.lon = util.floatPrecision7(parseFloat(row.centroid.slice(0, commaIndex)))
+    centroid.lat = util.floatPrecision7(parseFloat(row.centroid.slice(commaIndex + 1)))
   }
+
+  if (row.bounds) {
+    bounds = row.bounds.split(',').map(util.floatPrecision7)
+  }
+
+  return { centroid, bounding_box: bounds.join(',') }
+}
+
+module.exports = {
+  controller,
+  query,
+  parseRows,
+  remapFromHierarchy,
+  normalize,
+  boundsAndCentroid
 }
