@@ -26,12 +26,6 @@ tap.test('remapFromHierarchy - Martinborough', (t) => {
         name: 'Martinborough',
         centroid: { lat: -41.2232135, lon: 175.4797177 },
         bounding_box: '175.400013,-41.301336,175.564123,-41.145135'
-      },
-      {
-        id: 1729339735,
-        name: 'Dyerville',
-        centroid: { lat: -41.2756255, lon: 175.3799931 },
-        bounding_box: '175.290524,-41.335574,175.439075,-41.215716'
       }
     ],
     county: [
