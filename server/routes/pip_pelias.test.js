@@ -1,8 +1,8 @@
 const _ = require('lodash')
 const tap = require('tap')
-const pelias = require('./pip_pelias')
+const pelias = require('./pip_pelias').controller
 const mock = require('node-mocks-http')
-const proxy = (fn) => _.set({}, 'locals.service.module.pip.statement.verbose.all', fn)
+const proxy = (fn) => _.set({}, 'locals.service.module.pip.statement.summary.all', fn)
 
 tap.test('remapFromHierarchy - Martinborough', (t) => {
   let res = mock.createResponse()
@@ -11,14 +11,9 @@ tap.test('remapFromHierarchy - Martinborough', (t) => {
     app: proxy((query) => {
       t.same(query, {
         lon: 175.4166635,
-        lat: -41.221498,
-        limit: 1000,
-        aliaslimit: 0,
-        sources: '\u001ewof\u001e',
-        lang: 'und',
-        hierarchy: 1
+        lat: -41.221498
       })
-      return require('./fixtures/martinborough_verbose.rows.json')
+      return require('./fixtures/martinborough_summary.rows.json')
     })
   })
 
@@ -30,7 +25,7 @@ tap.test('remapFromHierarchy - Martinborough', (t) => {
         id: 101914287,
         name: 'Martinborough',
         centroid: { lat: -41.2232135, lon: 175.4797177 },
-        bounding_box: '175.400001,-41.301336,175.564123,-41.145135'
+        bounding_box: '175.400013,-41.301336,175.564123,-41.145135'
       }
     ],
     county: [
@@ -38,7 +33,7 @@ tap.test('remapFromHierarchy - Martinborough', (t) => {
         id: 102079347,
         name: 'South Wairarapa District',
         abbr: 'SP',
-        centroid: { lat: -41.2673995, lon: 175.417743 },
+        centroid: { lat: -41.2674375, lon: 175.4177081 },
         bounding_box: '174.958653,-41.613549,175.809775,-40.921064'
       }
     ],
@@ -56,7 +51,7 @@ tap.test('remapFromHierarchy - Martinborough', (t) => {
         id: 85687233,
         name: 'Wellington Region',
         abbr: 'WG',
-        centroid: { lat: -41.2214985, lon: 175.4166635 },
+        centroid: { lat: -41.220145, lon: 175.417246 },
         bounding_box: '174.388038,-41.815112,176.56406,-40.628591'
       }
     ]
@@ -71,14 +66,9 @@ tap.test('remapFromHierarchy - Oamaru', (t) => {
     app: proxy((query) => {
       t.same(query, {
         lon: 170.96879300000001,
-        lat: -45.098982,
-        limit: 1000,
-        aliaslimit: 0,
-        sources: '\u001ewof\u001e',
-        lang: 'und',
-        hierarchy: 1
+        lat: -45.098982
       })
-      return require('./fixtures/oamaru_verbose.rows.json')
+      return require('./fixtures/oamaru_summary.rows.json')
     })
   })
 
@@ -89,7 +79,7 @@ tap.test('remapFromHierarchy - Oamaru', (t) => {
       {
         id: 101914699,
         name: 'Oamaru',
-        centroid: { lat: -45.0927995, lon: 170.9676509 },
+        centroid: { lat: -45.092746, lon: 170.9677059 },
         bounding_box: '170.949378,-45.103048,170.983274,-45.083577'
       }
     ],
@@ -115,11 +105,8 @@ tap.test('remapFromHierarchy - Oamaru', (t) => {
       {
         id: 1729238521,
         name: 'Oamaru',
-        centroid: {
-          lat: -45.073514,
-          lon: 170.9569513
-        },
-        bounding_box: '170.897807,-45.122193,171.01932,-45.024824'
+        centroid: { lat: -45.0734125, lon: 170.9570003 },
+        bounding_box: '170.897807,-45.122193,171.019312,-45.024824'
       }
     ],
     region: [
@@ -127,8 +114,8 @@ tap.test('remapFromHierarchy - Oamaru', (t) => {
         id: 85687201,
         name: 'Otago Region',
         abbr: 'OT',
-        centroid: { lat: -45.3973235, lon: 170.1778035 },
-        bounding_box: '168.116395,-46.839379,171.406801,-43.955411'
+        centroid: { lat: -45.3968555, lon: 170.1775072 },
+        bounding_box: '168.116395,-46.839379,171.406801,-43.955425'
       }
     ]
   })
@@ -144,12 +131,7 @@ tap.test('remapFromHierarchy - Untrusted Layers - Single Match', (t) => {
     app: proxy((query) => {
       t.same(query, {
         lon: 1,
-        lat: 1,
-        limit: 1000,
-        aliaslimit: 0,
-        sources: '\u001ewof\u001e',
-        lang: 'und',
-        hierarchy: 1
+        lat: 1
       })
       return [
         {
@@ -209,12 +191,7 @@ tap.test('remapFromHierarchy - Untrusted Layers - Multi Match', (t) => {
     app: proxy((query) => {
       t.same(query, {
         lon: 1,
-        lat: 1,
-        limit: 1000,
-        aliaslimit: 0,
-        sources: '\u001ewof\u001e',
-        lang: 'und',
-        hierarchy: 1
+        lat: 1
       })
       return [
         {
@@ -306,14 +283,9 @@ tap.test('pelias - layer filter', (t) => {
     app: proxy((query) => {
       t.same(query, {
         lon: 170.96879300000001,
-        lat: -45.098982,
-        limit: 1000,
-        aliaslimit: 0,
-        sources: '\u001ewof\u001e',
-        lang: 'und',
-        hierarchy: 1
+        lat: -45.098982
       })
-      return require('./fixtures/oamaru_verbose.rows.json')
+      return require('./fixtures/oamaru_summary.rows.json')
     })
   })
 
@@ -334,8 +306,8 @@ tap.test('pelias - layer filter', (t) => {
         id: 85687201,
         name: 'Otago Region',
         abbr: 'OT',
-        centroid: { lat: -45.3973235, lon: 170.1778035 },
-        bounding_box: '168.116395,-46.839379,171.406801,-43.955411'
+        centroid: { lat: -45.3968555, lon: 170.1775072 },
+        bounding_box: '168.116395,-46.839379,171.406801,-43.955425'
       }
     ]
   })

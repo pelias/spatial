@@ -72,11 +72,6 @@ module.exports = function (req, res) {
     })
   })
 
-  // allow other views to utilize this view
-  if (typeof req.remap === 'function') {
-    resp = req.remap(resp, req, res)
-  }
-
   // send json
   res.status(200).json(resp)
 }

@@ -1,6 +1,5 @@
 const _ = require('lodash')
 const util = require('./util')
-const verbose = require('./pip_verbose')
 const untrustedLayers = new Set(['neighbourhood'])
 
 /**
@@ -31,36 +30,66 @@ const displayLayers = new Set([
 
 // a custom 'view' which emulates the legacy pelias PIP format (with some additions!)
 // see: https://github.com/pelias/wof-admin-lookup
-module.exports = function (req, res) {
+function controller (req, res) {
   // configurable layers via query param
   const queryLayers = new Set(util.commaSeparatedArrayOfStrings(req.query.layers))
-  const searchLayers = queryLayers.size ? new Set(_.intersection([...displayLayers], [...queryLayers])) : displayLayers
 
-  // inputs
-  req.query = {
-    lon: req.params.lon,
-    lat: req.params.lat,
-    aliaslimit: 0,
-    wofonly: 1,
-    hierarchy: true,
-    searchLayers
+  const params = {
+    lon: parseFloat(util.flatten(req.params.lon)),
+    lat: parseFloat(util.flatten(req.params.lat))
   }
 
-  // remap verbose view using custom formatter
-  req.remap = remapFromHierarchy
+  // send json
+  res.status(200)
+    .json(query(req.app.locals.service, params, queryLayers))
+}
 
-  return verbose(req, res)
+// perform query
+function query (service, params, queryLayers) {
+  const rows = service.module.pip.statement.summary.all({
+    lat: params.lat,
+    lon: params.lon
+  })
+
+  const searchLayers = (queryLayers && queryLayers.size) ? new Set(_.intersection([...displayLayers], [...queryLayers])) : displayLayers
+  return remapFromHierarchy(parseRows(rows), searchLayers)
+}
+
+function parseHierarchy (hierarchyStr) {
+  return _.mapValues(
+    JSON.parse(hierarchyStr || '{}'),
+    (parent) => {
+      Object.assign(parent, boundsAndCentroid(parent))
+      parent.bounds = undefined
+      return parent
+    }
+  )
+}
+
+function parseRows (rows) {
+  let resp = {}
+  for (let i = 0; i < rows.length; i++) {
+    const row = rows[i]
+    if (!resp[row.type]) { resp[row.type] = [] }
+    resp[row.type].push({
+      ...row,
+      ...boundsAndCentroid(row),
+      hierarchy: parseHierarchy(row.hierarchy),
+      distance: util.floatPrecision7(row.distance)
+    })
+  }
+  return resp
 }
 
 // rewite the verbose view to match the expected format
 // using the 'lowest' matching placetype as the base and adopting
 // the hierarchy from that record for the parents.
-function remapFromHierarchy (resp, req) {
+function remapFromHierarchy (resp, searchLayers) {
   const mapped = {}
   let chosen = [] // the chosen 'lowest layer' to use for the hierarchy
 
   // iterate through compatible layers
-  for (const layer of req.query.searchLayers) {
+  for (const layer of searchLayers) {
     if (!_.has(resp, layer)) { continue }
     chosen = _.get(resp, layer)
 
@@ -94,6 +123,32 @@ function remapFromHierarchy (resp, req) {
 function normalize (place) {
   const res = _.pick(place, ['id', 'name', 'abbr', 'centroid', 'bounding_box'])
   res.id = parseInt(res.id, 10) // for compatibility (wof IDs are always numeric)
-  if (!res.abbr) { delete res.abbr }
+  if (!res.abbr) { res.abbr = undefined }
   return res
+}
+
+function boundsAndCentroid (row) {
+  const centroid = { lat: 0, lon: 0 }
+  let bounds = [centroid.lon, centroid.lat, centroid.lon, centroid.lat]
+
+  if (row.centroid) {
+    const commaIndex = row.centroid.indexOf(',')
+    centroid.lon = util.floatPrecision7(parseFloat(row.centroid.slice(0, commaIndex)))
+    centroid.lat = util.floatPrecision7(parseFloat(row.centroid.slice(commaIndex + 1)))
+  }
+
+  if (row.bounds) {
+    bounds = row.bounds.split(',').map(util.floatPrecision7)
+  }
+
+  return { centroid, bounding_box: bounds.join(',') }
+}
+
+module.exports = {
+  controller,
+  query,
+  parseRows,
+  remapFromHierarchy,
+  normalize,
+  boundsAndCentroid
 }
