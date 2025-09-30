@@ -8,12 +8,11 @@ module.exports = {
     // optional params
     yargs.option('db', {
       type: 'string',
-      default: 'geo.db',
       describe: 'location of spatial database file'
     })
   },
   handler: (argv) => {
     const script = path.resolve(__dirname, '../../server/http.js')
-    spawn('node', [script, argv.db], { stdio: 'inherit' })
+    spawn('node', [script, ...argv.db ? [argv.db] : []], { stdio: 'inherit' })
   }
 }

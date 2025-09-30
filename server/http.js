@@ -25,7 +25,7 @@ const handlebars = require('express-handlebars')
 const helpers = require('handlebars-helpers')()
 const QueryService = require('../service/QueryService')
 const logger = require('pelias-logger').get('geometry')
-const dbFilename = process.argv[2] || 'geo.db'
+const filename = process.argv[2]
 
 // select the amount of cpus we will use
 const envCpus = parseInt(process.env.CPUS, 10)
@@ -68,10 +68,11 @@ app.engine('.hbs', handlebars({
 app.set('view engine', '.hbs')
 
 // init service
-logger.info(`load: ${dbFilename}`)
+logger.info(`load: ${filename}`)
 const service = new QueryService({
   readonly: true,
-  filename: dbFilename
+  pelias: true,
+  filename
 })
 
 // store $service on app

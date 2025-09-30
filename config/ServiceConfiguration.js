@@ -1,4 +1,6 @@
 const _ = require('lodash')
+const path = require('path')
+const peliasConfig = require('pelias-config')
 const PragmaStatement = require('./PragmaStatement')
 
 class ServiceConfiguration {
@@ -22,6 +24,17 @@ class ServiceConfiguration {
       new PragmaStatement('cache_size', ['2000']),
       new PragmaStatement('recursive_triggers', ['ON', 'OFF'])
     ])
+
+    // optionally read database filename from pelias/config (when available)
+    // note: you must set `config.pelias=true` to enable this functionality as
+    // it is undesirable at index generation time (for instance).
+    // note: existing `config.filename` value takes precedence over pelias config
+    if (!_.has(config, 'filename') && _.get(config, 'pelias') === true) {
+      const config = peliasConfig.generate().get('services.spatial')
+      if (config && !_.isEmpty(config.datapath) && !_.isEmpty(config.files)) {
+        this.filename = path.resolve(config.datapath, _.first(_.castArray(config.files)))
+      }
+    }
   }
 }
 
