@@ -29,7 +29,7 @@ class ServiceConfiguration {
     // note: you must set `config.pelias=true` to enable this functionality as
     // it is undesirable at index generation time (for instance).
     // note: existing `config.filename` value takes precedence over pelias config
-    if (!_.has(config, 'filename') && _.get(config, 'pelias') === true) {
+    if (!_.get(config, 'filename') && _.get(config, 'pelias') === true) {
       const config = peliasConfig.generate().get('services.spatial')
       if (config && !_.isEmpty(config.datapath) && !_.isEmpty(config.files)) {
         this.filename = path.resolve(config.datapath, _.first(_.castArray(config.files)))
