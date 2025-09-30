@@ -2,7 +2,7 @@
   "name": "pelias-spatial",
   "version": "0.0.0-development",
   "author": "pelias",
-  "description": "Pelias Geometry Service",
+  "description": "Pelias Spatial Service",
   "homepage": "https://github.com/pelias/spatial",
   "license": "MIT",
   "main": "index.js",
@@ -30,7 +30,7 @@
     "url": "https://github.com/pelias/spatial/issues"
   },
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=19.4.0"
   },
   "dependencies": {
     "@mapbox/polyline": "^1.1.1",
