@@ -363,6 +363,31 @@ tap.test('remapFromHierarchy - Lancing', (t) => {
         centroid: { lat: 50.944699, lon: -0.5276061 },
         bounding_box: '-0.957597,50.722029,0.04455,51.167304'
       }
+    ],
+    country: [
+      {
+        id: 85633159,
+        name: 'United Kingdom',
+        abbr: 'GBR',
+        centroid: { lat: 54.314473, lon: -1.9212754 },
+        bounding_box: '-8.649996,49.864632,1.768975,60.860867'
+      }
+    ],
+    empire: [
+      {
+        id: 136253055,
+        name: 'United Kingdom',
+        centroid: { lat: 54.3140933, lon: -1.9116522 },
+        bounding_box: '-130.7530818,-59.4727516,72.4946395,60.8478865'
+      }
+    ],
+    continent: [
+      {
+        id: 102191581,
+        name: 'Europe',
+        centroid: { lat: 53.5665955, lon: 34.4425412 },
+        bounding_box: '-24.539906,34.815009,69.033946,81.85871'
+      }
     ]
   })
   t.end()
