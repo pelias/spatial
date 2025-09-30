@@ -313,3 +313,57 @@ tap.test('pelias - layer filter', (t) => {
   })
   t.end()
 })
+
+// at time of writin the locality of lancing has -1 values for {region, county, continent}
+// https://spelunker.whosonfirst.org/id/1125843731
+tap.test('remapFromHierarchy - Lancing', (t) => {
+  let res = mock.createResponse()
+  let req = mock.createRequest({
+    params: { lon: -0.332593, lat: 50.830056 },
+    app: proxy((query) => {
+      t.same(query, {
+        lon: -0.332593,
+        lat: 50.830056
+      })
+      return require('./fixtures/lancing_summary.rows.json')
+    })
+  })
+
+  pelias(req, res)
+  t.equal(200, res.statusCode)
+  t.same(res._getJSONData(), {
+    locality: [
+      {
+        id: 1125843731,
+        name: 'Lancing',
+        centroid: { lat: 50.83314, lon: -0.3085617 },
+        bounding_box: '-0.337211,50.816041,-0.284364,50.849996'
+      }
+    ],
+    localadmin: [
+      {
+        id: 404433635,
+        name: 'Lancing Civil Parish',
+        centroid: { lat: 50.8331403, lon: -0.3085615 },
+        bounding_box: '-0.3372113,50.8160407,-0.2843642,50.849996'
+      }
+    ],
+    county: [
+      {
+        id: 1880771683,
+        name: 'Adur',
+        centroid: { lat: 50.845215, lon: -0.2939033 },
+        bounding_box: '-0.371517,50.81603,-0.215295,50.874738'
+      }
+    ],
+    macrocounty: [
+      {
+        id: 1880762061,
+        name: 'West Sussex',
+        centroid: { lat: 50.944699, lon: -0.5276061 },
+        bounding_box: '-0.957597,50.722029,0.04455,51.167304'
+      }
+    ]
+  })
+  t.end()
+})
