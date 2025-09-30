@@ -6,4 +6,7 @@ Dockerfile
 .dockerignore
 .git
 .gitignore
+.github/
 *.db
+.jshintignore
+.jshintrc
