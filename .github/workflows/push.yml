@@ -3,9 +3,30 @@ on: push
 jobs:
   unit-tests:
     uses: ./.github/workflows/_test.yml
+  npm-publish:
+    needs: unit-tests
+    if: github.ref == 'refs/heads/master' && needs.unit-tests.result == 'success'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+      - name: Run semantic-release
+        env:
+          GH_TOKEN: ${{ secrets.GH_SEMANTIC_RELEASE_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: >
+          if [[ -n "$GH_TOKEN" && -n "$NPM_TOKEN" ]]; then
+            curl "https://raw.githubusercontent.com/pelias/ci-tools/master/semantic-release.sh" | bash -
+          fi
   build-docker-images:
-    needs: [unit-tests]
-    runs-on: ubuntu-latest
+    # run this job if the unit tests passed and the npm-publish job was a success or was skipped
+    # note: github actions won't run a job if you don't call one of the status check functions, so `always()` is called since it evalutes to `true`
+    if: ${{ always() && needs.unit-tests.result == 'success' && (needs.npm-publish.result == 'success' || needs.npm-publish.result == 'skipped') }}
+    needs: [unit-tests, npm-publish]
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - name: Build Docker images
