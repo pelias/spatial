@@ -56,3 +56,23 @@ writeFixture(
   },
   'oamaru_verbose.rows.json'
 )
+
+// writeFixture(
+//   service.module.pip.statement.summary,
+//   { lon: -0.332593, lat: 50.830056 },
+//   'lancing_summary.rows.json'
+// )
+
+// writeFixture(
+//   service.module.pip.statement.verbose,
+//   {
+//     lon: -0.332593,
+//     lat: 50.830056,
+//     limit: 1000,
+//     aliaslimit: 0,
+//     sources: '\u001ewof\u001e',
+//     lang: 'und',
+//     hierarchy: 1
+//   },
+//   'lancing_verbose.rows.json'
+// )

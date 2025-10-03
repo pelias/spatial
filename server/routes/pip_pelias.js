@@ -28,6 +28,15 @@ const displayLayers = new Set([
   'ocean'
 ])
 
+// layers which should be added from the 'pure pip' results if not
+// present in the hierarchy.
+const hoistLayers = new Set([
+  'country',
+  'dependency',
+  'empire',
+  'continent'
+])
+
 // a custom 'view' which emulates the legacy pelias PIP format (with some additions!)
 // see: https://github.com/pelias/wof-admin-lookup
 function controller (req, res) {
@@ -115,6 +124,13 @@ function remapFromHierarchy (resp, searchLayers) {
   // dedupe and clean results
   for (const placetype of Object.keys(mapped)) {
     mapped[placetype] = _.uniqBy(mapped[placetype], 'id')
+  }
+
+  // 'hoist' some layers from the pure pip results if not already present
+  for (const placetype of hoistLayers) {
+    if (!mapped[placetype] && resp[placetype]) {
+      mapped[placetype] = resp[placetype].map(normalize)
+    }
   }
 
   return mapped
