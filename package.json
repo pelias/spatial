@@ -54,8 +54,6 @@
     "yargs": "^13.3.0"
   },
   "devDependencies": {
-    "difflet": "^1.0.1",
-    "glob": "^7.1.6",
     "mitata": "^1.0.34",
     "node-mocks-http": "^1.17.2",
     "precommit-hook": "^3.0.0",

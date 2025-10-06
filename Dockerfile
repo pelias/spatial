@@ -1,12 +1,4 @@
-FROM ubuntu:noble
-
-# apt dependencies
-RUN apt-get update -y && \
-  apt-get install -y curl && \
-  curl -fsSL https://deb.nodesource.com/setup_24.x -o nodesource_setup.sh && \
-  bash nodesource_setup.sh && \
-  apt-get install -y nodejs libsqlite3-mod-spatialite && \
-  rm -rf /var/lib/apt/lists/*
+FROM pelias/baseimage
 
 # working directory
 WORKDIR /code
@@ -14,11 +6,11 @@ WORKDIR /code
 # copy source files
 COPY . /code
 
-# install npm dependencies
-RUN npm i
-
-# run tests
-RUN npm t
+# install npm dependencies, run tests and prune dev dependencies
+RUN npm install && \
+  npm run env_check && \
+  npm test && \
+  npm prune --production
 
 # entrypoint
 ENTRYPOINT ["node", "bin/spatial.js"]
