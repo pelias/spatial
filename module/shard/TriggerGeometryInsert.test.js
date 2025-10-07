@@ -81,7 +81,7 @@ tap.test('definition', (t) => {
 
           -- insert collection into tmp table
           INSERT INTO shard_subdivide (geom)
-          SELECT ST_Subdivide(ST_SimplifyPreserveTopology(NEW.geom, 0.0001), 200)
+          SELECT ST_Subdivide(ST_SimplifyPreserveTopology(NEW.geom, 0.0001), 500)
           WHERE NEW.geom IS NOT NULL;
 
           -- insert shards in to shard table
@@ -177,8 +177,7 @@ tap.test('functional - boundary', (t) => {
     { element: 34 },
     { element: 35 },
     { element: 36 },
-    { element: 37 },
-    { element: 38 }
+    { element: 37 }
   ], 'split')
 
   t.end()
@@ -254,8 +253,7 @@ tap.test('functional - buffer', (t) => {
     { element: 34 },
     { element: 35 },
     { element: 36 },
-    { element: 37 },
-    { element: 38 }
+    { element: 37 }
   ], 'split')
 
   t.end()
