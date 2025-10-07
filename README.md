@@ -1,3 +1,106 @@
+<p align="center">
+  <img height="100" src="https://raw.githubusercontent.com/pelias/design/master/logo/pelias_github/Github_markdown_hero.png">
+</p>
+<h3 align="center">A modular, open-source search engine for our world.</h3>
+<p align="center">Pelias is a geocoder powered completely by open data, available freely to everyone.</p>
+<p align="center">
+<a href="https://github.com/pelias/api/actions"><img src="https://github.com/pelias/api/workflows/Continuous%20Integration/badge.svg" /></a>
+<a href="https://en.wikipedia.org/wiki/MIT_License"><img src="https://img.shields.io/github/license/pelias/api?style=flat&color=orange" /></a>
+<a href="https://hub.docker.com/u/pelias"><img src="https://img.shields.io/docker/pulls/pelias/api?style=flat&color=informational" /></a>
+<a href="https://gitter.im/pelias/pelias"><img src="https://img.shields.io/gitter/room/pelias/pelias?style=flat&color=yellow" /></a>
+</p>
+<p align="center">
+	<a href="https://github.com/pelias/docker">Local Installation</a> ·
+        <a href="https://geocode.earth">Cloud Webservice</a> ·
+	<a href="https://github.com/pelias/documentation">Documentation</a> ·
+	<a href="https://gitter.im/pelias/pelias">Community Chat</a>
+</p>
+<details open>
+<summary>What is Pelias?</summary>
+<br />
+Pelias is a search engine for places worldwide, powered by open data. It turns addresses and place names into geographic coordinates, and turns geographic coordinates into places and addresses. With Pelias, you’re able to turn your users’ place searches into actionable geodata and transform your geodata into real places.
+<br /><br />
+We think open data, open source, and open strategy win over proprietary solutions at any part of the stack and we want to ensure the services we offer are in line with that vision. We believe that an open geocoder improves over the long-term only if the community can incorporate truly representative local knowledge.
+</details>
+
+# Pelias Spatial Service
+
+Lightweight spatial service used by Pelias — provides point-in-polygon (PIP) lookups, geometry, relationships and ontology data via a small HTTP API and demo pages.
+
+## HTTP endpoints
+
+All endpoints are GET endpoints unless noted. See `server/routes/*` for parameter details and exact output shape.
+
+- GET `/place/:source/:id`
+  Return place metadata by source and id.
+
+- GET `/place/:source/:id/geometry`
+  Return all geometry roles for the place.
+
+- GET `/place/:source/:id/geometry/:role`
+  Return geometry for a specific role (e.g. `intersection`, `shape`, etc.).
+
+- GET `/place/:source/:id/relationship/intersects`
+  Return places that intersect the given place.
+
+- GET `/place/:source/:id/relationship/contains`
+  Return places that contain the given place.
+
+- GET `/place/:source/:id/relationship/within`
+  Return places within the given place.
+
+- GET `/place/:source/:id/property`
+  Return properties for the place.
+
+- GET `/place/:source/:id/name`
+  Return names for the place.
+
+- GET `/place/:source/:id/hierarchy`
+  Return the administrative hierarchy for the place.
+
+- GET `/query/pip`
+  Point-in-polygon lookup (compact view). Query parameters are handled by the pip route implementation in server/routes/pip.js.
+
+- GET `/query/pip/verbose`
+  Point-in-polygon lookup (verbose view), returns detailed match records.
+
+- GET `/query/pip/_view/pelias/:lon/:lat`
+  Pelias-compatible PIP view (legacy Pelias format).  
+  - Path params: lon, lat  
+  - Query params: `layers` (comma-separated list) is supported by the Pelias view implementation and filters the output layers. See server/routes/pip_pelias.js for details.
+
+- GET `/query/search`
+  General spatial search endpoint (see server/routes/search.js for supported query parameters).
+
+- GET `/ontology`
+  Return top-level ontology index.
+
+- GET `/ontology/:class`
+  Return ontology entries for a class.
+
+- GET `/ontology/:class/:type`
+  Return ontology entries for a class/type pair.
+
+Demo pages and utilities:
+- GET `/explore` (static demo UI at server/demo)  
+- GET `/explore/place/:source/:id ` 
+- GET `/explore/pip` 
+- GET `/explore/ontology`
+- GET `/explore/ontology/:class/:type`
+
+Root:
+- GET `/` redirects to `/explore/pip`
+
+## Examples
+
+Pelias PIP view (Pelias-compatible response):
+
+    curl -s "http://localhost:3000/query/pip/_view/pelias/170.97/-45.09?layers=locality,region"
+
+Simple place lookup:
+
+    curl -s "http://localhost:3000/place/whosonfirst/85633345"
+
 # Docker Development
 
 ```bash
