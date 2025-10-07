@@ -47,7 +47,7 @@ module.exports.one = function (req, res) {
   let query = {
     source: util.flatten(req.params.source),
     id: util.flatten(req.params.id),
-    role: util.flatten(req.query.role),
+    role: util.flatten(req.params.role),
     simplify: parseFloat(util.flatten(req.query.simplify)),
     limit: 100
   }
