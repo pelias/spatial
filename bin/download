@@ -1,0 +1,83 @@
+#!/bin/bash
+set -euo pipefail
+# set -x
+
+# Get configuration from pelias-config
+CONFIG_JSON=$(node -e "console.log(JSON.stringify(require('pelias-config').generate()));")
+
+# Extract spatial configuration
+SPATIAL_CONFIG=$(echo "$CONFIG_JSON" | jq '.imports.spatial // {}')
+if [ "$SPATIAL_CONFIG" = "{}" ] || [ "$SPATIAL_CONFIG" = "null" ]; then
+    echo "no spatial configuration defined, skipping"
+    exit 0
+fi
+
+
+# Check if datapath or downloads are specified
+DATAPATH=$(echo "$SPATIAL_CONFIG" | jq -r '.datapath // empty')
+if [ -z "$DATAPATH" ] || [ "$DATAPATH" = "null" ]; then
+    echo "no datapath defined, skipping"
+    exit 1
+fi
+
+DOWNLOADS=$(echo "$SPATIAL_CONFIG" | jq -r '.download // [] | if type == "array" then .[] else . end')
+if [ -z "$DOWNLOADS" ] || [ "$DOWNLOADS" = "null" ]; then
+    echo "no downloads defined, skipping"
+    exit 0
+fi
+
+# Ensure datapath exists
+if [ ! -d "$DATAPATH" ]; then
+    echo "Creating directory: $DATAPATH"
+    mkdir -p "$DATAPATH"
+fi
+
+# Function to decompress downloaded files
+decompress_file() {
+    local dir="$1"
+    local filename="$2"
+
+    # select decompression command based on file extension
+    local cmd
+    if [[ "$filename" == *.gz ]]; then
+        cmd=$(command -v pigz > /dev/null 2>&1 && echo "pigz -d" || echo "gunzip")
+    elif [[ "$filename" == *.bz2 ]]; then
+        cmd=$(command -v lbunzip2 > /dev/null 2>&1 && echo "lbunzip2" || echo "bunzip2")
+    elif [[ "$filename" == *.zst ]]; then
+        cmd="unzstd"
+    else
+        echo "cannot decompress unknown file extension: $filename"
+        return
+    fi
+
+    echo "decompressing $filename using command: $cmd"
+    if ! $cmd -f "$dir/$filename"; then
+        echo "error: failed to decompress $filename"
+        exit 1
+    fi
+}
+
+# Download sources
+echo "starting downloads..."
+echo "$DOWNLOADS" | while IFS= read -r url; do
+    if [ -n "$url" ] && [ "$url" != "null" ]; then
+        filename=$(basename "$url")
+        filepath="$DATAPATH/$filename"
+        echo "downloading $url to $filepath"
+
+        if ! curl -L \
+             --fail \
+             --retry 5 \
+             --output "$filepath" \
+             "$url";
+        then
+            echo "error: failed to download $url"
+            exit 1
+        fi
+
+        # Decompress the downloaded file if it has a supported extension
+        decompress_file "$DATAPATH" "$filename"
+    fi
+done
+
+echo "all done!"
