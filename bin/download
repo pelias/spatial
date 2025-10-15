@@ -6,7 +6,7 @@ set -euo pipefail
 CONFIG_JSON=$(node -e "console.log(JSON.stringify(require('pelias-config').generate()));")
 
 # Extract spatial configuration
-SPATIAL_CONFIG=$(echo "$CONFIG_JSON" | jq '.imports.spatial // {}')
+SPATIAL_CONFIG=$(echo "$CONFIG_JSON" | jq '.services.spatial // {}')
 if [ "$SPATIAL_CONFIG" = "{}" ] || [ "$SPATIAL_CONFIG" = "null" ]; then
     echo "no spatial configuration defined, skipping"
     exit 0
