@@ -139,3 +139,44 @@ tap.test('mapper: mapshaper position', (t) => {
   t.equal(p.geometry[1].role, 'mapshaper_position')
   t.end()
 })
+tap.test('mapper: converts 3D geometries to 2D', (t) => {
+  let p = new Place()
+  map(p, {
+    geometry: {
+      'type': 'Polygon',
+      'coordinates': [
+        [
+          [
+            39.0234375,
+            48.922499263758255,
+            10
+          ],
+          [
+            47.8125,
+            39.639537564366684,
+            20
+          ],
+          [
+            61.17187499999999,
+            49.83798245308484,
+            30
+          ],
+          [
+            39.0234375,
+            48.922499263758255,
+            40
+          ]
+        ]
+      ]
+    }
+  })
+  t.equal(p.geometry.length, 1)
+  t.ok(p.geometry[0] instanceof Geometry)
+  t.equal(p.geometry[0].geometry.constructor.name.toUpperCase(), 'POLYGON')
+  t.equal(p.geometry[0].role, 'boundary')
+  t.equal(p.geometry[0].geometry.hasZ, false)
+  t.equal(p.geometry[0].geometry.hasM, false)
+  t.same(p.geometry[0].geometry.toGeoJSON().coordinates[0][0], [39.0234375, 48.922499263758255])
+  t.equal(p.geometry[0].geometry.toGeoJSON().coordinates[0].every(c => c.length === 2), true)
+  t.end()
+})

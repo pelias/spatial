@@ -48,7 +48,26 @@ function from (type, format, geom) {
     throw new Error(`invalid format: ${format}`)
   }
 
-  return func(geom)
+  return castToXY(func(geom))
+}
+
+function to2D (coords) {
+  if (typeof coords[0] === 'number') {
+    return coords.slice(0, 2)
+  }
+  return coords.map(to2D)
+}
+
+// Convert a geometry to 2D by stripping Z and M values
+function castToXY (geom) {
+  if (!geom.hasZ && !geom.hasM) {
+    return geom
+  }
+  const gj = geom.toGeoJSON()
+  return wkx.Geometry.parseGeoJSON({
+    type: gj.type,
+    coordinates: to2D(gj.coordinates)
+  })
 }
 
 function to (geom, format) {
