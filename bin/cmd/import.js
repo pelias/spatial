@@ -49,6 +49,11 @@ module.exports = {
       coerce: parseFloat,
       describe: 'simplification tolerance for geometry module'
     })
+    yargs.option('tweak_module_geometry_repair', {
+      type: 'number',
+      default: 0,
+      describe: 'repair method for geometry module (0=none, 1=MakeValid, 2=GeosMakeValid)'
+    })
     yargs.option('tweak_module_shard_simplify', {
       type: 'number',
       default: 0.00003,
@@ -81,7 +86,8 @@ module.exports = {
       verbose: argv.verbose,
       module: {
         geometry: {
-          simplify: argv.tweak_module_geometry_simplify
+          simplify: argv.tweak_module_geometry_simplify,
+          repair: argv.tweak_module_geometry_repair
         },
         shard: {
           simplify: argv.tweak_module_shard_simplify,
