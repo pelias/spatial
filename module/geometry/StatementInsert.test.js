@@ -46,3 +46,78 @@ tap.test('create & drop', (t) => {
 
   t.end()
 })
+
+tap.test('query config', (t) => {
+  const db = common.tempSpatialDatabase()
+  new TableGeometry().create(db)
+  new GeoColumnGeom().create(db)
+
+  const stmts = {
+    default: new StatementInsert(),
+    simplify: new StatementInsert(),
+    repair: new StatementInsert(),
+    simplifyAndRepair: new StatementInsert()
+  }
+
+  // no config specified
+  stmts.default.create(db)
+  t.equal(stmts.default.statement.source, `
+        INSERT OR REPLACE INTO main.geometry (
+          source,
+          id,
+          role,
+          geom
+        ) VALUES (
+          @source,
+          @id,
+          @role,
+          GeomFromWKB( @geom, 4326 )
+        )`)
+
+  // repair only
+  stmts.repair.create(db, { module: { geometry: { repair: 1 } } })
+  t.equal(stmts.repair.statement.source, `
+        INSERT OR REPLACE INTO main.geometry (
+          source,
+          id,
+          role,
+          geom
+        ) VALUES (
+          @source,
+          @id,
+          @role,
+          MakeValid( GeomFromWKB( @geom, 4326 ) )
+        )`)
+
+  // simplify only
+  stmts.simplify.create(db, { module: { geometry: { simplify: 0.001 } } })
+  t.equal(stmts.simplify.statement.source, `
+        INSERT OR REPLACE INTO main.geometry (
+          source,
+          id,
+          role,
+          geom
+        ) VALUES (
+          @source,
+          @id,
+          @role,
+          SimplifyPreserveTopology( GeomFromWKB( @geom, 4326 ), 0.001 )
+        )`)
+
+  // simplify + repair
+  stmts.simplifyAndRepair.create(db, { module: { geometry: { simplify: 0.001, repair: 2 } } })
+  t.equal(stmts.simplifyAndRepair.statement.source, `
+        INSERT OR REPLACE INTO main.geometry (
+          source,
+          id,
+          role,
+          geom
+        ) VALUES (
+          @source,
+          @id,
+          @role,
+          SimplifyPreserveTopology( GeosMakeValid( GeomFromWKB( @geom, 4326 ) ), 0.001 )
+        )`)
+
+  t.end()
+})
