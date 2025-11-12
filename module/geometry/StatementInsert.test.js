@@ -5,10 +5,7 @@ const TableGeometry = require('./TableGeometry')
 const GeoColumnGeom = require('./GeoColumnGeom')
 const StatementInsert = require('./StatementInsert')
 
-const TRIANGLE = format.from('geometry', 'geojson', {
-  'type': 'MultiPolygon',
-  'coordinates': [[[[1, 1], [2, 2], [3, 3], [1, 1]]]]
-})
+const TRIANGLE = format.from('polygon', 'geojson', require('../../test/fixture/geojson.triangle'))
 
 tap.test('create & drop', (t) => {
   let db = common.tempSpatialDatabase()
