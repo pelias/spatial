@@ -50,7 +50,7 @@
     "split2": "^3.1.1",
     "through2": "^3.0.1",
     "turf-point": "^2.0.1",
-    "wkx": "^0.4.8",
+    "wkx": "^0.5.0",
     "yargs": "^13.3.0"
   },
   "devDependencies": {
