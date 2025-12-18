@@ -1,7 +1,5 @@
 .git
 .gitignore
-.circleci
-.travis.yml
 Dockerfile
 .dockerignore
 node_modules
@@ -12,7 +10,10 @@ tmp
 package-lock.json
 *.md
 *.db
+*.db*
 *.db-journal
 *.geojson
+*.geojsonl
 *.gz
+*.zip
 .tap
