@@ -3,6 +3,7 @@ FROM pelias/baseimage
 # install commands used by bin/download script
 RUN apt-get update && \
   apt-get install -y jq lbzip2 pigz zstd && \
+  apt-get clean && \
   rm -rf /var/lib/apt/lists/*
 
 # working directory
@@ -15,7 +16,8 @@ COPY . /code
 RUN npm install && \
   npm run env_check && \
   npm test && \
-  npm prune --production
+  npm prune --production && \
+  rm -rf ~/.npm /tmp/*
 
 # entrypoint
 ENTRYPOINT ["node", "bin/spatial.js"]
