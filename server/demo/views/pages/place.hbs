@@ -70,30 +70,14 @@
             <tr>
               <td>
                 <span class="tag is-light">
-                  {{#is this.role compare="boundary"}}
-                    <i class="fas fa-draw-polygon"></i>
-                  {{/is}}
-                  {{#is this.role compare="buffer"}}
-                  <i class="fas fa-expand"></i>
-                  {{/is}}
-                  {{#is this.role compare="envelope"}}
-                  <i class="fa fa-vector-square"></i>
-                  {{/is}}
-                  {{#is this.role compare="centroid"}}
-                    <i class="fa fa-crosshairs"></i>
-                  {{/is}}
-                  {{#is this.role compare="label_position"}}
-                    <i class="fa fa-quote-right"></i>
-                  {{/is}}
-                  {{#is this.role compare="reversegeo_position"}}
-                    <i class="fa fa-compass"></i>
-                  {{/is}}
-                  {{#is this.role compare="mapshaper_position"}}
-                  <i class="fa fa-drafting-compass"></i>
-                  {{/is}}
-                  {{#is this.role compare="centerline"}}
-                  <i class="fa fa-bezier-curve"></i>
-                  {{/is}}
+                  {{#startsWith "boundary" this.role}}<i class="fas fa-draw-polygon"></i>{{/startsWith}}
+                  {{#startsWith "buffer" this.role}}<i class="fas fa-expand"></i>{{/startsWith}}
+                  {{#startsWith "envelope" this.role}}<i class="fa fa-vector-square"></i>{{/startsWith}}
+                  {{#startsWith "centroid" this.role}}<i class="fa fa-crosshairs"></i>{{/startsWith}}
+                  {{#startsWith "label_position" this.role}}<i class="fa fa-quote-right"></i>{{/startsWith}}
+                  {{#startsWith "reversegeo_position" this.role}}<i class="fa fa-compass"></i>{{/startsWith}}
+                  {{#startsWith "mapshaper_position" this.role}}<i class="fa fa-drafting-compass"></i>{{/startsWith}}
+                  {{#startsWith "centerline" this.role}}<i class="fa fa-bezier-curve"></i>{{/startsWith}}
                 </span>
                 {{#contains (lowercase this.geom.type) "point"}}
                   <span class="tag is-light tooltip" data-tooltip="{{this.geom.coordinates}}">{{this.geom.type}}</span>
@@ -121,7 +105,7 @@
                   {{#is @key compare="alpha2"}}
                     {{#isnt this compare="XX"}}
                       {{#equalsLength this 2}}
-                        <img class="flag" src="https://www.countryflags.io/{{this}}/flat/16.png">
+                        <img class="flag" src="https://geocode.earth/flags/v1/flat/64/{{this}}.png" height="16" width="16" />
                       {{/equalsLength}}
                     {{/isnt}}
                   {{/is}}
