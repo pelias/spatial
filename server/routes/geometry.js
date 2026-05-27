@@ -49,7 +49,7 @@ module.exports.one = function (req, res) {
     id: util.flatten(req.params.id),
     role: util.flatten(req.params.role),
     simplify: parseFloat(util.flatten(req.query.simplify)),
-    limit: 100
+    limit: 1
   }
 
   // select output format
