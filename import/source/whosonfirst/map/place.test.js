@@ -100,6 +100,32 @@ tap.test('invalid: current false', t => {
   t.end()
 })
 
+tap.test('invalid: current false as string', t => {
+  let place = map({
+    id: 1,
+    properties: {
+      'wof:placetype': 'locality',
+      'wof:name': 'Example',
+      'mz:is_current': '0'
+    }
+  })
+  t.equal(place, null)
+  t.end()
+})
+
+tap.test('invalid: current indeterminate', t => {
+  let place = map({
+    id: 1,
+    properties: {
+      'wof:placetype': 'locality',
+      'wof:name': 'Example',
+      'mz:is_current': -1
+    }
+  })
+  t.ok(place instanceof Place)
+  t.end()
+})
+
 tap.test('invalid: deprecated false', t => {
   let place = map({
     id: 1,
@@ -107,6 +133,19 @@ tap.test('invalid: deprecated false', t => {
       'wof:placetype': 'locality',
       'wof:name': 'Example',
       'edtf:deprecated': ''
+    }
+  })
+  t.ok(place instanceof Place)
+  t.end()
+})
+
+tap.test('invalid: deprecated uuuu is not a deprecation', t => {
+  let place = map({
+    id: 1,
+    properties: {
+      'wof:placetype': 'locality',
+      'wof:name': 'Example',
+      'edtf:deprecated': 'uuuu'
     }
   })
   t.ok(place instanceof Place)

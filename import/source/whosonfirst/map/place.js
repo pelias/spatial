@@ -42,11 +42,23 @@ function mapper (doc) {
   return place
 }
 
+// note: these semantics intentionally match placeholder's isValidWofRecord()
+// so that both services agree on which records exist, see:
+// https://github.com/pelias/placeholder/blob/master/prototype/wof.js
 function _isValid (properties) {
-  let isCurrent = _.get(properties, 'mz:is_current') !== 0
-  let isDeprecated = !!_.trim(properties['edtf:deprecated'] || '').length
-  let isSuperseded = _.isArray(_.get(properties, 'wof:superseded_by')) &&
+  // non-current records; the value may be a number or a string.
+  // -1 signifies an indeterminate state and is considered current
+  const current = _.get(properties, 'mz:is_current')
+  const isCurrent = !(current === 0 || current === '0')
+
+  // deprecated records; the value 'uuuu' signifies an unknown
+  // date and is not considered a deprecation
+  const deprecated = _.trim(properties['edtf:deprecated'] || '')
+  const isDeprecated = !!deprecated.length && deprecated !== 'uuuu'
+
+  const isSuperseded = _.isArray(_.get(properties, 'wof:superseded_by')) &&
     properties['wof:superseded_by'].length > 0
+
   return isCurrent && !isDeprecated && !isSuperseded
 }
 
