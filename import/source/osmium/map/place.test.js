@@ -142,6 +142,54 @@ tap.test('mapper: derive ontology type from "boundary" tag - multivalue', (t) =>
   t.equal(place.ontology.type, 'example_boundary_tag')
   t.end()
 })
+tap.test('mapper: normalize "postal_code" boundary to the WOF placetype', (t) => {
+  let place = map({
+    properties: {
+      '@type': 'relation',
+      '@id': '100',
+      'boundary': 'postal_code'
+    }
+  })
+  t.ok(place instanceof Place)
+  t.equal(place.identity.source, 'osm')
+  t.equal(place.identity.id, 'relation:100')
+  t.equal(place.ontology.class, 'admin')
+  t.equal(place.ontology.type, 'postalcode')
+  t.end()
+})
+tap.test('mapper: normalize "postal_code" boundary - multivalue', (t) => {
+  let place = map({
+    properties: {
+      '@type': 'relation',
+      '@id': '100',
+      'boundary': 'postal_code; administrative'
+    }
+  })
+  t.equal(place.ontology.type, 'postalcode')
+  t.end()
+})
+tap.test('mapper: normalize "postal_code" from the "place" tag too', (t) => {
+  let place = map({
+    properties: {
+      '@type': 'relation',
+      '@id': '100',
+      'place': 'postal_code'
+    }
+  })
+  t.equal(place.ontology.type, 'postalcode')
+  t.end()
+})
+tap.test('mapper: aliasing leaves other boundary types untouched', (t) => {
+  let place = map({
+    properties: {
+      '@type': 'relation',
+      '@id': '100',
+      'boundary': 'administrative'
+    }
+  })
+  t.equal(place.ontology.type, 'administrative')
+  t.end()
+})
 tap.test('mapper: prefer "place" over other tags', (t) => {
   let place = map({
     properties: {

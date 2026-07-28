@@ -11,6 +11,15 @@ const map = {
   geometries: require('./geometries')
 }
 
+// OSM tag values which name the same concept as a Who's on First placetype but
+// spell it differently. Normalizing here means downstream consumers only need
+// to know the WOF vocabulary; without this, `boundary=postal_code` records are
+// filtered out of the /query/pip/_view/pelias view, whose layer whitelist uses
+// the WOF spelling 'postalcode'.
+const ONTOLOGY_TYPE_ALIASES = {
+  postal_code: 'postalcode'
+}
+
 function mapper (doc) {
   // get document properties
   const properties = _.get(doc, 'properties')
@@ -32,6 +41,11 @@ function mapper (doc) {
       const boundary = scalar(_.get(properties, 'boundary', 'unknown').trim().toLowerCase())
       if (boundary !== 'multipolygon') { place.ontology.setType(boundary) }
     }
+  }
+
+  // normalize OSM spellings to their Who's on First equivalents
+  if (_.has(ONTOLOGY_TYPE_ALIASES, place.ontology.type)) {
+    place.ontology.setType(ONTOLOGY_TYPE_ALIASES[place.ontology.type])
   }
 
   // run mappers
