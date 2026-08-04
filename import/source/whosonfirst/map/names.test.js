@@ -58,6 +58,47 @@ tap.test('mapper: wof:name - use qs:a2_alt for USA counties', (t) => {
   t.equal(p.name[0].name, 'example3')
   t.end()
 })
+tap.test('mapper: wof:name - label:eng_x_preferred_longname wins over qs:a2_alt for USA counties', (t) => {
+  let p = new Place()
+  map(p, {
+    'iso:country': 'US',
+    'wof:placetype': 'county',
+    'wof:name': 'Kings',
+    'label:eng_x_preferred_longname': ['Kings County'],
+    'qs:a2_alt': 'a different qs:a2_alt value'
+  })
+
+  t.equal(p.name.length, 1)
+  t.equal(p.name[0].name, 'Kings County')
+  t.end()
+})
+tap.test('mapper: wof:name - longname is used for French counties', (t) => {
+  let p = new Place()
+  map(p, {
+    'iso:country': 'FR',
+    'wof:placetype': 'county',
+    'wof:name': 'Montmarault',
+    'label:eng_x_preferred_longname': ['Montmarault Canton']
+  })
+
+  t.equal(p.name.length, 1)
+  t.equal(p.name[0].name, 'Montmarault Canton')
+  t.end()
+})
+tap.test('mapper: wof:name - longname is NOT used outside the qualifier-preferred allowlist ' +
+  '(eg. Greater London stays Greater London, not the ceremonial-county longname)', (t) => {
+  let p = new Place()
+  map(p, {
+    'iso:country': 'GB',
+    'wof:placetype': 'macrocounty',
+    'wof:name': 'Greater London',
+    'label:eng_x_preferred_longname': ['Greater London Ceremonial County']
+  })
+
+  t.equal(p.name.length, 1)
+  t.equal(p.name[0].name, 'Greater London')
+  t.end()
+})
 
 // generic abbreviation
 tap.test('mapper: wof:abbreviation - prefer wof:shortcode over wof:abbreviation', (t) => {
