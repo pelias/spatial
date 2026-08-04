@@ -150,7 +150,7 @@ docker run --rm -i \
 
 ```bash
 # run whosonfirst import
-# note: database sourced from https://dist.whosonfirst.org/sqlite/
+# note: database sourced from https://geocode.earth/data/whosonfirst/
 ingress() {
   WOFDB='/data/wof/sqlite/whosonfirst-data-admin-nz-latest.db'
   EXTRACT_QUERY='SELECT json_extract(body, "$") FROM geojson'
@@ -235,7 +235,7 @@ node bin/spatial.js merge --db=/data/empty.db /data/external.db
 
 ```bash
 # run whosonfirst import
-# note: database sourced from https://dist.whosonfirst.org/sqlite/
+# note: database sourced from https://geocode.earth/data/whosonfirst/
 ingress() {
   WOFDB='/data/wof/sqlite/whosonfirst-data-admin-nz-latest.db'
   EXTRACT_QUERY='SELECT json_extract(body, "$") FROM geojson'
