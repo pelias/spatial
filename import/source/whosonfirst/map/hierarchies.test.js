@@ -138,6 +138,28 @@ tap.test('mapper: key ordering', (t) => {
 
   t.end()
 })
+tap.test('mapper: record\'s own placetype not in spec (eg. postalregion) should not throw, ' +
+  'and should still get a self-reference', (t) => {
+  const p = new Place(new Identity('wof', '1864205377'), new Ontology('admin', 'postalregion'))
+  map(p, {
+    'wof:hierarchy': [
+      {
+        continent_id: 102191581,
+        country_id: 85633159,
+        empire_id: 136253055
+      }
+    ]
+  })
+
+  t.same([
+    new Hierarchy(p.identity, new Identity('wof', '85633159'), 'wof:0', 0),
+    new Hierarchy(p.identity, new Identity('wof', '136253055'), 'wof:0', 1),
+    new Hierarchy(p.identity, new Identity('wof', '102191581'), 'wof:0', 2),
+    new Hierarchy(p.identity, p.identity, 'wof:0', 3)
+  ], p.hierarchy)
+
+  t.end()
+})
 tap.test('mapper: sort hierarchy - unknown placetype', (t) => {
   const p = new Place(new Identity('wof', '1729339019'), new Ontology('admin', 'locality'))
   map(p, {
