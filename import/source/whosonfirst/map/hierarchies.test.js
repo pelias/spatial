@@ -45,13 +45,13 @@ tap.test('mapper: single hierarchy', (t) => {
     ]
   })
 
-  t.same([
+  t.same(p.hierarchy, [
     new Hierarchy(p.identity, p.identity, 'wof:0', 0),
     new Hierarchy(p.identity, new Identity('wof', '102062861'), 'wof:0', 1),
     new Hierarchy(p.identity, new Identity('wof', '85682381'), 'wof:0', 2),
     new Hierarchy(p.identity, new Identity('wof', '85633051'), 'wof:0', 3),
     new Hierarchy(p.identity, new Identity('wof', '102191581'), 'wof:0', 4)
-  ], p.hierarchy)
+  ])
   t.end()
 })
 tap.test('mapper: multiple hierarchies', (t) => {
@@ -74,7 +74,7 @@ tap.test('mapper: multiple hierarchies', (t) => {
     ]
   })
 
-  t.same([
+  t.same(p.hierarchy, [
     new Hierarchy(p.identity, p.identity, 'wof:0', 0),
     new Hierarchy(p.identity, new Identity('wof', '1159339547'), 'wof:0', 1),
     new Hierarchy(p.identity, new Identity('wof', '85632685'), 'wof:0', 2),
@@ -85,7 +85,7 @@ tap.test('mapper: multiple hierarchies', (t) => {
     new Hierarchy(p.identity, new Identity('wof', '1159339547'), 'wof:1', 1),
     new Hierarchy(p.identity, new Identity('wof', '85633805'), 'wof:1', 2),
     new Hierarchy(p.identity, new Identity('wof', '102191581'), 'wof:1', 3)
-  ], p.hierarchy)
+  ])
 
   t.end()
 })
@@ -103,12 +103,12 @@ tap.test('mapper: skip -1 ids', (t) => {
     ]
   })
 
-  t.same([
+  t.same(p.hierarchy, [
     new Hierarchy(p.identity, p.identity, 'wof:0', 0),
     new Hierarchy(p.identity, new Identity('wof', '1159339547'), 'wof:0', 1),
     new Hierarchy(p.identity, new Identity('wof', '874393555'), 'wof:0', 2),
     new Hierarchy(p.identity, new Identity('wof', '102191581'), 'wof:0', 3)
-  ], p.hierarchy)
+  ])
 
   t.end()
 })
@@ -127,19 +127,18 @@ tap.test('mapper: key ordering', (t) => {
     ]
   })
 
-  t.same([
+  t.same(p.hierarchy, [
     new Hierarchy(p.identity, p.identity, 'wof:0', 0),
     new Hierarchy(p.identity, new Identity('wof', '1729238583'), 'wof:0', 1),
     new Hierarchy(p.identity, new Identity('wof', '102079339'), 'wof:0', 2),
     new Hierarchy(p.identity, new Identity('wof', '85687233'), 'wof:0', 3),
     new Hierarchy(p.identity, new Identity('wof', '85633345'), 'wof:0', 4),
     new Hierarchy(p.identity, new Identity('wof', '102191583'), 'wof:0', 5)
-  ], p.hierarchy)
+  ])
 
   t.end()
 })
-tap.test('mapper: record\'s own placetype not in spec (eg. postalregion) should not throw, ' +
-  'and should still get a self-reference', (t) => {
+tap.test('mapper: postalregion', (t) => {
   const p = new Place(new Identity('wof', '1864205377'), new Ontology('admin', 'postalregion'))
   map(p, {
     'wof:hierarchy': [
@@ -151,12 +150,34 @@ tap.test('mapper: record\'s own placetype not in spec (eg. postalregion) should 
     ]
   })
 
-  t.same([
+  t.same(p.hierarchy, [
+    new Hierarchy(p.identity, p.identity, 'wof:0', 0),
+    new Hierarchy(p.identity, new Identity('wof', '85633159'), 'wof:0', 1),
+    new Hierarchy(p.identity, new Identity('wof', '136253055'), 'wof:0', 2),
+    new Hierarchy(p.identity, new Identity('wof', '102191581'), 'wof:0', 3)
+  ])
+
+  t.end()
+})
+tap.test(`mapper: record's own placetype not in spec (eg. unknown) should not throw, ` +
+  `and should still get a self-reference`, (t) => {
+  const p = new Place(new Identity('wof', '1864205377'), new Ontology('admin', 'unknown'))
+  map(p, {
+    'wof:hierarchy': [
+      {
+        continent_id: 102191581,
+        country_id: 85633159,
+        empire_id: 136253055
+      }
+    ]
+  })
+
+  t.same(p.hierarchy, [
     new Hierarchy(p.identity, new Identity('wof', '85633159'), 'wof:0', 0),
     new Hierarchy(p.identity, new Identity('wof', '136253055'), 'wof:0', 1),
     new Hierarchy(p.identity, new Identity('wof', '102191581'), 'wof:0', 2),
     new Hierarchy(p.identity, p.identity, 'wof:0', 3)
-  ], p.hierarchy)
+  ])
 
   t.end()
 })
@@ -171,11 +192,11 @@ tap.test('mapper: sort hierarchy - unknown placetype', (t) => {
     ]
   })
 
-  t.same([
+  t.same(p.hierarchy, [
     new Hierarchy(p.identity, p.identity, 'wof:0', 0),
     new Hierarchy(p.identity, new Identity('wof', '85687233'), 'wof:0', 1),
     new Hierarchy(p.identity, new Identity('wof', '1'), 'wof:0', 2)
-  ], p.hierarchy)
+  ])
 
   t.end()
 })

@@ -16,16 +16,17 @@ tap.test('spec', (t) => {
     102312307, 102312309, 102312311, 102312313, 102312317, 102312319, 102312321,
     102312323, 102312325, 102312327, 102312329, 102312331, 102312335, 102312341,
     102320821, 102322043, 102371933, 136057795, 404221409, 404221411, 404221413,
-    404528653, 404528655, 421205763, 470996387, 1108746739, 1108906905, 1159162571,
-    1159162573, 1159162575, 1159268867, 1159268869, 1360666019
+    404528653, 404528655, 421205763, 470996387, 1108906905, 1159162571,
+    1159162573, 1159162575, 1159268867, 1159268869, 1360666019, 1729783759,
+    1796730315, 1897483759
   ])
   t.same(Array.from(spec.names.keys()), [
     'country', 'continent', 'region', 'county', 'locality', 'neighbourhood',
     'microhood', 'macrohood', 'venue', 'building', 'address', 'campus', 'empire',
     'planet', 'dependency', 'disputed', 'metroarea', 'timezone', 'localadmin',
     'macroregion', 'macrocounty', 'ocean', 'marinearea', 'borough', 'postalcode',
-    'constituency', 'intersection', 'wing', 'concourse', 'arcade', 'enclosure',
-    'installation', 'marketarea'
+    'intersection', 'wing', 'concourse', 'arcade', 'enclosure',
+    'installation', 'marketarea', 'custom', 'nation', 'postalregion'
   ])
   t.end()
 })
