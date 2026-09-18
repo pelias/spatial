@@ -30,7 +30,7 @@
     "url": "https://github.com/pelias/spatial/issues"
   },
   "engines": {
-    "node": ">=19.4.0"
+    "node": ">=22.0.0"
   },
   "dependencies": {
     "@mapbox/polyline": "^1.1.1",
