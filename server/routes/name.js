@@ -7,7 +7,7 @@ module.exports = function (req, res) {
   let query = {
     source: util.flatten(req.params.source),
     id: util.flatten(req.params.id),
-    limit: 100
+    limit: 1000000
   }
 
   // perform query
