@@ -178,6 +178,21 @@ ingress | docker run --rm -i \
 ```
 
 ```bash
+# run overture import (supports division and division_area themes)
+# note: data downloaded using https://docs.overturemaps.org/
+ingress() {
+  BBOX='165,-48,179,-34' # New Zealand
+  overturemaps download -t division -f geojsonseq --bbox "${BBOX}" 2>/dev/null
+  overturemaps download -t division_area -f geojsonseq --bbox "${BBOX}" 2>/dev/null
+}
+
+ingress | docker run --rm -i \
+  -v "${PWD}:/data" \
+  pelias/spatial \
+  import overture --db=/data/geo.docker.db
+```
+
+```bash
 # start the HTTP server on port 3000
 docker run --rm -it \
   -v "${PWD}:/data" \
@@ -254,6 +269,18 @@ ingress() {
 }
 
 ingress | node bin/spatial.js --db=geo.local.db import osmium
+```
+
+```bash
+# run overture import (supports division and division_area themes)
+# note: data downloaded using https://docs.overturemaps.org/
+ingress() {
+  BBOX='165,-48,179,-34' # New Zealand
+  overturemaps download -t division -f geojsonseq --bbox "${BBOX}" 2>/dev/null
+  overturemaps download -t division_area -f geojsonseq --bbox "${BBOX}" 2>/dev/null
+}
+
+ingress | node bin/spatial.js --db=geo.local.db import overture
 ```
 
 ```bash
