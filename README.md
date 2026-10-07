@@ -178,6 +178,25 @@ ingress | docker run --rm -i \
 ```
 
 ```bash
+# run overture import (supports division and division_area themes)
+# note: data queried using DuckDB against S3 parquet files
+# requires: duckdb CLI (brew install duckdb)
+
+# first, source the overture_export_geojson_by_bbox function (see "Overture Helper Function" section below)
+
+ingress() {
+  # New Zealand bounding box: xmin, ymin, xmax, ymax
+  overture_export_geojson_by_bbox divisions division 165 -48 179 -34
+  overture_export_geojson_by_bbox divisions division_area 165 -48 179 -34
+}
+
+ingress | docker run --rm -i \
+  -v "${PWD}:/data" \
+  pelias/spatial \
+  import overture --db=/data/geo.docker.db
+```
+
+```bash
 # start the HTTP server on port 3000
 docker run --rm -it \
   -v "${PWD}:/data" \
@@ -257,6 +276,22 @@ ingress | node bin/spatial.js --db=geo.local.db import osmium
 ```
 
 ```bash
+# run overture import (supports division and division_area themes)
+# note: data queried using DuckDB against S3 parquet files
+# requires: duckdb CLI (brew install duckdb)
+
+# first, source the overture_export_geojson_by_bbox function (see "Overture Helper Function" section below)
+
+ingress() {
+  # New Zealand bounding box: xmin, ymin, xmax, ymax
+  overture_export_geojson_by_bbox divisions division 165 -48 179 -34
+  overture_export_geojson_by_bbox divisions division_area 165 -48 179 -34
+}
+
+ingress | node bin/spatial.js --db=geo.local.db import overture
+```
+
+```bash
 # start the HTTP server on port 3000
 node bin/spatial.js server --db=geo.local.db
 ```
@@ -264,6 +299,50 @@ node bin/spatial.js server --db=geo.local.db
 ```bash
 # run point-in-polygon query
 node bin/spatial.js --db=geo.local.db pip 174.766843 -41.288788
+```
+
+# Overture Helper Function
+
+The Overture import requires a bash helper function to query DuckDB against S3 parquet files. Copy this function to your shell or save it to a file and source it:
+
+```bash
+overture_export_geojson_by_bbox() {
+  local theme="${1:?Missing theme (e.g., divisions, buildings, places)}"
+  local type="${2:?Missing type (e.g., division_area, division_boundary)}"
+  local xmin="${3:?Missing xmin (western longitude)}"
+  local ymin="${4:?Missing ymin (southern latitude)}"
+  local xmax="${5:?Missing xmax (eastern longitude)}"
+  local ymax="${6:?Missing ymax (northern latitude)}"
+
+  local OVERTURE_RELEASE="2026-09-23.1"
+  local S3_BASE="s3://overturemaps-us-west-2/release/${OVERTURE_RELEASE}"
+
+  duckdb -noheader -list -c "
+INSTALL spatial; LOAD spatial;
+WITH data AS (
+  SELECT *, row_number() OVER () as rn
+  FROM read_parquet('${S3_BASE}/theme=${theme}/type=${type}/*', filename=true, hive_partitioning=1)
+  WHERE bbox.xmin < ${xmax} AND bbox.xmax > ${xmin}
+    AND bbox.ymin < ${ymax} AND bbox.ymax > ${ymin}
+)
+SELECT json_object(
+  'id', data.id,
+  'type', 'Feature',
+  'geometry', ST_AsGeoJSON(data.geometry)::JSON,
+  'properties', (SELECT to_json(r) FROM (SELECT * EXCLUDE (id, geometry, filename, theme, type, rn) FROM data d WHERE d.rn = data.rn) r)
+)
+FROM data;
+"
+}
+```
+
+**Usage:**
+```bash
+# Export division areas for New Zealand
+overture_export_geojson_by_bbox divisions division_area 165 -48 179 -34
+
+# Export division points for Indonesia
+overture_export_geojson_by_bbox divisions division 106 -7 107 -6
 ```
 
 # Performance Testing
