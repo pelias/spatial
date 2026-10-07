@@ -51,18 +51,34 @@ tap.test('mapper: version', (t) => {
 tap.test('mapper: local_type', (t) => {
   let p = new Place()
   map(p, {
-    local_type: [
-      ['en', 'locality'],
-      ['mi', 'kāinga']
-    ]
+    local_type: {
+      en: 'village'
+    }
   })
 
   t.equal(p.property.length, 1)
-  t.same(p.property[0], new Property('local_type', 'en:locality,mi:kāinga'))
+  t.same(p.property[0], new Property('local_type', 'en:village'))
   t.end()
 })
 
-tap.test('mapper: local_type invalid entries', (t) => {
+tap.test('mapper: local_type (multiple languages)', (t) => {
+  let p = new Place()
+  map(p, {
+    local_type: {
+      en: 'locality',
+      mi: 'kāinga'
+    }
+  })
+
+  t.equal(p.property.length, 1)
+  // Object iteration order may vary
+  const value = p.property[0].value
+  t.ok(value.includes('en:locality'))
+  t.ok(value.includes('mi:kāinga'))
+  t.end()
+})
+
+tap.test('mapper: local_type invalid type (array)', (t) => {
   let p = new Place()
   map(p, {
     local_type: [
@@ -72,8 +88,8 @@ tap.test('mapper: local_type invalid entries', (t) => {
     ]
   })
 
-  t.equal(p.property.length, 1)
-  t.same(p.property[0], new Property('local_type', 'en:locality'))
+  // Arrays are no longer supported, only objects
+  t.equal(p.property.length, 0)
   t.end()
 })
 

@@ -94,14 +94,11 @@ function mapper (place, properties) {
   }
 
   // local type
-  const localType = _.get(properties, 'local_type', [])
-  if (_.isArray(localType) && localType.length > 0) {
-    const localTypeStr = localType.map(lt => {
-      if (_.isArray(lt) && lt.length >= 2) {
-        return `${lt[0]}:${lt[1]}`
-      }
-      return ''
-    }).filter(Boolean).join(',')
+  const localType = _.get(properties, 'local_type')
+  if (localType && _.isPlainObject(localType)) {
+    const localTypeStr = Object.entries(localType)
+      .map(([key, value]) => `${key}:${value}`)
+      .join(',')
 
     if (localTypeStr) {
       place.addProperty(new Property('local_type', localTypeStr))

@@ -9,17 +9,19 @@ tap.test('mapper: primary and common names', (t) => {
   map(p, {
     names: {
       primary: 'Tīnui',
-      common: [
-        ['en', 'Tīnui'],
-        ['mi', 'Tīnui']
-      ]
+      common: {
+        en: 'Tīnui',
+        mi: 'Tīnui'
+      }
     }
   })
 
   t.equal(p.name.length, 3)
   t.same(p.name[0], new Name('und', 'default', false, 'Tīnui'))
-  t.same(p.name[1], new Name('en', 'variant', false, 'Tīnui'))
-  t.same(p.name[2], new Name('mi', 'variant', false, 'Tīnui'))
+  // Object iteration order may vary
+  const variants = p.name.slice(1)
+  t.ok(variants.some(n => n.lang === 'en' && n.name === 'Tīnui'))
+  t.ok(variants.some(n => n.lang === 'mi' && n.name === 'Tīnui'))
   // common names that match primary ARE added when they have specific language codes
   t.end()
 })
@@ -29,19 +31,21 @@ tap.test('mapper: primary and different common names', (t) => {
   map(p, {
     names: {
       primary: 'New Zealand',
-      common: [
-        ['en', 'New Zealand'],
-        ['mi', 'Aotearoa'],
-        ['fr', 'Nouvelle-Zélande']
-      ]
+      common: {
+        en: 'New Zealand',
+        mi: 'Aotearoa',
+        fr: 'Nouvelle-Zélande'
+      }
     }
   })
 
   t.equal(p.name.length, 4)
   t.same(p.name[0], new Name('und', 'default', false, 'New Zealand'))
-  t.same(p.name[1], new Name('en', 'variant', false, 'New Zealand'))
-  t.same(p.name[2], new Name('mi', 'variant', false, 'Aotearoa'))
-  t.same(p.name[3], new Name('fr', 'variant', false, 'Nouvelle-Zélande'))
+  // Object iteration order may vary
+  const variants = p.name.slice(1)
+  t.ok(variants.some(n => n.lang === 'en' && n.name === 'New Zealand'))
+  t.ok(variants.some(n => n.lang === 'mi' && n.name === 'Aotearoa'))
+  t.ok(variants.some(n => n.lang === 'fr' && n.name === 'Nouvelle-Zélande'))
   t.end()
 })
 
@@ -50,13 +54,10 @@ tap.test('mapper: skip invalid common names', (t) => {
   map(p, {
     names: {
       primary: 'Example',
-      common: [
-        ['en', 'Valid Name'],
-        'invalid',
-        ['en'],
-        null,
-        ['de', '']
-      ]
+      common: {
+        en: 'Valid Name',
+        de: '' // empty value should be skipped
+      }
     }
   })
 
@@ -71,16 +72,18 @@ tap.test('mapper: default language for missing lang', (t) => {
   map(p, {
     names: {
       primary: 'Example',
-      common: [
-        ['', 'Name Without Lang'],
-        [null, 'Another Name']
-      ]
+      common: {
+        '': 'Name Without Lang',
+        und: 'Another Name'
+      }
     }
   })
 
   t.equal(p.name.length, 3)
   t.same(p.name[0], new Name('und', 'default', false, 'Example'))
-  t.same(p.name[1], new Name('und', 'variant', false, 'Name Without Lang'))
-  t.same(p.name[2], new Name('und', 'variant', false, 'Another Name'))
+  // Object iteration order may vary
+  const variants = p.name.slice(1)
+  t.ok(variants.some(n => n.lang === 'und' && n.name === 'Name Without Lang'))
+  t.ok(variants.some(n => n.lang === 'und' && n.name === 'Another Name'))
   t.end()
 })

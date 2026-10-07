@@ -53,7 +53,7 @@ tap.test('mapper: division_area has no hierarchies', t => {
       division_id: '89e73df8-d5ab-4156-9e83-140d1ee694c5',
       names: {
         primary: 'New Zealand',
-        common: [['en', 'New Zealand'], ['mi', 'Aotearoa']]
+        common: { en: 'New Zealand', mi: 'Aotearoa' }
       },
       version: 1
     }

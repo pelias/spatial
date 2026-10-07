@@ -17,7 +17,7 @@ tap.test('mapper: maps all components for division theme', t => {
       class: 'city',
       names: {
         primary: 'Flat Point',
-        common: [['en', 'Flat Point']]
+        common: { en: 'Flat Point' }
       },
       region: 'NZ-WGN',
       hierarchies: [[

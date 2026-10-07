@@ -11,17 +11,13 @@ function mapper (place, properties) {
   }
 
   // add common names with language codes
-  const common = _.get(names, 'common', [])
-  if (_.isArray(common)) {
-    common.forEach(nameEntry => {
-      if (!_.isArray(nameEntry) || nameEntry.length < 2) { return }
-
-      const lang = nameEntry[0] || 'und'
-      const name = nameEntry[1]
-
+  const common = _.get(names, 'common')
+  if (common && _.isPlainObject(common)) {
+    Object.entries(common).forEach(([lang, name]) => {
+      const langCode = lang || 'und'
       // always add if name is different OR if it matches primary but has a specific language code
-      if (name && (name !== primary || (lang !== 'und' && lang !== ''))) {
-        place.addName(new Name(lang, 'variant', false, name))
+      if (name && (name !== primary || (langCode !== 'und' && langCode !== ''))) {
+        place.addName(new Name(langCode, 'variant', false, name))
       }
     })
   }
